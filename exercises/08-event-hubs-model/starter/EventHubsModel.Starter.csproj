@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Learner tree for module.event-hubs-model. The focused command is
+    documented in lessons/08-event-hubs-model/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.EventHubsModel</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.EventHubsModel.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

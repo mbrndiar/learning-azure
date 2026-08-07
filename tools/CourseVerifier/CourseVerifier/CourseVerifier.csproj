@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.CourseVerifier</RootNamespace>
+    <AssemblyName>CourseVerifier</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="CourseVerifier.Tests" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Learner starter for project.field-station.
+
+    Every type, signature, and doc comment is already here; fifteen numbered GAPs
+    are not. Each one throws NotImplementedException and carries the reasoning
+    the decision turns on, so the work is deciding, not guessing at an API.
+
+    Grade one milestone at a time with the shared evaluator in ../tests:
+
+      dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter
+
+    It is an executable because the project is judged twice: by the evaluator,
+    and by a real end-to-end run against Azurite the guide documents.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Projects.FieldStation</RootNamespace>
+    <AssemblyName>LearningAzure.Projects.FieldStation.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Azure.Storage.Blobs" />
+    <PackageReference Include="Azure.Storage.Queues" />
+    <PackageReference Include="Azure.Data.Tables" />
+  </ItemGroup>
+
+</Project>

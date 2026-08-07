@@ -1,0 +1,3 @@
+[submodule ".learning-mentor"]
+	path = .learning-mentor
+	url = https://github.com/mbrndiar/learning-mentor.git

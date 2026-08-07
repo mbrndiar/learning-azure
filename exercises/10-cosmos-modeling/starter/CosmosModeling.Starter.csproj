@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Starting point for module.cosmos-modeling. The focused command is documented in
+    lessons/10-cosmos-modeling/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.CosmosModeling</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.CosmosModeling.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <!--
+      CA1822 fires on every unimplemented instance member, because a method whose
+      whole body is `throw new NotImplementedException` genuinely does not touch
+      instance state yet. Suppressing it here keeps the starter compiling; the
+      reference implementation does not need the suppression, which is a useful
+      signal that the gaps have been filled.
+    -->
+    <NoWarn>$(NoWarn);CA1822</NoWarn>
+  </PropertyGroup>
+
+</Project>

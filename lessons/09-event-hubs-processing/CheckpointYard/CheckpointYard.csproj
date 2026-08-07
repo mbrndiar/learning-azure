@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.event-hubs-processing. Requires BOTH the Event
+    Hubs emulator and Azurite: the processor stores its checkpoints and its
+    partition ownership in Blob Storage. See
+    lessons/09-event-hubs-processing/README.md for the exact commands.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.EventHubsProcessing</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.EventHubsProcessing.CheckpointYard</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" />
+    <PackageReference Include="Azure.Messaging.EventHubs.Processor" />
+    <PackageReference Include="Azure.Storage.Blobs" />
+  </ItemGroup>
+
+</Project>

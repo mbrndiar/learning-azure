@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.cosmos-development. Requires the Cosmos DB
+    emulator; see lessons/11-cosmos-development/README.md for the exact commands.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.CosmosDevelopment</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.CosmosDevelopment.DataPlane</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Cosmos" />
+    <!--
+      Microsoft.Azure.Cosmos.targets fails the build unless Newtonsoft.Json is
+      referenced directly: the SDK v3 document model depends on it even when the
+      client is configured with the System.Text.Json serializer. The version is
+      central, in Directory.Packages.props, like every other package.
+    -->
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.secure-operable-cloud. It touches no network:
+    every identity, endpoint, scope, and cleanup state in here is a value, so
+    the output is the same on a laptop with `az login` and on a build agent with
+    nothing configured at all. See lessons/12-secure-operable-cloud/README.md.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.SecureOperableCloud</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.SecureOperableCloud.AccessBoundary</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Referenced for the credential types the narrative names, so the companion
+      talks about the same class names the learner will type rather than a
+      paraphrase of them.
+    -->
+    <PackageReference Include="Azure.Identity" />
+  </ItemGroup>
+
+</Project>

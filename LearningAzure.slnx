@@ -1,0 +1,82 @@
+<Solution>
+  <!--
+    Every lesson companion and exercise project in the built curriculum, plus the
+    shared offline test doubles. The course verifier is repository automation
+    rather than course content, so it lives under its own solution folder.
+
+    Exercise test projects default to the reference implementation and select the
+    learner tree with -p:Implementation=starter, so a repository-wide
+    `dotnet test` is a health signal rather than an expected failure. The applied
+    project follows the same rule with -p:ImplementationRoot, which is declared
+    repository-relative so the command matches the manifest's starter_root.
+  -->
+  <Folder Name="/support/">
+    <Project Path="support/AzureFakes/AzureFakes.csproj" />
+  </Folder>
+  <Folder Name="/lessons/">
+    <Project Path="lessons/01-azure-data-map/PrimitiveTour/PrimitiveTour.csproj" />
+    <Project Path="lessons/02-azure-sdk-foundations/ClientSeams/ClientSeams.csproj" />
+    <Project Path="lessons/03-storage-account/AccountBoundary/AccountBoundary.csproj" />
+    <Project Path="lessons/04-blob-storage/ArtifactVault/ArtifactVault.csproj" />
+    <Project Path="lessons/05-blob-lifecycle/PreconditionArena/PreconditionArena.csproj" />
+    <Project Path="lessons/06-queue-storage/DispatchYard/DispatchYard.csproj" />
+    <Project Path="lessons/07-table-storage/ObservationIndex/ObservationIndex.csproj" />
+    <Project Path="lessons/08-event-hubs-model/TelemetryStream/TelemetryStream.csproj" />
+    <Project Path="lessons/09-event-hubs-processing/CheckpointYard/CheckpointYard.csproj" />
+    <Project Path="lessons/10-cosmos-modeling/RequestUnits/RequestUnits.csproj" />
+    <Project Path="lessons/11-cosmos-development/DataPlane/DataPlane.csproj" />
+    <Project Path="lessons/12-secure-operable-cloud/AccessBoundary/AccessBoundary.csproj" />
+  </Folder>
+  <Folder Name="/exercises/">
+    <Project Path="exercises/01-azure-data-map/solution/DataMap.Solution.csproj" />
+    <Project Path="exercises/01-azure-data-map/starter/DataMap.Starter.csproj" />
+    <Project Path="exercises/01-azure-data-map/tests/DataMap.Tests.csproj" />
+    <Project Path="exercises/02-azure-sdk-foundations/solution/SdkFoundations.Solution.csproj" />
+    <Project Path="exercises/02-azure-sdk-foundations/starter/SdkFoundations.Starter.csproj" />
+    <Project Path="exercises/02-azure-sdk-foundations/tests/SdkFoundations.Tests.csproj" />
+    <Project Path="exercises/03-storage-account/solution/StorageAccount.Solution.csproj" />
+    <Project Path="exercises/03-storage-account/starter/StorageAccount.Starter.csproj" />
+    <Project Path="exercises/03-storage-account/tests/StorageAccount.Tests.csproj" />
+    <Project Path="exercises/04-blob-storage/solution/BlobStorage.Solution.csproj" />
+    <Project Path="exercises/04-blob-storage/starter/BlobStorage.Starter.csproj" />
+    <Project Path="exercises/04-blob-storage/tests/BlobStorage.Tests.csproj" />
+    <Project Path="exercises/05-blob-lifecycle/solution/BlobLifecycle.Solution.csproj" />
+    <Project Path="exercises/05-blob-lifecycle/starter/BlobLifecycle.Starter.csproj" />
+    <Project Path="exercises/05-blob-lifecycle/tests/BlobLifecycle.Tests.csproj" />
+    <Project Path="exercises/06-queue-storage/solution/QueueStorage.Solution.csproj" />
+    <Project Path="exercises/06-queue-storage/starter/QueueStorage.Starter.csproj" />
+    <Project Path="exercises/06-queue-storage/tests/QueueStorage.Tests.csproj" />
+    <Project Path="exercises/07-table-storage/solution/TableStorage.Solution.csproj" />
+    <Project Path="exercises/07-table-storage/starter/TableStorage.Starter.csproj" />
+    <Project Path="exercises/07-table-storage/tests/TableStorage.Tests.csproj" />
+    <Project Path="exercises/08-event-hubs-model/solution/EventHubsModel.Solution.csproj" />
+    <Project Path="exercises/08-event-hubs-model/starter/EventHubsModel.Starter.csproj" />
+    <Project Path="exercises/08-event-hubs-model/tests/EventHubsModel.Tests.csproj" />
+    <Project Path="exercises/09-event-hubs-processing/solution/EventHubsProcessing.Solution.csproj" />
+    <Project Path="exercises/09-event-hubs-processing/starter/EventHubsProcessing.Starter.csproj" />
+    <Project Path="exercises/09-event-hubs-processing/tests/EventHubsProcessing.Tests.csproj" />
+    <Project Path="exercises/10-cosmos-modeling/solution/CosmosModeling.Solution.csproj" />
+    <Project Path="exercises/10-cosmos-modeling/starter/CosmosModeling.Starter.csproj" />
+    <Project Path="exercises/10-cosmos-modeling/tests/CosmosModeling.Tests.csproj" />
+    <Project Path="exercises/11-cosmos-development/solution/CosmosDevelopment.Solution.csproj" />
+    <Project Path="exercises/11-cosmos-development/starter/CosmosDevelopment.Starter.csproj" />
+    <Project Path="exercises/11-cosmos-development/tests/CosmosDevelopment.Tests.csproj" />
+    <Project Path="exercises/12-secure-operable-cloud/solution/SecureOperableCloud.Solution.csproj" />
+    <Project Path="exercises/12-secure-operable-cloud/starter/SecureOperableCloud.Starter.csproj" />
+    <Project Path="exercises/12-secure-operable-cloud/tests/SecureOperableCloud.Tests.csproj" />
+  </Folder>
+  <Folder Name="/projects/">
+    <Project Path="projects/field-station/solution/FieldStation.Solution.csproj" />
+    <Project Path="projects/field-station/starter/FieldStation.Starter.csproj" />
+    <Project Path="projects/field-station/tests/FieldStation.Tests.csproj" />
+  </Folder>
+  <Folder Name="/capstones/">
+    <Project Path="capstones/cloud-expedition-journal/solution/CloudExpeditionJournal.Solution.csproj" />
+    <Project Path="capstones/cloud-expedition-journal/starter/CloudExpeditionJournal.Starter.csproj" />
+    <Project Path="capstones/cloud-expedition-journal/tests/CloudExpeditionJournal.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/CourseVerifier/CourseVerifier/CourseVerifier.csproj" />
+    <Project Path="tools/CourseVerifier/CourseVerifier.Tests/CourseVerifier.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,65 @@
+# .gitignore — Cloud Expedition Field Journal (learning-azure)
+#
+# Deny-list tuned for a .NET 10 course whose Learning Mentor integration runs on
+# Python 3. Keep this focused: the submodule gitlink (.learning-mentor) and the
+# native discovery symlinks (.agents, .claude, .codex, .github) are tracked on
+# purpose and must never be ignored.
+
+# --- .NET build output ---------------------------------------------------------
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+artifacts/
+
+# Test + coverage output
+[Tt]est[Rr]esult*/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+[Cc]overage*/
+
+# MSBuild / build logs
+*.binlog
+msbuild.*.log
+msbuild.log
+
+# --- Visual Studio / Rider / user-specific -------------------------------------
+.vs/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+# .idea/
+# .vscode/
+
+# --- Local secrets / environment -----------------------------------------------
+# Never commit connection strings, keys, or EULA-accepting env files.
+.env
+.env.*
+!.env.example
+# The one deliberate exception is capstones/*/emulator.env, which is course
+# content: it exports Microsoft's published emulator defaults and nothing else,
+# and the capstone refuses to start a live run while any of them is set.
+
+# --- Learning Mentor (Python 3) ------------------------------------------------
+# The shared state helper and the course-owned adapter both run on Python 3, so
+# bytecode caches can appear beside them. Learner progress itself is never stored
+# in the repository: the state helper keeps it outside, under
+# $XDG_DATA_HOME/copilot-learning-tutor/state.sqlite3.
+__pycache__/
+*.py[cod]
+
+# Adapter test fixtures are generated on disk at test time (the runtime forbids
+# writing under /tmp), then torn down. Never track them.
+.agents/skills/azure-learning-path/tests/.fixtures/
+
+# --- OS cruft ------------------------------------------------------------------
+.DS_Store
+Thumbs.db

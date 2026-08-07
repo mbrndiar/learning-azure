@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for module.queue-storage. The focused command is documented in
+    lessons/06-queue-storage/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.QueueStorage</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.QueueStorage.Solution</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

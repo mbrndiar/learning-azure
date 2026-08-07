@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for module.secure-operable-cloud. The focused command is documented in
+    lessons/12-secure-operable-cloud/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.SecureOperableCloud</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.SecureOperableCloud.Solution</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

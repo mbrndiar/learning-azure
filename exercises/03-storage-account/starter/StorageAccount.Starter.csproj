@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Learner tree for module.storage-account. The focused command is documented in
+    lessons/03-storage-account/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.StorageAccount</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.StorageAccount.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

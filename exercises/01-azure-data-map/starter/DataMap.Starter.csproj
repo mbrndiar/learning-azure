@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Learner tree for module.azure-data-map.
+
+    Every intentional gap is marked "GAP n" and throws NotImplementedException
+    with the narrative section that explains it. Build it, run the evaluator, and
+    work down the gaps in order:
+
+      dotnet test exercises/01-azure-data-map/tests -p:Implementation=starter
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.DataMap</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.DataMap.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

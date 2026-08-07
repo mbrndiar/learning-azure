@@ -1,0 +1,152 @@
+# Course validation workflow.
+#
+# Runs every gate the repository has. Every test in `dotnet test` is
+# deterministic and offline: evaluators drive real Azure SDK clients over
+# scripted HttpMessageHandler doubles or application-owned ports, never over a
+# socket. Emulator work lives in the lesson companions and the management labs,
+# which this workflow deliberately does not run; emulator-backed integration
+# jobs are added with the modules that need them.
+#
+# CI never creates Azure resources and never needs a cloud secret. Live
+# checkpoints incur cost and external side effects, so they stay manual and
+# documented in docs/COST-AND-CLEANUP.md.
+name: course
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: course-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: "true"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
+
+jobs:
+  course:
+    name: Build, test, and verify the course
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository and the Learning Mentor submodule
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Set up the pinned .NET SDK band
+        uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Set up Python for the Learning Mentor adapter
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Restore
+        run: dotnet restore LearningAzure.slnx
+
+      - name: Verify formatting
+        run: dotnet format LearningAzure.slnx --verify-no-changes
+
+      - name: Build with warnings as errors
+        run: dotnet build LearningAzure.slnx --no-restore
+
+      - name: Test
+        run: dotnet test LearningAzure.slnx --no-build --collect:"XPlat Code Coverage"
+
+      # Every module declares untouched_starter_result = "fails" in course.toml.
+      # That claim is only worth anything if it is checked: this step runs each
+      # shared evaluator against the untouched learner tree and fails the build
+      # if any starter passes, which would mean its gaps stopped being gaps. It
+      # cannot use --no-build because selecting the starter tree rewires the
+      # evaluator's project reference.
+      - name: Check every module starter baseline is red
+        run: |
+          failed=0
+          for tests in exercises/*/tests; do
+            if dotnet test "$tests" -p:Implementation=starter; then
+              echo "::error::The untouched starter for $tests passed; its gaps are no longer gaps."
+              failed=1
+            fi
+          done
+          exit "$failed"
+
+      # The project selects its implementation by repository-relative path
+      # rather than by the Implementation shorthand, so its baseline is checked
+      # separately with the command the manifest declares.
+      - name: Check the Field Station starter baseline is red
+        run: |
+          if dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter; then
+            echo "::error::The untouched Field Station starter passed; its gaps are no longer gaps."
+            exit 1
+          fi
+
+      # The capstone selects its implementation the same way, and its evaluator
+      # is fully offline, so its baseline is checked here without emulators.
+      - name: Check the Cloud Expedition Journal starter baseline is red
+        run: |
+          if dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter; then
+            echo "::error::The untouched capstone starter passed; its gaps are no longer gaps."
+            exit 1
+          fi
+
+      # The curriculum plan is the authority for the graph, outcomes, and
+      # evidence records. This step fails if content lands without a plan
+      # update, if the mentor manifest registers a unit whose artifacts do not
+      # exist, or if the published evidence matrix has gone stale.
+      - name: Verify the curriculum plan
+        run: dotnet run --project tools/CourseVerifier/CourseVerifier --no-build -- verify
+
+      - name: Validate the Learning Mentor manifest
+        run: |
+          python3 .agents/skills/azure-learning-path/scripts/course_adapter.py validate
+          python3 .agents/skills/azure-learning-path/scripts/course_adapter.py state-projection
+
+      - name: Test the Learning Mentor adapter
+        run: python3 -m unittest discover -s .agents/skills/azure-learning-path/tests
+
+      # Each module ships an Azure CLI lab and a behaviorally equivalent Azure
+      # PowerShell lab. Neither is exercised by dotnet test, so they are linted
+      # here rather than discovered broken by a learner.
+      - name: Parse the Azure CLI management labs
+        run: |
+          for script in infra/azure-cli/*.sh; do
+            bash -n "$script"
+          done
+
+      - name: Lint the Azure PowerShell management labs
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force
+          $findings = Invoke-ScriptAnalyzer -Path infra/powershell -Recurse -Severity Error,Warning
+          if ($findings) {
+            $findings | Format-Table -AutoSize | Out-String | Write-Host
+            throw "PSScriptAnalyzer reported $($findings.Count) finding(s)."
+          }
+
+      - name: Validate the emulator stack definition
+        run: docker compose config --quiet
+
+      # The Event Hubs emulator refuses to start on a malformed seed file and
+      # silently overrides a namespace name that is not emulatorNs1, so the
+      # config is parsed and the required name asserted here rather than
+      # discovered by a learner whose companion connects to an empty hub.
+      - name: Check the Event Hubs emulator seed configuration
+        run: |
+          python3 - <<'PY'
+          import json
+          config = json.load(open("infra/local/eventhubs/config.json"))
+          namespaces = config["UserConfig"]["NamespaceConfig"]
+          assert len(namespaces) == 1, "the emulator supports exactly one namespace"
+          name = namespaces[0]["Name"]
+          assert name.lower() == "emulatorns1", f"namespace {name!r} is not the required emulatorNs1"
+          PY

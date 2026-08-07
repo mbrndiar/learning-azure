@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The single authoritative evaluator for project.field-station.
+
+    One suite judges both trees. .NET selects an implementation by project path,
+    and the path is declared repository-root-relative so the command a learner
+    runs, the command the Learning Mentor runs, and the manifest's starter_root
+    are the same string:
+
+      dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter
+      dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/solution
+
+    The `Implementation` shorthand the modules use is accepted too.
+    The default is the reference implementation, so a repository-wide
+    `dotnet test` stays a health signal rather than an expected failure.
+
+    Every test carries a `Milestone` trait, so one milestone can be graded on its
+    own with a `Milestone` trait filter while the learner is still working
+    through the earlier stages.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Projects.FieldStation.Tests</RootNamespace>
+    <AssemblyName>LearningAzure.Projects.FieldStation.Tests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <Implementation Condition="'$(Implementation)' == ''">solution</Implementation>
+    <ImplementationRoot Condition="'$(ImplementationRoot)' == ''">projects/field-station/$(Implementation)</ImplementationRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ImplementationRoot is repository relative; anchor it at the repository root. -->
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../../../$(ImplementationRoot)/*.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../../../support/AzureFakes/AzureFakes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

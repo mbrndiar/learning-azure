@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The single authoritative evaluator for module.blob-lifecycle.
+
+    One evaluator judges both trees; the implementation is selected by project
+    path, which is how .NET picks an implementation:
+
+      dotnet test exercises/05-blob-lifecycle/tests -p:Implementation=starter
+      dotnet test exercises/05-blob-lifecycle/tests -p:Implementation=solution
+
+    The default is the reference implementation so a repository-wide
+    `dotnet test` is a health signal. The learner's focused command names the
+    starter explicitly and is expected to fail at the first intended gap.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Exercises.BlobLifecycle.Tests</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.BlobLifecycle.Tests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <Implementation Condition="'$(Implementation)' == ''">solution</Implementation>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../$(Implementation)/*.csproj" />
+    <ProjectReference Include="../../../support/AzureFakes/AzureFakes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for module.event-hubs-processing. The focused command is documented in
+    lessons/09-event-hubs-processing/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.EventHubsProcessing</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.EventHubsProcessing.Solution</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

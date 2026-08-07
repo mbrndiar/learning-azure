@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.queue-storage. Requires a running Azurite
+    container; see lessons/06-queue-storage/README.md for the exact commands.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.QueueStorage</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.QueueStorage.DispatchYard</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Queues" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Learner tree for module.blob-storage. The focused command is documented in
+    lessons/04-blob-storage/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.BlobStorage</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.BlobStorage.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

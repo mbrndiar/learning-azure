@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.event-hubs-model. Requires the Event Hubs
+    emulator (which in turn requires Azurite); see
+    lessons/08-event-hubs-model/README.md for the exact commands.
+
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.EventHubsModel</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.EventHubsModel.TelemetryStream</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Messaging.EventHubs" />
+  </ItemGroup>
+
+</Project>

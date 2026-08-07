@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for module.azure-sdk-foundations.
+
+      dotnet test exercises/02-azure-sdk-foundations/tests -p:Implementation=solution
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.SdkFoundations</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.SdkFoundations.Solution</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" />
+  </ItemGroup>
+
+</Project>

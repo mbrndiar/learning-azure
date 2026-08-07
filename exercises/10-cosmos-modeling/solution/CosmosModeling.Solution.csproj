@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for module.cosmos-modeling. The focused command is documented in
+    lessons/10-cosmos-modeling/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.CosmosModeling</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.CosmosModeling.Solution</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

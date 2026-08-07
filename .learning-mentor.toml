@@ -1,0 +1,15 @@
+schema_version = 1
+
+[adapter]
+protocol = "1"
+skill = ".agents/skills/azure-learning-path/SKILL.md"
+command = [
+  "python3",
+  ".agents/skills/azure-learning-path/scripts/course_adapter.py",
+]
+
+[state]
+command = [
+  "python3",
+  ".agents/skills/guided-learning/scripts/learning_state.py",
+]

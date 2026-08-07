@@ -1,0 +1,18 @@
+<Project>
+
+  <!--
+    Imported after every project file, so properties the project sets — notably
+    IsTestProject — are already visible here.
+
+    Evaluator names are learner-facing diagnostics: when a check fails, its name
+    is the sentence the learner reads first. Underscore-separated test names are
+    the idiomatic .NET way to write those sentences, so CA1707 is relaxed for
+    test projects only. Every other analyzer rule, and warnings-as-errors, still
+    applies.
+  -->
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <NoWarn>$(NoWarn);CA1707</NoWarn>
+  </PropertyGroup>
+
+</Project>

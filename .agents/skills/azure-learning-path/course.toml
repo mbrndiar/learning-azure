@@ -1,0 +1,578 @@
+# Machine-readable curriculum manifest for the Learning Mentor integration.
+# This file is the single authority for semantic IDs, prerequisites, outcomes,
+# learner and reference paths, focused commands, and solution-lock ownership.
+# See references/course-schema.md for the contract this instance must satisfy.
+#
+# COMPLETE CURRICULUM: every unit whose content exists is registered here, and
+# every planned unit now exists. Modules 1 through 12 -- from choosing a data
+# primitive through securing and operating the live architecture -- are built and
+# registered below, together with the Field Station project that applies all
+# three Storage services and the Cloud Expedition Field Journal capstone that
+# integrates all five. The capstone is the single required final destination.
+#
+# The whole curriculum -- 12 modules, one applied project, and the capstone, with
+# their graph, outcomes, and evidence records -- lives in curriculum_plan below
+# and is checked by tools/CourseVerifier. A unit may be registered here only once
+# the plan marks its artifacts as present, which is what stops the mentor from
+# recording progress against content that does not exist. The verifier enforces
+# the other direction: content that lands without a plan update, or a plan
+# promoted without registration here, fails the build.
+
+manifest_version = 1
+schema_version = "1.0.0"
+schema_document = ".agents/skills/azure-learning-path/references/course-schema.md"
+curriculum_plan = "docs/architecture/curriculum.json"
+
+[course]
+id = "learning-azure"
+version = "0.5.0"
+title = "Learning Azure Data and Messaging"
+description = "A narrative-driven, hands-on course teaching Azure Blob, Queue, and Table Storage, Event Hubs, and Azure Cosmos DB for NoSQL with C# and .NET 10 through one continuing story, the Cloud Expedition Field Journal. Twelve modules, an applied Storage project, and a capstone that integrates all five services end to end."
+language = "csharp"
+target_framework = "net10.0"
+dotnet_sdk_minimum = "10.0"
+learner_entry_point = "README.md"
+setup_guide = "docs/SETUP.md"
+command_working_directory = "."
+final_destinations = [{ id = "capstone.cloud-expedition-journal", path = "capstones/cloud-expedition-journal/README.md", required = true }]
+
+[[modules]]
+id = "module.azure-data-map"
+ordinal = 1
+title = "Choose the right Azure data primitive"
+prerequisites = []
+required_outcomes = [
+  "Choose the Azure data primitive that fits a stated expedition requirement and justify it against the adjacent service.",
+  "Compare durability, ordering, partitioning, replay, and cost characteristics across blob, queue, table, event stream, and document storage.",
+  "Apply resource-group scoping, safe naming, and teardown rules to a planned expedition deployment so every later unit stays reproducible.",
+]
+lesson_readme = "lessons/01-azure-data-map/README.md"
+exercise_starter = "exercises/01-azure-data-map/starter"
+exercise_solution = "exercises/01-azure-data-map/solution"
+solution_supplements = ["exercises/01-azure-data-map/tests"]
+review_questions = { path = "lessons/01-azure-data-map/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/01-azure-data-map/tests"]
+solution_lock_group = "solutions.azure-data-map"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.azure-data-map.primitive-tour"
+title = "Tour the five data primitives side by side"
+prerequisites = []
+lesson_project = "lessons/01-azure-data-map/PrimitiveTour"
+run_command = "dotnet run --project lessons/01-azure-data-map/PrimitiveTour"
+
+[[modules]]
+id = "module.azure-sdk-foundations"
+ordinal = 2
+title = "Build a testable C# Azure client"
+prerequisites = ["module.azure-data-map"]
+required_outcomes = [
+  "Build an Azure SDK client behind an application-owned interface so behavior can be verified without a live service.",
+  "Configure DefaultAzureCredential for live services and emulator credentials for local runs without placing secrets in source.",
+  "Diagnose transient failures using the SDK retry policy, cancellation tokens, and client diagnostics.",
+]
+lesson_readme = "lessons/02-azure-sdk-foundations/README.md"
+exercise_starter = "exercises/02-azure-sdk-foundations/starter"
+exercise_solution = "exercises/02-azure-sdk-foundations/solution"
+solution_supplements = ["exercises/02-azure-sdk-foundations/tests"]
+review_questions = { path = "lessons/02-azure-sdk-foundations/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/02-azure-sdk-foundations/tests"]
+solution_lock_group = "solutions.azure-sdk-foundations"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.azure-sdk-foundations.client-seams"
+title = "Put a seam between your code and the SDK client"
+prerequisites = []
+lesson_project = "lessons/02-azure-sdk-foundations/ClientSeams"
+run_command = "dotnet run --project lessons/02-azure-sdk-foundations/ClientSeams"
+
+[[modules]]
+id = "module.storage-account"
+ordinal = 3
+title = "Operate the shared storage boundary"
+prerequisites = ["module.azure-sdk-foundations"]
+required_outcomes = [
+  "Create, inspect, configure, and delete a storage account with behaviorally equivalent Azure CLI and Azure PowerShell workflows.",
+  "Explain how endpoints, redundancy, access tiers, encryption, and the network and auth boundary constrain the services hosted in one account.",
+  "Compare Azurite behavior with a live storage account and record which differences change a design decision.",
+]
+lesson_readme = "lessons/03-storage-account/README.md"
+exercise_starter = "exercises/03-storage-account/starter"
+exercise_solution = "exercises/03-storage-account/solution"
+solution_supplements = ["exercises/03-storage-account/tests"]
+review_questions = { path = "lessons/03-storage-account/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/03-storage-account/tests"]
+solution_lock_group = "solutions.storage-account"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.storage-account.account-boundary"
+title = "Read the storage account boundary from the outside in"
+prerequisites = []
+lesson_project = "lessons/03-storage-account/AccountBoundary"
+run_command = "dotnet run --project lessons/03-storage-account/AccountBoundary"
+
+[[modules]]
+id = "module.blob-storage"
+ordinal = 4
+title = "Preserve expedition artifacts"
+prerequisites = ["module.storage-account"]
+required_outcomes = [
+  "Implement streaming upload and download of large expedition artifacts without buffering whole payloads in memory.",
+  "Organize artifacts with containers, virtual directories, metadata, and tags, and list them with pagination and cancellation.",
+  "Measure the memory and request cost of buffered versus streamed transfers and choose the appropriate transfer option.",
+]
+lesson_readme = "lessons/04-blob-storage/README.md"
+exercise_starter = "exercises/04-blob-storage/starter"
+exercise_solution = "exercises/04-blob-storage/solution"
+solution_supplements = ["exercises/04-blob-storage/tests"]
+review_questions = { path = "lessons/04-blob-storage/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/04-blob-storage/tests"]
+solution_lock_group = "solutions.blob-storage"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.blob-storage.artifact-vault"
+title = "Stream, organize, and list expedition artifacts"
+prerequisites = []
+lesson_project = "lessons/04-blob-storage/ArtifactVault"
+run_command = "dotnet run --project lessons/04-blob-storage/ArtifactVault"
+
+[[modules]]
+id = "module.blob-lifecycle"
+ordinal = 5
+title = "Control artifact versions and deletion"
+prerequisites = ["module.blob-storage"]
+required_outcomes = [
+  "Implement conditional writes with ETag preconditions so two field uploads cannot silently overwrite one another.",
+  "Configure versioning, soft delete, and access-tier lifecycle rules that match the expedition's retention promise.",
+  "Diagnose precondition-failed and conflict responses and recover from them deterministically instead of retrying blindly.",
+]
+lesson_readme = "lessons/05-blob-lifecycle/README.md"
+exercise_starter = "exercises/05-blob-lifecycle/starter"
+exercise_solution = "exercises/05-blob-lifecycle/solution"
+solution_supplements = ["exercises/05-blob-lifecycle/tests"]
+review_questions = { path = "lessons/05-blob-lifecycle/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/05-blob-lifecycle/tests"]
+solution_lock_group = "solutions.blob-lifecycle"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.blob-lifecycle.precondition-arena"
+title = "Race two writers and watch the precondition hold"
+prerequisites = []
+lesson_project = "lessons/05-blob-lifecycle/PreconditionArena"
+run_command = "dotnet run --project lessons/05-blob-lifecycle/PreconditionArena"
+
+[[modules]]
+id = "module.queue-storage"
+ordinal = 6
+title = "Dispatch processing work"
+prerequisites = ["module.storage-account"]
+required_outcomes = [
+  "Implement a queue consumer that stays correct under at-least-once delivery and repeated redelivery of the same work order.",
+  "Configure visibility timeout, dequeue count, and poison-message routing so stuck work is quarantined rather than replayed forever.",
+  "Compare competing-consumer work dispatch with a partitioned event stream and justify which one a given expedition workload needs.",
+]
+lesson_readme = "lessons/06-queue-storage/README.md"
+exercise_starter = "exercises/06-queue-storage/starter"
+exercise_solution = "exercises/06-queue-storage/solution"
+solution_supplements = ["exercises/06-queue-storage/tests"]
+review_questions = { path = "lessons/06-queue-storage/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/06-queue-storage/tests"]
+solution_lock_group = "solutions.queue-storage"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.queue-storage.dispatch-yard"
+title = "Watch a visibility timeout expire under a slow handler"
+prerequisites = []
+lesson_project = "lessons/06-queue-storage/DispatchYard"
+run_command = "dotnet run --project lessons/06-queue-storage/DispatchYard"
+
+[[modules]]
+id = "module.table-storage"
+ordinal = 7
+title = "Index station observations"
+prerequisites = ["module.storage-account"]
+required_outcomes = [
+  "Design PartitionKey and RowKey values that turn the expedition's dominant lookups into point reads instead of scans.",
+  "Implement optimistic concurrency with entity ETags and group related writes into a transactional batch.",
+  "Measure the request cost difference between a point read, a partition scan, and a table scan on the same data set.",
+]
+lesson_readme = "lessons/07-table-storage/README.md"
+exercise_starter = "exercises/07-table-storage/starter"
+exercise_solution = "exercises/07-table-storage/solution"
+solution_supplements = ["exercises/07-table-storage/tests"]
+review_questions = { path = "lessons/07-table-storage/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/07-table-storage/tests"]
+solution_lock_group = "solutions.table-storage"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.table-storage.observation-index"
+title = "Measure a point read against a partition and a table scan"
+prerequisites = []
+lesson_project = "lessons/07-table-storage/ObservationIndex"
+run_command = "dotnet run --project lessons/07-table-storage/ObservationIndex"
+
+[[modules]]
+id = "module.event-hubs-model"
+ordinal = 8
+title = "Stream expedition telemetry"
+prerequisites = ["project.field-station"]
+required_outcomes = [
+  "Produce partitioned telemetry batches with an explicit partition-key strategy and bounded batch sizes.",
+  "Compare an event stream with a work queue and justify retention, replay, and ordering tradeoffs for sensor telemetry.",
+  "Explain how namespace, hub, partition count, and throughput limits bound ingest, and what cannot be changed after creation.",
+]
+lesson_readme = "lessons/08-event-hubs-model/README.md"
+exercise_starter = "exercises/08-event-hubs-model/starter"
+exercise_solution = "exercises/08-event-hubs-model/solution"
+solution_supplements = ["exercises/08-event-hubs-model/tests"]
+review_questions = { path = "lessons/08-event-hubs-model/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/08-event-hubs-model/tests"]
+solution_lock_group = "solutions.event-hubs-model"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.event-hubs-model.telemetry-stream"
+title = "Watch partition keys decide where telemetry lands"
+prerequisites = []
+lesson_project = "lessons/08-event-hubs-model/TelemetryStream"
+run_command = "dotnet run --project lessons/08-event-hubs-model/TelemetryStream"
+
+[[modules]]
+id = "module.event-hubs-processing"
+ordinal = 9
+title = "Consume, checkpoint, and recover"
+prerequisites = ["module.event-hubs-model"]
+required_outcomes = [
+  "Consume events with a processor client across consumer groups and persist checkpoints in Blob Storage.",
+  "Implement recovery from restart, partition rebalance, and duplicate delivery without losing or double-applying events.",
+  "Diagnose ownership churn, consumer lag, and checkpoint failures from processor diagnostics rather than from guesswork.",
+]
+lesson_readme = "lessons/09-event-hubs-processing/README.md"
+exercise_starter = "exercises/09-event-hubs-processing/starter"
+exercise_solution = "exercises/09-event-hubs-processing/solution"
+solution_supplements = ["exercises/09-event-hubs-processing/tests"]
+review_questions = { path = "lessons/09-event-hubs-processing/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/09-event-hubs-processing/tests"]
+solution_lock_group = "solutions.event-hubs-processing"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.event-hubs-processing.checkpoint-yard"
+title = "Restart a processor and watch the checkpoint decide what replays"
+prerequisites = []
+lesson_project = "lessons/09-event-hubs-processing/CheckpointYard"
+run_command = "dotnet run --project lessons/09-event-hubs-processing/CheckpointYard"
+
+[[modules]]
+id = "module.cosmos-modeling"
+ordinal = 10
+title = "Design the global journal"
+prerequisites = ["project.field-station"]
+required_outcomes = [
+  "Design a container partition key and item shape that keep the journal's dominant queries single-partition.",
+  "Measure the request-unit cost of representative reads, queries, and writes and size throughput from that evidence.",
+  "Compare Cosmos DB for NoSQL with Table Storage on query capability, cost model, and distribution, and justify which the journal needs.",
+]
+lesson_readme = "lessons/10-cosmos-modeling/README.md"
+exercise_starter = "exercises/10-cosmos-modeling/starter"
+exercise_solution = "exercises/10-cosmos-modeling/solution"
+solution_supplements = ["exercises/10-cosmos-modeling/tests"]
+review_questions = { path = "lessons/10-cosmos-modeling/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/10-cosmos-modeling/tests"]
+solution_lock_group = "solutions.cosmos-modeling"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.cosmos-modeling.request-units"
+title = "Price the same journal query against two partition keys"
+prerequisites = []
+lesson_project = "lessons/10-cosmos-modeling/RequestUnits"
+run_command = "dotnet run --project lessons/10-cosmos-modeling/RequestUnits"
+
+[[modules]]
+id = "module.cosmos-development"
+ordinal = 11
+title = "Query and update with C#"
+prerequisites = ["module.cosmos-modeling"]
+required_outcomes = [
+  "Implement point reads, parameterized queries, pagination, patch, and transactional batch against a Cosmos container.",
+  "Handle throttling responses and ETag conflicts deterministically instead of hiding them behind unbounded retries.",
+  "Diagnose query cost and index usage from Cosmos diagnostics and reduce the charge of an expensive query.",
+]
+lesson_readme = "lessons/11-cosmos-development/README.md"
+exercise_starter = "exercises/11-cosmos-development/starter"
+exercise_solution = "exercises/11-cosmos-development/solution"
+solution_supplements = ["exercises/11-cosmos-development/tests"]
+review_questions = { path = "lessons/11-cosmos-development/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/11-cosmos-development/tests"]
+solution_lock_group = "solutions.cosmos-development"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.cosmos-development.data-plane"
+title = "Page, patch, batch, and survive a throttled write"
+prerequisites = []
+lesson_project = "lessons/11-cosmos-development/DataPlane"
+run_command = "dotnet run --project lessons/11-cosmos-development/DataPlane"
+
+[[modules]]
+id = "module.secure-operable-cloud"
+ordinal = 12
+title = "Prove the live architecture"
+prerequisites = ["module.event-hubs-processing", "module.cosmos-development"]
+required_outcomes = [
+  "Assign least-privilege Entra ID roles for every service the expedition uses and prove that a removed role breaks exactly the expected call.",
+  "Verify how DefaultAzureCredential resolves in local, developer, and managed-identity contexts and where the emulator boundary ends.",
+  "Measure the cost shape of a live run and prove complete teardown with behaviorally equivalent Azure CLI and Azure PowerShell cleanup.",
+]
+lesson_readme = "lessons/12-secure-operable-cloud/README.md"
+exercise_starter = "exercises/12-secure-operable-cloud/starter"
+exercise_solution = "exercises/12-secure-operable-cloud/solution"
+solution_supplements = ["exercises/12-secure-operable-cloud/tests"]
+review_questions = { path = "lessons/12-secure-operable-cloud/README.md", heading = "Review questions" }
+validation_commands = ["dotnet test exercises/12-secure-operable-cloud/tests"]
+solution_lock_group = "solutions.secure-operable-cloud"
+untouched_starter_result = "fails"
+
+[[modules.concepts]]
+id = "concept.secure-operable-cloud.access-boundary"
+title = "Resolve an identity, scope a grant, and prove the cleanup"
+prerequisites = []
+lesson_project = "lessons/12-secure-operable-cloud/AccessBoundary"
+run_command = "dotnet run --project lessons/12-secure-operable-cloud/AccessBoundary"
+
+[[projects]]
+id = "project.field-station"
+ordinal = 1
+title = "Applied Storage field station"
+prerequisites = [
+  "module.blob-lifecycle",
+  "module.queue-storage",
+  "module.table-storage",
+]
+required_outcomes = [
+  "Build a worker that stores artifacts in Blob Storage, dispatches processing through Queue Storage, and tracks station status in Table Storage behind application-owned ports.",
+  "Implement processing that stays correct across duplicate delivery, restart, and partial failure.",
+  "Verify the whole flow deterministically against local emulators and fakes with no live Azure dependency.",
+]
+guide_path = "projects/field-station/README.md"
+starter_root = "projects/field-station/starter"
+solution_root = "projects/field-station/solution"
+tests_root = "projects/field-station/tests"
+specification_paths = ["projects/field-station/README.md"]
+implementation_selector = { kind = "project-path", learner_value = "starter", reference_value = "solution" }
+validation_commands = [
+  "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter",
+]
+solution_lock_group = "solutions.field-station"
+
+[[projects.milestones]]
+id = "milestone.field-station.domain-ports"
+ordinal = 1
+title = "Model the field-station domain and ports"
+prerequisites = []
+required_outcome = "Define the artifact, work-order, and station-status contracts as application-owned interfaces with no SDK types leaking into the domain."
+test_command = "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter --filter Milestone=domain-ports"
+untouched_starter_result = "fails"
+
+[[projects.milestones]]
+id = "milestone.field-station.artifact-storage"
+ordinal = 2
+title = "Preserve artifacts in Blob Storage"
+prerequisites = ["milestone.field-station.domain-ports"]
+required_outcome = "Stream artifacts into a container and update them under an ETag precondition."
+test_command = "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter --filter Milestone=artifact-storage"
+untouched_starter_result = "fails"
+
+[[projects.milestones]]
+id = "milestone.field-station.work-dispatch"
+ordinal = 3
+title = "Dispatch processing work"
+prerequisites = ["milestone.field-station.artifact-storage"]
+required_outcome = "Enqueue a work order per stored artifact and process it idempotently under redelivery."
+test_command = "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter --filter Milestone=work-dispatch"
+untouched_starter_result = "fails"
+
+[[projects.milestones]]
+id = "milestone.field-station.status-index"
+ordinal = 4
+title = "Index station status"
+prerequisites = ["milestone.field-station.work-dispatch"]
+required_outcome = "Record per-station processing status as point-readable entities with concurrency-safe updates."
+test_command = "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter --filter Milestone=status-index"
+untouched_starter_result = "fails"
+
+[[projects.milestones]]
+id = "milestone.field-station.failure-recovery"
+ordinal = 5
+title = "Survive failure and cleanup"
+prerequisites = ["milestone.field-station.status-index"]
+required_outcome = "Quarantine poison work, recover after restart without duplicate effects, and remove every resource the run created."
+test_command = "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter --filter Milestone=failure-recovery"
+untouched_starter_result = "fails"
+
+[[capstones]]
+id = "capstone.cloud-expedition-journal"
+ordinal = 1
+title = "Cloud Expedition Field Journal"
+prerequisites = ["module.secure-operable-cloud"]
+required_outcomes = [
+  "Build the end-to-end journal across Event Hubs, Blob, Queue, Table, and Cosmos DB behind application-owned ports.",
+  "Verify normal, boundary, and failure behavior -- duplicates, restarts, throttling, and poison work -- with deterministic local tests.",
+  "Deploy the architecture to a live subscription, operate it under least privilege, and prove complete cleanup afterwards.",
+]
+guide_path = "capstones/cloud-expedition-journal/README.md"
+starter_root = "capstones/cloud-expedition-journal/starter"
+solution_root = "capstones/cloud-expedition-journal/solution"
+tests_root = "capstones/cloud-expedition-journal/tests"
+specification_paths = ["capstones/cloud-expedition-journal/README.md"]
+implementation_selector = { kind = "project-path", learner_value = "starter", reference_value = "solution" }
+validation_commands = [
+  "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter",
+]
+solution_lock_group = "solutions.cloud-expedition-journal"
+
+[[capstones.milestones]]
+id = "milestone.cloud-expedition-journal.domain-ports"
+ordinal = 1
+title = "Model the journal domain and ports"
+prerequisites = []
+required_outcome = "Define telemetry, artifact, station, and journal-entry contracts independent of any Azure SDK type."
+test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=domain-ports"
+untouched_starter_result = "fails"
+
+[[capstones.milestones]]
+id = "milestone.cloud-expedition-journal.storage-workflow"
+ordinal = 2
+title = "Preserve reports and dispatch work"
+prerequisites = ["milestone.cloud-expedition-journal.domain-ports"]
+required_outcome = "Store reports in Blob Storage under preconditions, queue artifact work, and track station state in Table Storage."
+test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=storage-workflow"
+untouched_starter_result = "fails"
+
+[[capstones.milestones]]
+id = "milestone.cloud-expedition-journal.telemetry-pipeline"
+ordinal = 3
+title = "Ingest and process telemetry"
+prerequisites = ["milestone.cloud-expedition-journal.storage-workflow"]
+required_outcome = "Produce keyed telemetry batches and consume them with Blob checkpointing that survives restart and duplicates."
+test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=telemetry-pipeline"
+untouched_starter_result = "fails"
+
+[[capstones.milestones]]
+id = "milestone.cloud-expedition-journal.cosmos-projection"
+ordinal = 4
+title = "Project the queryable journal"
+prerequisites = ["milestone.cloud-expedition-journal.telemetry-pipeline"]
+required_outcome = "Project processed telemetry and artifacts into a Cosmos container whose dominant queries stay single-partition under throttling."
+test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=cosmos-projection"
+untouched_starter_result = "fails"
+
+[[capstones.milestones]]
+id = "milestone.cloud-expedition-journal.live-operations"
+ordinal = 5
+title = "Deploy, operate, and tear down"
+prerequisites = ["milestone.cloud-expedition-journal.cosmos-projection"]
+required_outcome = "Run the journal against a live subscription under least-privilege roles, capture diagnostics and cost, and verify complete teardown."
+test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=live-operations"
+untouched_starter_result = "fails"
+
+[[solution_lock_groups]]
+id = "solutions.azure-data-map"
+paths = ["exercises/01-azure-data-map/solution", "exercises/01-azure-data-map/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.azure-sdk-foundations"
+paths = ["exercises/02-azure-sdk-foundations/solution", "exercises/02-azure-sdk-foundations/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.storage-account"
+paths = ["exercises/03-storage-account/solution", "exercises/03-storage-account/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.blob-storage"
+paths = ["exercises/04-blob-storage/solution", "exercises/04-blob-storage/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.blob-lifecycle"
+paths = ["exercises/05-blob-lifecycle/solution", "exercises/05-blob-lifecycle/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.queue-storage"
+paths = ["exercises/06-queue-storage/solution", "exercises/06-queue-storage/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.table-storage"
+paths = ["exercises/07-table-storage/solution", "exercises/07-table-storage/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.event-hubs-model"
+paths = ["exercises/08-event-hubs-model/solution", "exercises/08-event-hubs-model/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.event-hubs-processing"
+paths = ["exercises/09-event-hubs-processing/solution", "exercises/09-event-hubs-processing/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.cosmos-modeling"
+paths = ["exercises/10-cosmos-modeling/solution", "exercises/10-cosmos-modeling/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.cosmos-development"
+paths = ["exercises/11-cosmos-development/solution", "exercises/11-cosmos-development/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+[[solution_lock_groups]]
+id = "solutions.secure-operable-cloud"
+paths = ["exercises/12-secure-operable-cloud/solution", "exercises/12-secure-operable-cloud/tests"]
+unlock_policy = "after-unit-validation"
+solution_unlock_after = 2
+
+# The project locks only its reference implementation. The evaluator stays
+# visible on purpose: it is the specification the learner works against, and the
+# milestone commands are meaningless if the assertions are hidden. The unlock
+# threshold is higher than a module's because a project milestone is a longer
+# piece of work, and comparing after two attempts would be comparing too early.
+[[solution_lock_groups]]
+id = "solutions.field-station"
+paths = ["projects/field-station/solution"]
+unlock_policy = "after-matching-milestone-validation"
+solution_unlock_after = 3
+
+# The capstone locks its reference implementation on the same terms as the
+# project, and for the same reason: the evaluator is the specification, so it
+# stays visible while the answer does not. Its end-to-end host is part of the
+# reference tree, so unlocking it early would hand over the whole integration.
+[[solution_lock_groups]]
+id = "solutions.cloud-expedition-journal"
+paths = ["capstones/cloud-expedition-journal/solution"]
+unlock_policy = "after-matching-milestone-validation"
+solution_unlock_after = 3

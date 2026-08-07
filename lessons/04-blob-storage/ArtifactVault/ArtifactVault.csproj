@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.blob-storage. Requires a running Azurite
+    container; see lessons/04-blob-storage/README.md for the exact commands.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.BlobStorage</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.BlobStorage.ArtifactVault</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" />
+  </ItemGroup>
+
+</Project>

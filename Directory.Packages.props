@@ -1,0 +1,60 @@
+<Project>
+
+  <!--
+    Central Package Management (CPM). Every project references packages without a
+    Version attribute; the single authoritative version lives here. Package
+    versions are added as modules, projects, and the capstone are built, pinned
+    only after checking the Azure SDK for .NET release inventory at that time.
+  -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+
+  <ItemGroup Label="Testing">
+    <!--
+      Test toolchain, shared by the course verifier today and by every lesson,
+      exercise, project, and capstone evaluator as they land. Versions are the
+      current stable releases on nuget.org checked at pin time.
+    -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="coverlet.collector" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Azure SDK">
+    <!--
+      Pinned with the Storage stage. Versions are the current stable releases on
+      nuget.org checked at pin time.
+    -->
+    <PackageVersion Include="Azure.Core" Version="1.61.0" />
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.29.1" />
+    <PackageVersion Include="Azure.Storage.Queues" Version="12.27.1" />
+    <PackageVersion Include="Azure.Data.Tables" Version="12.11.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Event Hubs">
+    <!--
+      Pinned with the Event Hubs stage. Azure.Messaging.EventHubs.Processor
+      carries the Blob Storage checkpoint store, so module 9 needs both packages
+      and Azure.Storage.Blobs above.
+    -->
+    <PackageVersion Include="Azure.Messaging.EventHubs" Version="5.12.2" />
+    <PackageVersion Include="Azure.Messaging.EventHubs.Processor" Version="5.12.2" />
+  </ItemGroup>
+
+  <ItemGroup Label="Cosmos DB">
+    <!--
+      Pinned with the Cosmos DB stage. Newtonsoft.Json is referenced directly by
+      the Cosmos companions because Microsoft.Azure.Cosmos.targets fails the
+      build without it; the SDK v3 document model depends on it even when the
+      client uses the System.Text.Json serializer.
+    -->
+    <PackageVersion Include="Microsoft.Azure.Cosmos" Version="3.62.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+</Project>

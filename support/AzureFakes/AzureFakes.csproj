@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Shared, offline test doubles for the Azure SDK for .NET.
+
+    Course evaluators must be deterministic and offline, but the behavior several
+    Storage modules teach — retry bounds, honored cancellation, ETag
+    preconditions, error classification — only exists inside a real SDK client.
+    This project supplies a scripted HTTP transport so evaluators drive the real
+    client types with no network, no emulator, and no wall-clock dependency.
+
+    It is course infrastructure, not learner-facing material: nothing here is a
+    reference solution and nothing here is locked.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Support.AzureFakes</RootNamespace>
+    <AssemblyName>LearningAzure.Support.AzureFakes</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Core" />
+  </ItemGroup>
+
+</Project>

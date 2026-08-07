@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for capstone.cloud-expedition-journal.
+
+    It is an executable because the capstone is judged twice: by the shared
+    evaluator in ../tests, and by a real end-to-end run against the local
+    emulators that the guide documents. The same assembly serves both, so the
+    code the evaluator grades is the code the emulator run executes.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Capstones.CloudExpeditionJournal</RootNamespace>
+    <AssemblyName>LearningAzure.Capstones.CloudExpeditionJournal.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Azure.Storage.Blobs" />
+    <PackageReference Include="Azure.Storage.Queues" />
+    <PackageReference Include="Azure.Data.Tables" />
+    <PackageReference Include="Azure.Messaging.EventHubs" />
+    <PackageReference Include="Microsoft.Azure.Cosmos" />
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+</Project>

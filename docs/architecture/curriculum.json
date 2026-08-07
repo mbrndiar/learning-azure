@@ -1,0 +1,1268 @@
+{
+  "plan_version": 1,
+  "schema_document": "docs/architecture/curriculum-plan-schema.md",
+  "course_id": "learning-azure",
+  "narrative_document": "docs/architecture/curriculum.md",
+  "evidence_matrix_document": "docs/architecture/evidence-matrix.md",
+  "manifest_document": ".agents/skills/azure-learning-path/course.toml",
+  "conventions": {
+    "lesson_root": "lessons/{ordinal}-{slug}",
+    "exercise_root": "exercises/{ordinal}-{slug}",
+    "project_root": "projects/{slug}",
+    "capstone_root": "capstones/{slug}",
+    "practice_trees": [
+      "starter",
+      "solution",
+      "tests"
+    ],
+    "cli_lab": "infra/azure-cli/{slug}.sh",
+    "powershell_lab": "infra/powershell/{slug}.ps1"
+  },
+  "roles": [
+    {
+      "role": "learner-entry-point",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "README.md",
+      "status": "present",
+      "note": "Course promise, audience, supported versions, non-goals, and reading order."
+    },
+    {
+      "role": "setup-and-troubleshooting",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "docs/SETUP.md",
+      "status": "present",
+      "note": "Toolchain install, emulator startup, live-subscription preflight, and failure diagnosis."
+    },
+    {
+      "role": "sequenced-instructional-units",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "lessons",
+      "status": "present",
+      "note": "One directory per module holding the primary narrative README and its runnable companions."
+    },
+    {
+      "role": "practice-starter-and-solution",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "exercises",
+      "status": "present",
+      "note": "One starter, one reference solution, and one shared evaluator per module."
+    },
+    {
+      "role": "applied-projects-and-capstones",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "projects",
+      "status": "present",
+      "note": "The Field Station project applies Blob, Queue, and Table Storage unaided before Event Hubs and Cosmos DB depend on it; the capstone lives in capstones/."
+    },
+    {
+      "role": "reference-and-recall",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "docs/CHEATSHEET.md",
+      "status": "planned",
+      "note": "Service-selection table, SDK client cheat sheet, and paired CLI/PowerShell command recall."
+    },
+    {
+      "role": "environment-manifests",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "compose.yaml",
+      "status": "present",
+      "note": "Emulator Compose stack alongside global.json, Directory.Build.props, and Directory.Packages.props."
+    },
+    {
+      "role": "automated-validation",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": "tools/CourseVerifier",
+      "status": "present",
+      "note": "Course verifier plus the workflow in .github/workflows/course.yml and the gates in docs/QUALITY.md."
+    },
+    {
+      "role": "learning-mentor-integration",
+      "contract_reference": "QUALITY_CONTRACT.md#4-required-repository-roles",
+      "path": ".agents/skills/azure-learning-path",
+      "status": "present",
+      "note": "Course-owned manifest, schema, adapter, and skill bound by .learning-mentor.toml."
+    }
+  ],
+  "units": [
+    {
+      "id": "module.azure-data-map",
+      "kind": "module",
+      "slug": "azure-data-map",
+      "ordinal": 1,
+      "sequence": 1,
+      "title": "Choose the right Azure data primitive",
+      "summary": "Establish the mental model that separates durable objects, work messages, keyed entities, event streams, and queryable documents, and the naming and cleanup discipline every later unit depends on.",
+      "prerequisites": [],
+      "environments": [
+        "local"
+      ],
+      "management_labs": false,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.azure-data-map.select-primitive",
+          "statement": "Choose the Azure data primitive that fits a stated expedition requirement and justify it against the adjacent service.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.azure-data-map.compare-characteristics",
+          "statement": "Compare durability, ordering, partitioning, replay, and cost characteristics across blob, queue, table, event stream, and document storage.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.azure-data-map.apply-naming-discipline",
+          "statement": "Apply resource-group scoping, safe naming, and teardown rules to a planned expedition deployment so every later unit stays reproducible.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Module objectives name each primitive and the selection criteria."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative derives the selection criteria from expedition requirements and includes a decision table plus authentic C# client-type fragments."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A runnable comparison companion prints the shape of each primitive against the same expedition record."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The shared evaluator scores selection decisions and their justifications against fixture requirements."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "The Field Station project requires an unaided primitive choice for each stage of its pipeline.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "module.azure-sdk-foundations",
+      "kind": "module",
+      "slug": "azure-sdk-foundations",
+      "ordinal": 2,
+      "sequence": 2,
+      "title": "Build a testable C# Azure client",
+      "summary": "Azure SDK for .NET client conventions: credentials, options, retries, cancellation, async streaming, diagnostics, and the application-owned seams that keep later units testable offline.",
+      "prerequisites": [
+        "module.azure-data-map"
+      ],
+      "environments": [
+        "local"
+      ],
+      "management_labs": false,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.azure-sdk-foundations.build-testable-client",
+          "statement": "Build an Azure SDK client behind an application-owned interface so behavior can be verified without a live service.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.azure-sdk-foundations.configure-credentials",
+          "statement": "Configure DefaultAzureCredential for live services and emulator credentials for local runs without placing secrets in source.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.azure-sdk-foundations.diagnose-transients",
+          "statement": "Diagnose transient failures using the SDK retry policy, cancellation tokens, and client diagnostics.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name credential chain, options, retries, cancellation, and diagnostics."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains why the SDK exposes these seams, with an annotated request/retry trace and excerpted client construction."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "Companions show a retried call, an honored cancellation, and captured diagnostic output."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects swallowed cancellation, missing retry bounds, and untestable client construction."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "Every project adapter is written against the learner's own client seam.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "module.storage-account",
+      "kind": "module",
+      "slug": "storage-account",
+      "ordinal": 3,
+      "sequence": 3,
+      "title": "Operate the shared storage boundary",
+      "summary": "The storage account is the shared boundary for Blob, Queue, and Table. Endpoints, redundancy, access tiers, encryption, and the auth boundary are configured through mirrored Azure CLI and Azure PowerShell workflows, first against Azurite and then at the first live checkpoint.",
+      "prerequisites": [
+        "module.azure-sdk-foundations"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.storage-account.manage-lifecycle",
+          "statement": "Create, inspect, configure, and delete a storage account with behaviorally equivalent Azure CLI and Azure PowerShell workflows.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.storage-account.explain-boundaries",
+          "statement": "Explain how endpoints, redundancy, access tiers, encryption, and the network and auth boundary constrain the services hosted in one account.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.storage-account.compare-emulator-parity",
+          "statement": "Compare Azurite behavior with a live storage account and record which differences change a design decision.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name account scope, endpoints, redundancy, tiers, encryption, and the auth boundary."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains why the account is the unit of billing, endpoint, and access control, with an account/endpoint diagram."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "cli_lab"
+          },
+          "note": "Paired CLI and PowerShell labs create, inspect, reconfigure, and delete a real account with captured output."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator checks account-configuration reasoning and endpoint resolution against fixtures."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "The project run creates, uses, and tears down its own account-scoped resources.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "module.blob-storage",
+      "kind": "module",
+      "slug": "blob-storage",
+      "ordinal": 4,
+      "sequence": 4,
+      "title": "Preserve expedition artifacts",
+      "summary": "Containers, streaming upload and download, metadata and tags, virtual directories, and paginated listing for field reports and photographs.",
+      "prerequisites": [
+        "module.storage-account"
+      ],
+      "environments": [
+        "emulator"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "split_rationale": "Object mechanics and precondition semantics have different prerequisite boundaries and independently verifiable practice contracts, so storing artifacts is taught separately from controlling their versions and deletion.",
+      "outcomes": [
+        {
+          "id": "outcome.blob-storage.stream-artifacts",
+          "statement": "Implement streaming upload and download of large expedition artifacts without buffering whole payloads in memory.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.blob-storage.organize-artifacts",
+          "statement": "Organize artifacts with containers, virtual directories, metadata, and tags, and list them with pagination and cancellation.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.blob-storage.measure-transfer-cost",
+          "statement": "Measure the memory and request cost of buffered versus streamed transfers and choose the appropriate transfer option.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name containers, blobs, streaming, metadata, tags, and listing."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains the flat namespace behind virtual directories, with an excerpted upload fragment and a captured listing observation."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "Companions upload, stream back, tag, and page through artifacts against Azurite."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects buffered uploads, unpaged listing, and lost cancellation."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "The Field Station project stores every artifact through the learner's own blob adapter.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "module.blob-lifecycle",
+      "kind": "module",
+      "slug": "blob-lifecycle",
+      "ordinal": 5,
+      "sequence": 5,
+      "title": "Control artifact versions and deletion",
+      "summary": "Conditional writes with ETag preconditions, versioning, soft delete, access-tier lifecycle rules, and deterministic recovery from precondition and conflict failures.",
+      "prerequisites": [
+        "module.blob-storage"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "split_rationale": "Precondition, version, and retention semantics form an independently teachable mental model whose evaluator asserts concurrency behavior rather than transfer behavior.",
+      "outcomes": [
+        {
+          "id": "outcome.blob-lifecycle.conditional-writes",
+          "statement": "Implement conditional writes with ETag preconditions so two field uploads cannot silently overwrite one another.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.blob-lifecycle.configure-retention",
+          "statement": "Configure versioning, soft delete, and access-tier lifecycle rules that match the expedition's retention promise.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.blob-lifecycle.diagnose-precondition-failures",
+          "statement": "Diagnose precondition-failed and conflict responses and recover from them deterministically instead of retrying blindly.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name ETags, conditional headers, versioning, soft delete, and lifecycle rules."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains lost-update prevention with a state table of two concurrent writers and an excerpted conditional-write fragment."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion reproduces a precondition failure and its captured error response against Azurite."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator injects a competing writer and rejects unconditional overwrite and blind retry."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "The Field Station project must keep artifact updates safe under duplicate processing.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "module.queue-storage",
+      "kind": "module",
+      "slug": "queue-storage",
+      "ordinal": 6,
+      "sequence": 6,
+      "title": "Dispatch processing work",
+      "summary": "Work orders as queue messages: encoding and size limits, visibility timeout, dequeue count, at-least-once delivery, idempotent handlers, and poison-message routing.",
+      "prerequisites": [
+        "module.storage-account"
+      ],
+      "environments": [
+        "emulator"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.queue-storage.idempotent-consumer",
+          "statement": "Implement a queue consumer that stays correct under at-least-once delivery and repeated redelivery of the same work order.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.queue-storage.configure-delivery",
+          "statement": "Configure visibility timeout, dequeue count, and poison-message routing so stuck work is quarantined rather than replayed forever.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.queue-storage.compare-with-streams",
+          "statement": "Compare competing-consumer work dispatch with a partitioned event stream and justify which one a given expedition workload needs.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name visibility timeout, dequeue count, at-least-once delivery, idempotency, and poison handling."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains message lifecycle with a state table from enqueue through invisibility, redelivery, and quarantine."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion forces a redelivery and shows the captured dequeue-count progression."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator replays a duplicate message and rejects handlers with observable double effects."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "The Field Station project dispatches all artifact processing through the learner's queue adapter.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "module.table-storage",
+      "kind": "module",
+      "slug": "table-storage",
+      "ordinal": 7,
+      "sequence": 7,
+      "title": "Index station observations",
+      "summary": "PartitionKey and RowKey design, entity shape, point reads versus filtered scans, entity ETags, optimistic concurrency, and transactional batches.",
+      "prerequisites": [
+        "module.storage-account"
+      ],
+      "environments": [
+        "emulator"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.table-storage.design-keys",
+          "statement": "Design PartitionKey and RowKey values that turn the expedition's dominant lookups into point reads instead of scans.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.table-storage.concurrent-updates",
+          "statement": "Implement optimistic concurrency with entity ETags and group related writes into a transactional batch.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.table-storage.measure-query-cost",
+          "statement": "Measure the request cost difference between a point read, a partition scan, and a table scan on the same data set.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name partition and row keys, entity shape, filters, ETags, and batches."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains why key design decides cost, with a key-layout table and an excerpted entity definition."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion contrasts a point read with a scan and shows captured timing and request counts."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects scan-based lookups, stale-ETag writes, and cross-partition batches."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "note": "The Field Station project tracks station status through the learner's table adapter.",
+          "artifact": {
+            "role": "project_starter"
+          }
+        }
+      ]
+    },
+    {
+      "id": "project.field-station",
+      "kind": "project",
+      "slug": "field-station",
+      "ordinal": 1,
+      "sequence": 8,
+      "title": "Applied Storage field station",
+      "summary": "A staged worker that preserves artifacts in Blob Storage, dispatches processing through Queue Storage, and tracks station status in Table Storage, applying every Storage concept independently before Event Hubs and Cosmos DB depend on it.",
+      "prerequisites": [
+        "module.blob-lifecycle",
+        "module.queue-storage",
+        "module.table-storage"
+      ],
+      "environments": [
+        "emulator"
+      ],
+      "management_labs": false,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.field-station.build-pipeline",
+          "statement": "Build a worker that stores artifacts in Blob Storage, dispatches processing through Queue Storage, and tracks station status in Table Storage behind application-owned ports.",
+          "measured_by": "project_tests"
+        },
+        {
+          "id": "outcome.field-station.survive-duplicates",
+          "statement": "Implement processing that stays correct across duplicate delivery, restart, and partial failure.",
+          "measured_by": "project_tests"
+        },
+        {
+          "id": "outcome.field-station.verify-locally",
+          "statement": "Verify the whole flow deterministically against local emulators and fakes with no live Azure dependency.",
+          "measured_by": "project_tests"
+        }
+      ],
+      "milestones": [
+        {
+          "id": "milestone.field-station.domain-ports",
+          "ordinal": 1,
+          "title": "Model the field-station domain and ports",
+          "prerequisites": [],
+          "required_outcome": "Define the artifact, work-order, and station-status contracts as application-owned interfaces with no SDK types leaking into the domain."
+        },
+        {
+          "id": "milestone.field-station.artifact-storage",
+          "ordinal": 2,
+          "title": "Preserve artifacts in Blob Storage",
+          "prerequisites": [
+            "milestone.field-station.domain-ports"
+          ],
+          "required_outcome": "Stream artifacts into a container and update them under an ETag precondition."
+        },
+        {
+          "id": "milestone.field-station.work-dispatch",
+          "ordinal": 3,
+          "title": "Dispatch processing work",
+          "prerequisites": [
+            "milestone.field-station.artifact-storage"
+          ],
+          "required_outcome": "Enqueue a work order per stored artifact and process it idempotently under redelivery."
+        },
+        {
+          "id": "milestone.field-station.status-index",
+          "ordinal": 4,
+          "title": "Index station status",
+          "prerequisites": [
+            "milestone.field-station.work-dispatch"
+          ],
+          "required_outcome": "Record per-station processing status as point-readable entities with concurrency-safe updates."
+        },
+        {
+          "id": "milestone.field-station.failure-recovery",
+          "ordinal": 5,
+          "title": "Survive failure and cleanup",
+          "prerequisites": [
+            "milestone.field-station.status-index"
+          ],
+          "required_outcome": "Quarantine poison work, recover after restart without duplicate effects, and remove every resource the run created."
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "project_guide",
+            "anchor": "objectives"
+          },
+          "note": "The project guide names the milestones and the Storage concepts each one applies."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "project_guide"
+          },
+          "note": "The guide explains the architecture and data flow without reteaching module material."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "project_solution"
+          },
+          "note": "The reference implementation shows the taught approach end to end."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "project_tests"
+          },
+          "note": "One shared contract suite judges the starter and the reference solution identically, including adversarial duplicate and stale-ETag fixtures."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "project_starter"
+          },
+          "note": "The learner implements every milestone unaided in the starter tree."
+        }
+      ]
+    },
+    {
+      "id": "module.event-hubs-model",
+      "kind": "module",
+      "slug": "event-hubs-model",
+      "ordinal": 8,
+      "sequence": 9,
+      "title": "Stream expedition telemetry",
+      "summary": "Namespaces, hubs, partitions, partition keys, producer batching, throughput and capacity concepts, retention and replay, and the boundaries of the Event Hubs emulator.",
+      "prerequisites": [
+        "project.field-station"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.event-hubs-model.produce-batches",
+          "statement": "Produce partitioned telemetry batches with an explicit partition-key strategy and bounded batch sizes.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.event-hubs-model.compare-with-queues",
+          "statement": "Compare an event stream with a work queue and justify retention, replay, and ordering tradeoffs for sensor telemetry.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.event-hubs-model.explain-capacity",
+          "statement": "Explain how namespace, hub, partition count, and throughput limits bound ingest, and what cannot be changed after creation.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name namespace, hub, partition, partition key, batch, retention, and throughput units."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains partition assignment with a diagram mapping station keys to partitions and an excerpted batch producer fragment."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion publishes keyed batches against the Event Hubs emulator with captured partition distribution."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects unkeyed publishing, unbounded batches, and ordering claims the service does not make."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_starter"
+          },
+          "note": "The capstone requires an independently chosen partition-key strategy for live telemetry. Resolved in capstone.cloud-expedition-journal#milestone-1-the-domain-and-the-ports."
+        }
+      ]
+    },
+    {
+      "id": "module.event-hubs-processing",
+      "kind": "module",
+      "slug": "event-hubs-processing",
+      "ordinal": 9,
+      "sequence": 10,
+      "title": "Consume, checkpoint, and recover",
+      "summary": "Consumer groups, partition ownership and load balancing, EventProcessorClient, Blob-backed checkpoints, replay, duplicates, cancellation, and recovery after restart.",
+      "prerequisites": [
+        "module.event-hubs-model"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.event-hubs-processing.consume-with-checkpoints",
+          "statement": "Consume events with a processor client across consumer groups and persist checkpoints in Blob Storage.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.event-hubs-processing.recover-from-failure",
+          "statement": "Implement recovery from restart, partition rebalance, and duplicate delivery without losing or double-applying events.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.event-hubs-processing.diagnose-lag",
+          "statement": "Diagnose ownership churn, consumer lag, and checkpoint failures from processor diagnostics rather than from guesswork.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name consumer groups, ownership, checkpoints, replay, and rebalancing."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains checkpoint semantics with an annotated offset trace across a restart."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion restarts a processor mid-stream and shows the captured replay window."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects checkpointing before successful handling, swallowed cancellation, and non-idempotent handlers."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_starter"
+          },
+          "note": "The capstone consumes live telemetry with the learner's own checkpointing strategy. Resolved in capstone.cloud-expedition-journal#milestone-3-the-telemetry-pipeline."
+        }
+      ]
+    },
+    {
+      "id": "module.cosmos-modeling",
+      "kind": "module",
+      "slug": "cosmos-modeling",
+      "ordinal": 10,
+      "sequence": 11,
+      "title": "Design the global journal",
+      "summary": "Accounts, databases, containers, and items; JSON boundaries; partition-key design; request units; consistency levels; indexing policy; and deliberate denormalization.",
+      "prerequisites": [
+        "project.field-station"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.cosmos-modeling.design-partition-key",
+          "statement": "Design a container partition key and item shape that keep the journal's dominant queries single-partition.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.cosmos-modeling.measure-request-units",
+          "statement": "Measure the request-unit cost of representative reads, queries, and writes and size throughput from that evidence.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.cosmos-modeling.compare-with-tables",
+          "statement": "Compare Cosmos DB for NoSQL with Table Storage on query capability, cost model, and distribution, and justify which the journal needs.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name containers, items, partition keys, request units, consistency, and indexing."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains logical versus physical partitions with a diagram and an excerpted item model."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion runs the same query under two key designs and shows captured request-unit charges."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects cross-partition fan-out for the dominant query and unjustified consistency downgrades."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_starter"
+          },
+          "note": "The capstone journal projection is modeled by the learner without a prescribed key. Resolved in capstone.cloud-expedition-journal#milestone-4-the-journal-projection."
+        }
+      ]
+    },
+    {
+      "id": "module.cosmos-development",
+      "kind": "module",
+      "slug": "cosmos-development",
+      "ordinal": 11,
+      "sequence": 12,
+      "title": "Query and update with C#",
+      "summary": "CosmosClient lifetime, point reads, parameterized queries, pagination, patch operations, transactional batch, ETag concurrency, bulk work, throttling, and diagnostics.",
+      "prerequisites": [
+        "module.cosmos-modeling"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.cosmos-development.implement-data-access",
+          "statement": "Implement point reads, parameterized queries, pagination, patch, and transactional batch against a Cosmos container.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.cosmos-development.handle-throttling",
+          "statement": "Handle throttling responses and ETag conflicts deterministically instead of hiding them behind unbounded retries.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.cosmos-development.diagnose-query-cost",
+          "statement": "Diagnose query cost and index usage from Cosmos diagnostics and reduce the charge of an expensive query.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name client lifetime, point reads, queries, pagination, patch, batch, and throttling."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains why a single long-lived client and parameterized queries matter, with excerpted query code."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_projects_root"
+          },
+          "note": "A companion pages a query and shows the captured continuation and request charge per page."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator rejects string-concatenated queries, per-call client construction, and swallowed throttling."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_starter"
+          },
+          "note": "The capstone projection and query surface are written unaided. Resolved in capstone.cloud-expedition-journal#milestone-4-the-journal-projection."
+        }
+      ]
+    },
+    {
+      "id": "module.secure-operable-cloud",
+      "kind": "module",
+      "slug": "secure-operable-cloud",
+      "ordinal": 12,
+      "sequence": 13,
+      "title": "Prove the live architecture",
+      "summary": "Microsoft Entra ID roles and least privilege, the managed-identity boundary, monitoring and diagnostics, cost controls, emulator parity gaps, and complete paired CLI and PowerShell teardown.",
+      "prerequisites": [
+        "module.event-hubs-processing",
+        "module.cosmos-development"
+      ],
+      "environments": [
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "outcomes": [
+        {
+          "id": "outcome.secure-operable-cloud.assign-least-privilege",
+          "statement": "Assign least-privilege Entra ID roles for every service the expedition uses and prove that a removed role breaks exactly the expected call.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.secure-operable-cloud.verify-identity-boundary",
+          "statement": "Verify how DefaultAzureCredential resolves in local, developer, and managed-identity contexts and where the emulator boundary ends.",
+          "measured_by": "exercise_tests"
+        },
+        {
+          "id": "outcome.secure-operable-cloud.prove-cleanup",
+          "statement": "Measure the cost shape of a live run and prove complete teardown with behaviorally equivalent Azure CLI and Azure PowerShell cleanup.",
+          "measured_by": "exercise_tests"
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme",
+            "anchor": "objectives"
+          },
+          "note": "Objectives name Entra roles, managed identity, diagnostics, cost controls, and teardown."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "lesson_readme"
+          },
+          "note": "Narrative explains the credential chain and role-assignment scope with a resolution diagram."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "cli_lab"
+          },
+          "note": "Paired labs assign, test, and revoke a role and show the captured authorization failure."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "exercise_tests"
+          },
+          "note": "The evaluator checks role scoping, preflight fail-closed behavior, and post-cleanup verification."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_starter"
+          },
+          "note": "The capstone live checkpoint is operated and torn down by the learner. Resolved in capstone.cloud-expedition-journal#milestone-5-running-it-for-real."
+        }
+      ]
+    },
+    {
+      "id": "capstone.cloud-expedition-journal",
+      "kind": "capstone",
+      "slug": "cloud-expedition-journal",
+      "ordinal": 1,
+      "sequence": 14,
+      "title": "Cloud Expedition Field Journal",
+      "summary": "Ingest sensor telemetry through Event Hubs with Blob checkpointing, queue artifact work, preserve reports in Blob Storage, track station state in Table Storage, and project a queryable journal into Cosmos DB, then deploy and tear it down live.",
+      "prerequisites": [
+        "module.secure-operable-cloud"
+      ],
+      "environments": [
+        "emulator",
+        "live-checkpoint"
+      ],
+      "management_labs": true,
+      "artifact_status": "present",
+      "final_destination": true,
+      "outcomes": [
+        {
+          "id": "outcome.cloud-expedition-journal.build-end-to-end",
+          "statement": "Build the end-to-end journal across Event Hubs, Blob, Queue, Table, and Cosmos DB behind application-owned ports.",
+          "measured_by": "capstone_tests"
+        },
+        {
+          "id": "outcome.cloud-expedition-journal.verify-failure-behavior",
+          "statement": "Verify normal, boundary, and failure behavior — duplicates, restarts, throttling, and poison work — with deterministic local tests.",
+          "measured_by": "capstone_tests"
+        },
+        {
+          "id": "outcome.cloud-expedition-journal.operate-live",
+          "statement": "Deploy the architecture to a live subscription, operate it under least privilege, and prove complete cleanup afterwards.",
+          "measured_by": "capstone_tests"
+        }
+      ],
+      "milestones": [
+        {
+          "id": "milestone.cloud-expedition-journal.domain-ports",
+          "ordinal": 1,
+          "title": "Model the journal domain and ports",
+          "prerequisites": [],
+          "required_outcome": "Define telemetry, artifact, station, and journal-entry contracts independent of any Azure SDK type."
+        },
+        {
+          "id": "milestone.cloud-expedition-journal.storage-workflow",
+          "ordinal": 2,
+          "title": "Preserve reports and dispatch work",
+          "prerequisites": [
+            "milestone.cloud-expedition-journal.domain-ports"
+          ],
+          "required_outcome": "Store reports in Blob Storage under preconditions, queue artifact work, and track station state in Table Storage."
+        },
+        {
+          "id": "milestone.cloud-expedition-journal.telemetry-pipeline",
+          "ordinal": 3,
+          "title": "Ingest and process telemetry",
+          "prerequisites": [
+            "milestone.cloud-expedition-journal.storage-workflow"
+          ],
+          "required_outcome": "Produce keyed telemetry batches and consume them with Blob checkpointing that survives restart and duplicates."
+        },
+        {
+          "id": "milestone.cloud-expedition-journal.cosmos-projection",
+          "ordinal": 4,
+          "title": "Project the queryable journal",
+          "prerequisites": [
+            "milestone.cloud-expedition-journal.telemetry-pipeline"
+          ],
+          "required_outcome": "Project processed telemetry and artifacts into a Cosmos container whose dominant queries stay single-partition under throttling."
+        },
+        {
+          "id": "milestone.cloud-expedition-journal.live-operations",
+          "ordinal": 5,
+          "title": "Deploy, operate, and tear down",
+          "prerequisites": [
+            "milestone.cloud-expedition-journal.cosmos-projection"
+          ],
+          "required_outcome": "Run the journal against a live subscription under least-privilege roles, capture diagnostics and cost, and verify complete teardown."
+        }
+      ],
+      "evidence": [
+        {
+          "stage": "named",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_guide",
+            "anchor": "objectives"
+          },
+          "note": "The capstone guide names each milestone and the services it integrates."
+        },
+        {
+          "stage": "explained",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_guide",
+            "anchor": "architecture"
+          },
+          "note": "The guide explains the target architecture, data flow, and acceptance criteria without reteaching modules."
+        },
+        {
+          "stage": "demonstrated",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_solution"
+          },
+          "note": "The reference implementation runs end to end locally and at the live checkpoint."
+        },
+        {
+          "stage": "practiced",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_tests"
+          },
+          "note": "One shared acceptance suite judges the starter and the reference solution identically across normal, boundary, and failure cases."
+        },
+        {
+          "stage": "applied",
+          "status": "covered",
+          "artifact": {
+            "role": "capstone_starter"
+          },
+          "note": "The learner completes every milestone unaided in the starter tree."
+        }
+      ]
+    }
+  ]
+}

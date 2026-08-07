@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Learner tree for module.blob-lifecycle. The focused command is documented in
+    lessons/05-blob-lifecycle/README.md.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.BlobLifecycle</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.BlobLifecycle.Starter</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" />
+  </ItemGroup>
+
+</Project>

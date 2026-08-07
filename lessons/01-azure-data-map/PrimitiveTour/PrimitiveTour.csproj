@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.DataMap</RootNamespace>
+    <AssemblyName>PrimitiveTour</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      Referenced so the tour can print the *real* client type each Storage
+      primitive is reached through, rather than a name that could drift.
+    -->
+    <PackageReference Include="Azure.Storage.Blobs" />
+    <PackageReference Include="Azure.Storage.Queues" />
+    <PackageReference Include="Azure.Data.Tables" />
+  </ItemGroup>
+
+</Project>

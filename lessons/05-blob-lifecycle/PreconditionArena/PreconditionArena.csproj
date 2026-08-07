@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lesson companion for module.blob-lifecycle. Requires a running Azurite
+    container; see lessons/05-blob-lifecycle/README.md for the exact commands.
+  -->
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>LearningAzure.Lessons.BlobLifecycle</RootNamespace>
+    <AssemblyName>LearningAzure.Lessons.BlobLifecycle.PreconditionArena</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" />
+  </ItemGroup>
+
+</Project>

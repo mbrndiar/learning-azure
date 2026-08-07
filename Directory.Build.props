@@ -1,0 +1,65 @@
+<Project>
+
+  <!--
+    Central build configuration for every project in the course.
+
+    The .NET 10 target framework, nullable reference types, warnings-as-errors,
+    analyzers, and deterministic builds are the baseline quality gate that lesson,
+    exercise, project, and capstone code inherits. Individual projects may override
+    a property when a unit deliberately teaches a different setting.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--
+    Implementation-slotted build output.
+
+    Every evaluator judges two trees and picks one by project path, so
+    `-p:Implementation=starter` and `-p:ImplementationRoot=<path>` rewire a
+    ProjectReference without changing the evaluator's own identity. Left alone,
+    both wirings would write the same bin/ and obj/, and the last run would win:
+    a later incremental run that skips the build, or a concurrent one, would then
+    grade whichever tree happened to be built last and report a result that has
+    nothing to do with the command that produced it.
+
+    These two properties arrive as MSBuild global properties, so they are visible
+    here and flow to every referenced project. Giving each selection its own
+    output slot makes the starter-baseline and reference runs independent and
+    order-insensitive. The unset default keeps the conventional bin/Debug and
+    obj/ layout, so a plain `dotnet build` or `dotnet test` is unchanged.
+  -->
+  <PropertyGroup>
+    <ImplementationSlot Condition="'$(ImplementationRoot)' != ''">$([System.IO.Path]::GetFileName($(ImplementationRoot.TrimEnd('/'))))</ImplementationSlot>
+    <ImplementationSlot Condition="'$(ImplementationSlot)' == '' and '$(Implementation)' != ''">$(Implementation)</ImplementationSlot>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ImplementationSlot)' != ''">
+    <BaseOutputPath>$(MSBuildProjectDirectory)/bin/impl-$(ImplementationSlot)/</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(MSBuildProjectDirectory)/obj/impl-$(ImplementationSlot)/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <!--
+    Slotting moves the excluded intermediate directory deeper, so the SDK's
+    default exclusion no longer covers generated sources left in obj/ by an
+    unslotted build. Exclude both build directories outright; neither is ever a
+    compile input.
+  -->
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Reference implementation for module.azure-data-map.
+
+    It is judged by exactly the same evaluator as the starter tree:
+
+      dotnet test exercises/01-azure-data-map/tests -p:Implementation=solution
+
+    Read it only after a genuine attempt; the Learning Mentor keeps it locked
+    until then.
+  -->
+
+  <PropertyGroup>
+    <RootNamespace>LearningAzure.Exercises.DataMap</RootNamespace>
+    <AssemblyName>LearningAzure.Exercises.DataMap.Solution</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>
