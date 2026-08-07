@@ -11,13 +11,16 @@ progression — **named → explained → demonstrated → practiced → applied
 
 | status | meaning |
 | --- | --- |
-| `covered` | the cited artifact exists and the verifier resolved it |
+| `covered` | the cited artifact exists, resolves, and the evidence note states the behavior it demonstrates |
 | `planned` | the artifact does not exist yet; the unit is not trackable |
 | `deferred` | satisfied by a later unit that is not built yet |
+| `partial` | some evidence exists, but the stage is incomplete and blocks completion |
+| `missing` | required evidence is absent and blocks completion |
 | `not-applicable` | the stage does not apply, with a recorded rationale |
 
 A unit is registered for Learning Mentor tracking only once every stage has left
-`planned`, so this matrix cannot claim coverage before content exists.
+`planned`, `partial`, and `missing`, so this matrix cannot claim completion
+before the required evidence exists.
 
 ## Summary
 
@@ -28,11 +31,13 @@ A unit is registered for Learning Mentor tracking only once every stage has left
 | applied projects | 1 |
 | capstones | 1 |
 | declared outcomes | 42 |
-| milestones | 10 |
+| milestones | 9 |
 | units with artifacts present | 14 |
 | evidence records `planned` | 0 |
 | evidence records `deferred` | 0 |
 | evidence records `covered` | 70 |
+| evidence records `partial` | 0 |
+| evidence records `missing` | 0 |
 | evidence records `not-applicable` | 0 |
 
 ## Repository roles
@@ -223,7 +228,7 @@ A unit is registered for Learning Mentor tracking only once every stage has left
 | `milestone.field-station.artifact-storage` | Stream artifacts into a container and update them under an ETag precondition. | `milestone.field-station.domain-ports` |
 | `milestone.field-station.work-dispatch` | Enqueue a work order per stored artifact and process it idempotently under redelivery. | `milestone.field-station.artifact-storage` |
 | `milestone.field-station.status-index` | Record per-station processing status as point-readable entities with concurrency-safe updates. | `milestone.field-station.work-dispatch` |
-| `milestone.field-station.failure-recovery` | Quarantine poison work, recover after restart without duplicate effects, and remove every resource the run created. | `milestone.field-station.status-index` |
+| `milestone.field-station.failure-recovery` | Quarantine poison work, recover after restart with an idempotent or deduplicated effect, and remove every resource the run created. | `milestone.field-station.status-index` |
 
 ## `module.event-hubs-model` — Stream expedition telemetry
 
@@ -328,7 +333,7 @@ A unit is registered for Learning Mentor tracking only once every stage has left
 | explained | `covered` | `lesson_readme` | Narrative explains the credential chain and role-assignment scope with a resolution diagram. |
 | demonstrated | `covered` | `cli_lab` | Paired labs assign, test, and revoke a role and show the captured authorization failure. |
 | practiced | `covered` | `exercise_tests` | The evaluator checks role scoping, preflight fail-closed behavior, and post-cleanup verification. |
-| applied | `covered` | `capstone_starter` | The capstone live checkpoint is operated and torn down by the learner. Resolved in capstone.cloud-expedition-journal#milestone-5-running-it-for-real. |
+| applied | `covered` | `capstone_starter` | The capstone applies identity, diagnostics, and cleanup through offline-graded adapters; an actual live run is an optional extension. |
 
 ## `capstone.cloud-expedition-journal` — Cloud Expedition Field Journal
 
@@ -341,13 +346,13 @@ A unit is registered for Learning Mentor tracking only once every stage has left
 | --- | --- | --- |
 | `outcome.cloud-expedition-journal.build-end-to-end` | Build the end-to-end journal across Event Hubs, Blob, Queue, Table, and Cosmos DB behind application-owned ports. | `capstone_tests` |
 | `outcome.cloud-expedition-journal.verify-failure-behavior` | Verify normal, boundary, and failure behavior — duplicates, restarts, throttling, and poison work — with deterministic local tests. | `capstone_tests` |
-| `outcome.cloud-expedition-journal.operate-live` | Deploy the architecture to a live subscription, operate it under least privilege, and prove complete cleanup afterwards. | `capstone_tests` |
+| `outcome.cloud-expedition-journal.verify-operational-boundary` | Verify the journal's identity, retry, diagnostics, and cleanup boundary with deterministic tests. | `capstone_tests` |
 
 | stage | status | evidence | note |
 | --- | --- | --- | --- |
 | named | `covered` | `capstone_guide#objectives` | The capstone guide names each milestone and the services it integrates. |
 | explained | `covered` | `capstone_guide#architecture` | The guide explains the target architecture, data flow, and acceptance criteria without reteaching modules. |
-| demonstrated | `covered` | `capstone_solution` | The reference implementation runs end to end locally and at the live checkpoint. |
+| demonstrated | `covered` | `capstone_solution` | The reference implementation runs end to end against the local service emulators; the live Azure extension is optional. |
 | practiced | `covered` | `capstone_tests` | One shared acceptance suite judges the starter and the reference solution identically across normal, boundary, and failure cases. |
 | applied | `covered` | `capstone_starter` | The learner completes every milestone unaided in the starter tree. |
 
@@ -356,6 +361,5 @@ A unit is registered for Learning Mentor tracking only once every stage has left
 | `milestone.cloud-expedition-journal.domain-ports` | Define telemetry, artifact, station, and journal-entry contracts independent of any Azure SDK type. | none |
 | `milestone.cloud-expedition-journal.storage-workflow` | Store reports in Blob Storage under preconditions, queue artifact work, and track station state in Table Storage. | `milestone.cloud-expedition-journal.domain-ports` |
 | `milestone.cloud-expedition-journal.telemetry-pipeline` | Produce keyed telemetry batches and consume them with Blob checkpointing that survives restart and duplicates. | `milestone.cloud-expedition-journal.storage-workflow` |
-| `milestone.cloud-expedition-journal.cosmos-projection` | Project processed telemetry and artifacts into a Cosmos container whose dominant queries stay single-partition under throttling. | `milestone.cloud-expedition-journal.telemetry-pipeline` |
-| `milestone.cloud-expedition-journal.live-operations` | Run the journal against a live subscription under least-privilege roles, capture diagnostics and cost, and verify complete teardown. | `milestone.cloud-expedition-journal.cosmos-projection` |
+| `milestone.cloud-expedition-journal.projection-and-operations` | Project telemetry into a single-partition query model and implement the identity, retry, diagnostics, and cleanup boundary. | `milestone.cloud-expedition-journal.telemetry-pipeline` |
 

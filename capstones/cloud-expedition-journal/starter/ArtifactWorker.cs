@@ -20,8 +20,8 @@ public sealed record DrainReport(int Received, int Completed, int Retried, int Q
 /// Milestone 2. The queue guarantees delivery, not uniqueness: a message is
 /// redelivered when a worker crashes, when a handler outlives its visibility
 /// timeout, and sometimes for no visible reason at all. The worker's job is to
-/// make the <em>effect</em> happen once anyway, to give up on work that can never
-/// succeed, and to leave a shutdown cleanly interruptible.
+/// make the <em>effect</em> safe under repeated execution, to give up on work
+/// that can never succeed, and to leave a shutdown cleanly interruptible.
 /// </para>
 /// <para>
 /// The disposition is a decision, not a status code:
@@ -96,7 +96,7 @@ public sealed class ArtifactWorker(IWorkBacklog queue, StationLedger ledger, int
         // message whose row already says Journaled, which costs one wasted receive;
         // a crash the other way round loses the record of an effect that happened.
         throw new NotImplementedException(
-            "GAP 11: settle one received message exactly once. See "
+            "GAP 11: settle one delivery safely under redelivery. See "
             + "capstones/cloud-expedition-journal/README.md#milestone-2-the-storage-workflow.");
     }
 

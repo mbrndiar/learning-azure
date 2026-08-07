@@ -323,8 +323,6 @@ whole reason the baseline disables it.
 # Your work. Expected to FAIL at GAP 1 until you implement it.
 dotnet test exercises/03-storage-account/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/03-storage-account/tests -p:Implementation=solution
 ```
 
 The starter has nine numbered gaps, in dependency order: endpoints and the naming

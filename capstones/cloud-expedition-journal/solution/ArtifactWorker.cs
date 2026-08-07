@@ -20,8 +20,8 @@ public sealed record DrainReport(int Received, int Completed, int Retried, int Q
 /// Milestone 2. The queue guarantees delivery, not uniqueness: a message is
 /// redelivered when a worker crashes, when a handler outlives its visibility
 /// timeout, and sometimes for no visible reason at all. The worker's job is to
-/// make the <em>effect</em> happen once anyway, to give up on work that can never
-/// succeed, and to leave a shutdown cleanly interruptible.
+/// make the <em>effect</em> safe under repeated execution, to give up on work
+/// that can never succeed, and to leave a shutdown cleanly interruptible.
 /// </para>
 /// <para>
 /// The disposition is a decision, not a status code:

@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 
 namespace LearningAzure.Exercises.EventHubsModel;
 
@@ -10,8 +11,8 @@ namespace LearningAzure.Exercises.EventHubsModel;
 /// </remarks>
 public static class PartitionKeyPlanner
 {
-    /// <summary>The service's maximum partition-key length, in characters.</summary>
-    public const int MaximumKeyLength = 128;
+    /// <summary>The service's maximum partition-key length, in UTF-8 bytes.</summary>
+    public const int MaximumKeyBytes = 128;
 
     /// <summary>Builds the partition key for one telemetry reading.</summary>
     /// <param name="reading">The reading about to be published.</param>
@@ -34,8 +35,8 @@ public static class PartitionKeyPlanner
     /// <param name="partitionKey">The candidate key.</param>
     /// <returns><c>true</c> when the service will accept it.</returns>
     public static bool IsUsableKey(string? partitionKey) =>
-        // GAP 2 — A key is a non-empty string of at most MaximumKeyLength
-        // characters.
+        // GAP 2 — A key is a non-empty string of at most MaximumKeyBytes UTF-8
+        // bytes. Use Encoding.UTF8.GetByteCount rather than string.Length.
         //
         // Unlike a table key there is no forbidden-character list, so the trap
         // is length rather than punctuation: a key built by concatenating a

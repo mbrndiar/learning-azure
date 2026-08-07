@@ -90,7 +90,7 @@ public enum ProcessingState
     /// <summary>Claimed by a worker; the effect has not been confirmed.</summary>
     Pending,
 
-    /// <summary>The effect has been applied and confirmed exactly once.</summary>
+    /// <summary>An attempt reports that the idempotent effect was applied and confirmed.</summary>
     Processed,
 
     /// <summary>The work was moved aside and needs a human.</summary>

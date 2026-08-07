@@ -136,7 +136,7 @@ public sealed class TeardownPlanTests
     [Fact]
     public void Verify_ReportsAGroupThatIsStillListed()
     {
-        // `az group delete` returns before the delete finishes unless you wait.
+        // A caller may opt into asynchronous deletion with `--no-wait`.
         var verdict = TeardownPlan.Verify(new CleanupProbe(true, 0, 0, 0, 0));
 
         Assert.False(verdict.Complete);

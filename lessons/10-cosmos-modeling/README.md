@@ -143,10 +143,12 @@ is the decision, and it should be made with the list in front of you.
 
 ## Read amplification is the number to watch
 
-Request units are a charge, and Azure defines exactly one point on the scale: a
-1 KB document read by id and partition key costs **1 RU**. Everything else is
-proportional to how much work the engine had to do, and the dominant term in
-that work is *how many documents it had to look at*.
+Request units are a charge. A point read of a 1 KiB item by id and partition key
+costs **1 RU under Eventual or Session consistency**. Strong and Bounded
+Staleness reads cost twice as many RUs, and larger items cost more. Query charge
+also includes index lookup, item loading and return, and compilation; use
+response charges and query metrics from a real account rather than treating a
+local formula as Azure's meter.
 
 So the useful local measurement is not the charge — it is the ratio:
 
@@ -218,15 +220,28 @@ just as hard at 20,000 over twenty. The fix for a hot partition is a different
 partition key, not a bigger number.
 
 The choice between manual and autoscale is arithmetic too, and it has a trap.
-Autoscale bills what you used at **1.5x** the manual rate, and **never below 10%
-of the maximum**. `RelativeAutoscaleCost` returns the autoscale bill as a
-fraction of the manual one, which makes the floor visible: a workload that is
-idle almost all the time still costs 0.15 — fifteen percent of the manual bill,
-not the fraction of a percent that raw usage suggests. Below 10% of the peak the
-bill simply stops falling.
+Classic autoscale bills the **highest RU/s reached in each hour**, never below
+10% of the configured maximum for that hour. Averaging raw requests over a day
+erases the peaks the meter charges for. In a single-write-region account, the
+autoscale meter is 1.5x the manual rate; multiple-write-region pricing differs.
+`RelativeAutoscaleCost` therefore accepts one peak per billed hour and applies
+the floor before summing.
 
-Flat load: manual wins. Spiky load: autoscale wins. The break-even is at two
-thirds of the peak.
+Dynamic autoscale changes where scaling happens: each physical partition and
+region can scale independently rather than every partition scaling to the
+hottest partition's level. It does not turn billing into request averaging.
+Flat load generally favors manual throughput; spiky load can favor autoscale,
+but calculate it from hourly maxima for the account's region configuration.
+
+### Consistency is part of the read budget
+
+Session consistency is the usual application default because a client carrying
+its session token gets read-your-writes without paying the global coordination
+cost of Strong consistency. If work moves to another process, propagate the
+session token when that guarantee matters. Request-level overrides may weaken
+the account default, but cannot strengthen it. Strong and Bounded Staleness
+double read RU cost, so consistency belongs in both the correctness design and
+the throughput estimate.
 
 ## Indexing is a write tax you choose
 
@@ -547,8 +562,6 @@ reason that has nothing to do with the key — which is precisely why
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/10-cosmos-modeling/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/10-cosmos-modeling/tests -p:Implementation=solution
 ```
 
 The starter has fourteen numbered gaps, in dependency order: the distribution
@@ -562,14 +575,14 @@ composite index requirement (GAPs 12-14). Each throws a
 Every check is deterministic and offline: a partition key decision is arithmetic
 over a distribution, and nothing here touches an emulator or Azure.
 
-**Untouched-starter baseline: fails.** 81 of 115 checks fail, the first with:
+**Untouched-starter baseline: fails.** 84 of 117 checks fail, the first with:
 
 ```text
 System.NotImplementedException : GAP 1: implement PartitionKeyAdvisor.Measure.
 See lessons/10-cosmos-modeling/README.md#cardinality-is-not-distribution.
 ```
 
-The 34 that pass are the argument-guard checks and the published constants —
+The 33 that pass are the argument-guard checks and the published constants —
 `ASkewCeilingOfOneOrLessIsMeaningless`, `TheLogicalPartitionLimitIsTwentyGigabytes`,
 `ZeroBucketsIsNotASpread`, `AnAutoscaleRequestUnitCostsHalfAsMuchAgain` and so
 on. The guards are already written, because validating an input is not the skill

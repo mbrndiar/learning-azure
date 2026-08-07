@@ -99,7 +99,7 @@ public sealed class StationWorker(IWorkBacklog queue, StationStatusProjector pro
             // receive; a crash the other way round loses the record of an effect that
             // really happened. Use ConcurrencyAttempts as the projector's budget.
             throw new NotImplementedException(
-                "GAP 9: settle one received message exactly once. See "
+                "GAP 9: settle one delivery safely under redelivery. See "
                 + "projects/field-station/README.md#milestone-5-when-things-go-wrong.");
 
     /// <summary>Receives and settles messages until the queue stops handing any back.</summary>

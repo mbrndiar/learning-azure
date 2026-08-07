@@ -26,7 +26,7 @@ runnable companion, starter, reference solution, and shared evaluator, plus
 `project.field-station`, the applied project that puts all three Storage services
 together across five milestones, and
 `capstone.cloud-expedition-journal`, the required final destination that
-integrates all five services across five more.
+integrates all five services across four milestones.
 
 The whole curriculum — 12 modules, the Field Station project, and the
 Cloud Expedition Field Journal capstone, with their prerequisite graph, outcomes,
@@ -127,9 +127,9 @@ selects an implementation by repository-relative path rather than by the
 
 The whole project is validated with
 `dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter`,
-which fails 63 of 85 tests on an untouched starter. Dropping the property runs the
-same evaluator against the reference solution. The project's end-to-end run needs
-Azurite: `docker compose up -d azurite`.
+which fails 64 of 86 tests on an untouched starter. Reference comparison uses
+the same evaluator only after unlock. The project's
+end-to-end run needs Azurite: `docker compose up -d azurite`.
 
 ### `capstone.cloud-expedition-journal`
 
@@ -141,13 +141,12 @@ learner tree named by path:
 | `milestone.cloud-expedition-journal.domain-ports` | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=domain-ports` |
 | `milestone.cloud-expedition-journal.storage-workflow` | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=storage-workflow` |
 | `milestone.cloud-expedition-journal.telemetry-pipeline` | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=telemetry-pipeline` |
-| `milestone.cloud-expedition-journal.cosmos-projection` | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=cosmos-projection` |
-| `milestone.cloud-expedition-journal.live-operations` | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=live-operations` |
+| `milestone.cloud-expedition-journal.projection-and-operations` | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=cosmos-projection` |
 
 The whole capstone is validated with
 `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter`,
-which fails 84 of 112 tests on an untouched starter. The evaluator itself is
-offline. The capstone's end-to-end run needs all three emulators
+which fails on an untouched starter. The evaluator itself is offline. The
+capstone's end-to-end run needs all three emulators
 (`ACCEPT_EULA=Y docker compose up -d`), and its live checkpoint is opt-in and
 costs money, so never run it without an explicit request.
 
@@ -189,6 +188,6 @@ locked.
 
 One group exists per built module — `solutions.azure-data-map` through
 `solutions.secure-operable-cloud` — and each covers exactly that module's
-`exercises/<NN>-<slug>/solution` and `exercises/<NN>-<slug>/tests` trees. The
-evaluator is locked alongside the reference because reading the assertions gives
-away the same answers the solution does.
+`exercises/<NN>-<slug>/solution` tree. Evaluators remain visible so the Learning
+Mentor can run deterministic checks while the reference implementation stays
+locked.

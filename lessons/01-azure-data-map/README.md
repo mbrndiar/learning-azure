@@ -96,22 +96,16 @@ KiB:
 
 ```csharp
 /// <summary>
-/// A Queue Storage message is limited to 64 KiB *after* encoding, and the
-/// SDK's default Base64 encoding expands a payload by four thirds — so the
-/// largest raw payload that still fits is 48 KiB.
+/// Queue Storage accepts a message body up to 64 KiB. Applications that choose
+/// Base64 must account for its expansion separately; the v12 SDK defaults to
+/// no message encoding.
 /// </summary>
-public const long MaxQueueMessagePayloadBytes = 49_152;
+public const long MaxQueueMessagePayloadBytes = 65_536;
 ```
 
-*(Excerpt from
-[`exercises/01-azure-data-map/solution/PrimitiveCharacteristics.cs`](../../exercises/01-azure-data-map/solution/PrimitiveCharacteristics.cs),
-which the evaluator checks.)*
-
-An implementation that records 65,536 there passes every unit test you would
-think to write, and then fails in production the first time a real payload
-arrives. The evaluator for this module checks the encoded size specifically, and
-[the mutation run below](#how-this-evaluator-is-known-to-be-strong) shows it
-catching exactly that mistake.
+This is the service ceiling. Module 6 deliberately chooses Base64 as an
+application codec and validates its smaller raw-payload envelope separately.
+The evaluator rejects implementations that confuse those two policies.
 
 ## Route a workload
 
@@ -145,8 +139,8 @@ var requiresClaimCheck = workload.TypicalItemBytes > ceiling;
 return new PrimitiveDecision(chosen, runnerUp, factor, requiresClaimCheck, justification);
 ```
 
-*(Excerpt from
-[`exercises/01-azure-data-map/solution/PrimitiveSelector.cs`](../../exercises/01-azure-data-map/solution/PrimitiveSelector.cs).)*
+This illustrative fragment mirrors the contract without exposing the locked
+reference implementation.
 
 Note that the size rule reads the ceiling **out of the characteristics table**
 rather than repeating a constant. That is deliberate: a routing rule that carries
@@ -295,8 +289,6 @@ in any type signature.
 # Your work. Expected to FAIL at GAP 1 until you implement it.
 dotnet test exercises/01-azure-data-map/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/01-azure-data-map/tests -p:Implementation=solution
 ```
 
 The starter has six numbered gaps, in dependency order: fill the characteristics
@@ -321,7 +313,7 @@ reverted:
 
 | fault introduced | evaluator response |
 | --- | --- |
-| queue ceiling recorded as `65_536` (the wire limit) instead of `49_152` | `Queue_ceiling_leaves_room_for_base64_expansion` — *"A 65536-byte payload encodes to 87381 bytes, over the 65,536-byte message limit."* |
+| queue service ceiling reduced to an application codec envelope | `Queue_service_ceiling_is_exactly_64_KiB` — *Expected: 65536; the optional Base64 policy belongs in module 6.* |
 | rule 1 weakened to `ConsumersAreIndependentAndReplay && !ItemIsHandedToExactlyOneWorker`, so rule 2 wins ties | `Replay_beats_single_worker_handoff_when_a_workload_looks_like_both` — *Assert.Equal() Failure: Values differ* |
 | discriminator moved to the end of the storage account name | `Truncation_never_removes_the_uniqueness_discriminator` and `A_storage_account_name_is_lowercase_alphanumeric_and_within_the_azure_limit` both fail |
 

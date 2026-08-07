@@ -76,6 +76,6 @@ public sealed class ExpeditionCleanup(
         // teardown that cannot prove the queue is empty has not finished.
         throw new NotImplementedException(
             "GAP 25: enumerate and remove everything the expedition created. See "
-            + "capstones/cloud-expedition-journal/README.md#milestone-5-running-it-for-real.");
+            + "capstones/cloud-expedition-journal/README.md#operational-boundary-offline-graded-live-run-optional.");
     }
 }

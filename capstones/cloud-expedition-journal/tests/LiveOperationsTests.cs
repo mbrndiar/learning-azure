@@ -1,11 +1,11 @@
 namespace LearningAzure.Capstones.CloudExpeditionJournal.Tests;
 
 /// <summary>
-/// Milestone 5 — running it for real. Judges whether identity is the only way
-/// in, whether the retry budget is bounded, and whether teardown proves it
+/// Milestone 4 — the operational boundary. Judges whether identity is the only
+/// way in, whether the retry budget is bounded, and whether teardown proves it
 /// finished rather than assuming it.
 /// </summary>
-[Trait("Milestone", "live-operations")]
+[Trait("Milestone", "cosmos-projection")]
 public sealed class LiveOperationsTests
 {
     private static readonly Dictionary<string, string?> LiveVariables = new(StringComparer.OrdinalIgnoreCase)

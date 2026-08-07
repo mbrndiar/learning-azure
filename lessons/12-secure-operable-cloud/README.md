@@ -193,6 +193,8 @@ that produces a token:
 8  AzureDeveloperCliCredential     developer    azd auth login
 ```
 
+This is the base chain. `BrokerCredential` may follow it when broker support is
+installed and configured; it is not an unconditional ninth source.
 Every deployment source is above every developer tool, which is the only reason
 a host with a managed identity never quietly runs as whoever last signed in on
 it. `InteractiveBrowserCredential` belongs to the same family and is excluded
@@ -204,7 +206,7 @@ won" but "which credentials would have won somewhere else":
 | host | resolves to | also configured |
 | --- | --- | --- |
 | your laptop | `AzureCliCredential` | `AzureDeveloperCliCredential` |
-| GitHub Actions with OIDC | `EnvironmentCredential` | — |
+| GitHub Actions after `azure/login` OIDC | `AzureCliCredential` | — |
 | App Service with a system-assigned identity | `ManagedIdentityCredential` | — |
 | AKS pod with workload identity | `WorkloadIdentityCredential` | `ManagedIdentityCredential` |
 
@@ -258,7 +260,8 @@ var credential = new DefaultAzureCredential();
 
 // Production: this cannot resolve to anything else, and it fails loudly
 // on a laptop, which is the behaviour you want.
-var credential = new ManagedIdentityCredential(userAssignedClientId);
+var credential = new ManagedIdentityCredential(
+    ManagedIdentityId.FromUserAssignedClientId(userAssignedClientId));
 ```
 
 The second form also fails *fast*. The chain, given a misconfigured host, walks
@@ -433,9 +436,10 @@ variable. The variable says what you meant; the tag says what is actually there.
 
 ## Deleted is not gone
 
-`az group delete` returns before the delete finishes, and several services keep
-a recoverable copy on purpose. A cleanup that stops at "the command succeeded"
-leaves four categories of remnant behind:
+`az group delete` waits for deletion by default; `--no-wait` returns before it
+finishes. Either way, several services keep a recoverable copy on purpose. A
+cleanup that stops at "the command succeeded" can leave these categories of
+remnant behind:
 
 | remnant | how long | what it still costs you |
 | --- | --- | --- |
@@ -489,7 +493,7 @@ on it.
   host                                    resolves to                     also configured
   --------------------------------------  -----------------------------  --------------------------
   your laptop                             AzureCliCredential             AzureDeveloperCliCredential
-  GitHub Actions (OIDC)                   EnvironmentCredential          -
+  GitHub Actions after azure/login OIDC  AzureCliCredential             -
   App Service + system-assigned identity  ManagedIdentityCredential      -
   AKS pod with workload identity          WorkloadIdentityCredential     ManagedIdentityCredential
 
@@ -732,8 +736,6 @@ Then delete the group: `az group delete --name "$RESOURCE_GROUP" --yes`.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/12-secure-operable-cloud/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/12-secure-operable-cloud/tests
 ```
 
 Fourteen gaps across six files, every one of them offline and deterministic —

@@ -468,8 +468,6 @@ platform will never tell you.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/09-event-hubs-processing/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/09-event-hubs-processing/tests -p:Implementation=solution
 ```
 
 The starter has fourteen numbered gaps, in dependency order: the ledger's

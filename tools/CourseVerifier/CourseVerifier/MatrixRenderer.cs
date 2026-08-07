@@ -26,13 +26,16 @@ internal static class MatrixRenderer
         builder.AppendLine();
         builder.AppendLine("| status | meaning |");
         builder.AppendLine("| --- | --- |");
-        builder.AppendLine("| `covered` | the cited artifact exists and the verifier resolved it |");
+        builder.AppendLine("| `covered` | the cited artifact exists, resolves, and the evidence note states the behavior it demonstrates |");
         builder.AppendLine("| `planned` | the artifact does not exist yet; the unit is not trackable |");
         builder.AppendLine("| `deferred` | satisfied by a later unit that is not built yet |");
+        builder.AppendLine("| `partial` | some evidence exists, but the stage is incomplete and blocks completion |");
+        builder.AppendLine("| `missing` | required evidence is absent and blocks completion |");
         builder.AppendLine("| `not-applicable` | the stage does not apply, with a recorded rationale |");
         builder.AppendLine();
         builder.AppendLine("A unit is registered for Learning Mentor tracking only once every stage has left");
-        builder.AppendLine("`planned`, so this matrix cannot claim coverage before content exists.");
+        builder.AppendLine("`planned`, `partial`, and `missing`, so this matrix cannot claim completion");
+        builder.AppendLine("before the required evidence exists.");
         builder.AppendLine();
 
         AppendSummary(builder, plan);

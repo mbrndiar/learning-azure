@@ -175,13 +175,16 @@ not one setting. It is three, and each covers a *different* loss:
 
 | mechanism | covers | does not cover |
 | --- | --- | --- |
-| **soft delete** | a blob that was **deleted** | an overwrite — nothing was deleted |
-| **versioning** | a blob that was **overwritten** | nothing, if it was off at the time |
+| **soft delete** | deletes and, on flat-namespace accounts without versioning, a pre-overwrite soft-deleted snapshot | recovery after the retention window; HNS overwrite semantics differ |
+| **versioning** | explicit previous versions after writes | recovery after versions are deleted or expire |
 | **lifecycle rules** | cost over time, and eventual deletion | any kind of accident |
 
-The trap is assuming soft delete covers overwrites. It does not. An overwrite of
-a blob on an account with soft delete on and versioning off is **permanent and
-immediate**, and there is no support ticket that recovers it.
+The mechanisms overlap, but they are not interchangeable. On the flat-namespace
+accounts used in this course, when versioning is disabled and soft delete is
+active, an overwrite creates a soft-deleted snapshot of the previous bytes.
+Versioning makes previous states first-class versions instead. Accounts with a
+hierarchical namespace have different overwrite behavior, so do not transfer
+this recovery table to Data Lake Storage without checking that account model.
 
 ### Lifecycle rules are data the service evaluates without you
 
@@ -281,7 +284,8 @@ difference between silent data loss and a detected conflict.
 
 Sections 1–3 above behave identically on Azurite and in Azure. Section 4 does
 not, and everything in it is load-bearing for a retention promise. **This
-checkpoint is required**, and it is the second and last one in the course.
+checkpoint is required**, and it is the second Storage checkpoint. Later
+chapters return to live Azure for Event Hubs, Cosmos DB, and identity boundaries.
 
 ```bash
 bash infra/azure-cli/blob-lifecycle.sh
@@ -342,7 +346,7 @@ be inside the retry loop.
 | the retry "works" but data is still lost | the read was hoisted out of the loop, so every attempt bets the same stale ETag | all attempts send an identical `If-Match` |
 | two nodes both believe they created the artifact | `ExistsAsync` then `Upload` instead of `If-None-Match: *` | both got 201 for the same name |
 | a 403 is retried five times | classification on exception type, or on message text, instead of status | retries on a status that can never succeed |
-| an overwritten blob cannot be recovered despite soft delete | soft delete does not cover overwrites; versioning was off | the account shows `IsVersioningEnabled: false` |
+| an overwritten blob is not recoverable | the applicable version or soft-deleted snapshot expired, or the account uses HNS semantics | inspect namespace mode, retention settings, versions, and deleted snapshots |
 | the bill rose after adding a lifecycle rule | blobs move to Cool or Archive and are deleted before the minimum retention | compare transition days with the 30/180-day minimums |
 | an archived artifact cannot be read | Archive requires rehydration, which takes hours | `x-ms-access-tier: Archive` and 409 `BlobArchived` on read |
 
@@ -352,8 +356,6 @@ be inside the retry loop.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/05-blob-lifecycle/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/05-blob-lifecycle/tests -p:Implementation=solution
 ```
 
 The starter has ten numbered gaps, in dependency order: the conditional adapter
@@ -414,8 +416,9 @@ too. An evaluator that checked return values would pass it.
    it is not — including the case where the retry *succeeds*.
 4. A retry policy retries 412, 429, 500 and 503 identically. Which one is a bug,
    and what is the worst outcome it can produce?
-5. An account has soft delete on for 30 days and versioning off. A script
-   overwrites 400 artifacts with empty files. What is recoverable, and why?
+5. A flat-namespace account has soft delete on for 30 days and versioning off.
+   A script overwrites 400 artifacts with empty files. What is recoverable, in
+   what form, and for how long?
 6. A lifecycle rule tiers to Archive on day 3 and deletes on day 30. State the
    billed retention for each artifact and whether the rule saves money.
 7. Name three things the live checkpoint proves that a green Azurite run does

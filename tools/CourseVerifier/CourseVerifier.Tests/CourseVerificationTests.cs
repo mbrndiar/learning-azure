@@ -175,7 +175,19 @@ public sealed class CourseVerificationTests
             fixture.Write(path, "placeholder\n");
         }
 
-        AssertFinding(fixture.Verify(), "must be covered, deferred, or explicitly not applicable");
+        AssertFinding(fixture.Verify(), "must be covered, partial, missing, deferred, or explicitly not applicable");
+    }
+
+    [Theory]
+    [InlineData("partial", "partial evidence blocks curriculum completion")]
+    [InlineData("missing", "missing evidence blocks curriculum completion")]
+    public void RejectsIncompleteEvidenceStatuses(string status, string finding)
+    {
+        using var fixture = FixtureRepository.Create();
+        var record = fixture.Evidence("module.alpha", "explained");
+        record["status"] = status;
+
+        AssertFinding(fixture.Verify(), finding);
     }
 
     [Fact]

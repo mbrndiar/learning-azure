@@ -122,18 +122,15 @@ public sealed class PrimitiveCharacteristicsTests
     }
 
     /// <summary>
-    /// The queue ceiling is a *payload* limit, not the 64 KiB wire limit: Base64
-    /// encoding expands a payload by four thirds, and a table that records 65,536
-    /// here produces routing decisions that fail at run time.
+    /// The service limit describes the message body. Applications that opt into
+    /// Base64 must apply their smaller raw-payload policy separately.
     /// </summary>
     [Fact]
-    public void Queue_ceiling_leaves_room_for_base64_expansion()
+    public void Queue_ceiling_is_the_service_message_limit()
     {
         var ceiling = PrimitiveCharacteristics.For(Primitive.Queue).MaxItemBytes;
 
-        Assert.True(
-            ceiling * 4 / 3 <= 65_536,
-            $"A {ceiling}-byte payload encodes to {ceiling * 4 / 3} bytes, over the 65,536-byte message limit.");
+        Assert.Equal(65_536, ceiling);
     }
 
     [Fact]

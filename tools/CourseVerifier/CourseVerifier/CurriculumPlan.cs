@@ -31,9 +31,11 @@ internal static class EvidenceStatuses
     internal const string Planned = "planned";
     internal const string Deferred = "deferred";
     internal const string Covered = "covered";
+    internal const string Partial = "partial";
+    internal const string Missing = "missing";
     internal const string NotApplicable = "not-applicable";
 
-    internal static readonly string[] All = [Planned, Deferred, Covered, NotApplicable];
+    internal static readonly string[] All = [Planned, Deferred, Covered, Partial, Missing, NotApplicable];
 }
 
 /// <summary>Whether a unit's artifacts are expected on disk yet.</summary>

@@ -121,7 +121,7 @@ public sealed class FailureRecoveryTests
     public async Task ARestartedWorkerResumesAnObservationTheCrashedRunNeverConfirmed()
     {
         // The row says Pending, which means the effect may or may not have
-        // happened. Re-running it is the only safe reading.
+        // happened. Re-running requires an idempotent or deduplicated effect.
         var world = new Pipeline();
         var order = Fixture.Order();
         await world.Projector.TryClaimAsync(order, TestContext.Current.CancellationToken);
@@ -131,6 +131,24 @@ public sealed class FailureRecoveryTests
 
         Assert.True(outcome.EffectApplied);
         Assert.Equal(ProcessingState.Processed, (await world.RowAsync())!.State);
+    }
+
+    [Fact]
+    public async Task APendingClaimCannotProveTheExternalEffectRanExactlyOnce()
+    {
+        var world = new Pipeline();
+        var order = Fixture.Order();
+        await world.Projector.TryClaimAsync(order, TestContext.Current.CancellationToken);
+
+        // Simulate a crash after the external effect but before ledger confirmation.
+        world.Effect.Applied.Add(order.WorkOrderId);
+
+        await world.Restart().ProcessAsync(
+            Fixture.Delivery(order, dequeueCount: 2),
+            world.Effect.ApplyAsync,
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(2, world.Effect.Applied.Count);
     }
 
     [Fact]

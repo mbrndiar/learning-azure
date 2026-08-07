@@ -44,7 +44,7 @@ backlog of small messages and four verbs: send, receive, delete, peek.
 
 | property | value | why it matters |
 | --- | --- | --- |
-| maximum message size | 64 KiB **after encoding** | the payload does not go in the message |
+| maximum message size | 64 KiB message body | large payloads belong elsewhere |
 | default time to live | 7 days | a backlog nobody drains expires silently |
 | maximum visibility timeout | 7 days | the ceiling on "I am still working on this" |
 | ordering | none guaranteed | competing consumers reorder by construction |
@@ -54,11 +54,13 @@ The size limit is the design constraint that shapes everything else. A message
 is a **pointer to work**, not the work: the observation goes in a blob and the
 message carries its name. Module 4 built exactly that name.
 
-### The 64 KiB ceiling is a Base64 ceiling
+### Base64 is this course's explicit codec policy
 
-The SDKs Base64-encode message bodies by default, and Base64 emits four bytes
-for every three it consumes. The limit applies to the encoded form, so the
-usable payload is not 64 KiB:
+`Azure.Storage.Queues` v12 defaults `QueueClientOptions.MessageEncoding` to
+`None`; it does **not** Base64-encode by default. This course deliberately uses
+Base64 so producers and consumers share one unambiguous wire format. Base64
+emits four bytes for every three it consumes, so under that application policy
+the usable raw payload is smaller than the service's 64 KiB message-body limit:
 
 ```text
  49152 raw bytes ->  65536 encoded bytes -> fits
@@ -67,9 +69,10 @@ usable payload is not 64 KiB:
 ```
 
 That table is printed by the companion, not recited from documentation. A
-validation that checks the JSON length against 64 KiB accepts a 60 KiB payload
-and the service rejects the 80 KiB message it becomes — in production, at the
-send, after the caller has already been told the upload succeeded.
+validation that checks raw JSON against 64 KiB can accept a 60 KiB payload even
+though this codec turns it into an 80 KiB body. A client using the SDK's `None`
+default would not pay that expansion, but should still keep work in Blob
+Storage and put only its durable name on the queue.
 
 ## The message lifecycle, as a state table
 
@@ -279,13 +282,13 @@ occurrence; every count, code, and `DequeueCount` in it is reproducible.
    its DequeueCount does not advance. Peek is for dashboards, not consumers.
    ApproximateMessagesCount: 3 (named 'Approximate' because it is a snapshot, not a lock)
 
-5. The 64 KiB ceiling is a Base64 ceiling
------------------------------------------
+5. The course Base64 policy reduces the raw-payload ceiling
+-----------------------------------------------------------
     49152 raw bytes ->  65536 encoded bytes -> fits
     50176 raw bytes ->  66904 encoded bytes -> REJECTED
     61440 raw bytes ->  81920 encoded bytes -> REJECTED
-   The usable payload is about 48 KiB, not 64. Anything bigger belongs in a
-   blob, with the queue carrying only its name.
+   Under this explicit codec policy, usable raw payload is about 48 KiB.
+   The SDK default is None. Keep large work in a blob and queue only its name.
 ```
 
 The companion deletes its queue on the way out, so it can be run repeatedly.
@@ -366,7 +369,7 @@ must be correct when it happens anyway.
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
-| `RequestBodyTooLarge` on send, but your payload is 60 KiB | the 64 KiB limit is on the **encoded** body; Base64 added a third | compute `4 * ceil(bytes / 3)` and compare it with 65536 |
+| `RequestBodyTooLarge` under this course's Base64 codec, but raw JSON is 60 KiB | Base64 expanded the body past the 64 KiB service limit | compute `4 * ceil(bytes / 3)` and compare it with 65536; do not mistake Base64 for the SDK default |
 | the same work is done two or three times | the handler outlives its visibility timeout | log `DequeueCount` on every receive; anything above 1 is a redelivery |
 | duplicates persist even with a dedupe cache | the cache is keyed on `MessageId`, which changes per enqueue | log both ids; a re-sent work order shows a new message id and the same work order id |
 | `MessageNotFound` on delete | the pop receipt is stale — the message was redelivered while you worked | compare `NextVisibleOn` from the receive against the wall clock at the delete |
@@ -381,8 +384,6 @@ must be correct when it happens anyway.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/06-queue-storage/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/06-queue-storage/tests -p:Implementation=solution
 ```
 
 The starter has ten numbered gaps, in dependency order: message encoding and the

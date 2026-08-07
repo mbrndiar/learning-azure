@@ -65,46 +65,67 @@ public static class ThroughputPlanner
     /// Prices a workload under an autoscale allocation, relative to what the
     /// equivalent manual allocation would cost.
     /// </summary>
-    /// <param name="peakRequestUnitsPerSecond">The highest rate the workload reaches.</param>
-    /// <param name="averageRequestUnitsPerSecond">The rate it spends most of its time at.</param>
+    /// <param name="autoscaleMaximumRequestUnitsPerSecond">The configured autoscale maximum.</param>
+    /// <param name="hourlyPeakRequestUnitsPerSecond">
+    /// The highest RU/s reached in each billed hour.
+    /// </param>
+    /// <param name="multipleWriteRegions">
+    /// Whether the account uses the multiple-write-region meter, where manual
+    /// and autoscale use the same per-RU rate.
+    /// </param>
     /// <returns>
     /// The autoscale bill divided by the manual bill. Below 1.0 autoscale is
     /// cheaper; above 1.0 it is not.
     /// </returns>
-    /// <exception cref="ArgumentOutOfRangeException">A rate is negative, the peak is zero, or the average exceeds the peak.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The maximum or an hourly peak is invalid.</exception>
+    /// <exception cref="ArgumentException">No billed hours were supplied.</exception>
     public static double RelativeAutoscaleCost(
-        double peakRequestUnitsPerSecond,
-        double averageRequestUnitsPerSecond)
+        double autoscaleMaximumRequestUnitsPerSecond,
+        IReadOnlyList<double> hourlyPeakRequestUnitsPerSecond,
+        bool multipleWriteRegions = false)
     {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(peakRequestUnitsPerSecond);
-        ArgumentOutOfRangeException.ThrowIfNegative(averageRequestUnitsPerSecond);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(
-            averageRequestUnitsPerSecond,
-            peakRequestUnitsPerSecond);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(autoscaleMaximumRequestUnitsPerSecond);
+        ArgumentNullException.ThrowIfNull(hourlyPeakRequestUnitsPerSecond);
+        if (hourlyPeakRequestUnitsPerSecond.Count == 0)
+        {
+            throw new ArgumentException("At least one billed hour is required.", nameof(hourlyPeakRequestUnitsPerSecond));
+        }
 
-        // GAP 11: autoscale bills the average, but never below a tenth of the peak.
+        // GAP 11: bill each hour's maximum, with the floor applied per hour.
         //
-        // Manual provisioning bills the peak every second of the day, so it
-        // wins when the load is flat. Autoscale bills what was used at 1.5x the
-        // rate, so it wins when the load is spiky — but only down to 10% of the
-        // maximum, which is why autoscale on a workload that is idle 23 hours a
-        // day still costs 15% of the manual bill rather than nothing at all.
-        // Forgetting the floor is what makes autoscale look free.
+        // Averaging raw requests over a day erases the very peak that autoscale
+        // bills. Each hour contributes max(hourly peak, 10% of Tmax). A
+        // single-write-region autoscale meter is 1.5x the manual rate; the
+        // multiple-write-region meters use the same per-RU rate.
         // See lessons/10-cosmos-modeling/README.md#throughput-is-divided-before-it-is-spent
-        var billed = Math.Max(
-            averageRequestUnitsPerSecond,
-            peakRequestUnitsPerSecond * AutoscaleFloorFraction);
+        var billed = 0.0;
+        foreach (var hourlyPeak in hourlyPeakRequestUnitsPerSecond)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(hourlyPeak);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(
+                hourlyPeak,
+                autoscaleMaximumRequestUnitsPerSecond);
+            billed += Math.Max(
+                hourlyPeak,
+                autoscaleMaximumRequestUnitsPerSecond * AutoscaleFloorFraction);
+        }
 
-        return billed * AutoscalePriceMultiplier / peakRequestUnitsPerSecond;
+        var multiplier = multipleWriteRegions ? 1.0 : AutoscalePriceMultiplier;
+        var manual = autoscaleMaximumRequestUnitsPerSecond * hourlyPeakRequestUnitsPerSecond.Count;
+        return billed * multiplier / manual;
     }
 
     /// <summary>Decides which allocation is cheaper for this shape of load.</summary>
-    /// <param name="peakRequestUnitsPerSecond">The highest rate the workload reaches.</param>
-    /// <param name="averageRequestUnitsPerSecond">The rate it spends most of its time at.</param>
+    /// <param name="autoscaleMaximumRequestUnitsPerSecond">The configured autoscale maximum.</param>
+    /// <param name="hourlyPeakRequestUnitsPerSecond">The highest RU/s reached in each billed hour.</param>
+    /// <param name="multipleWriteRegions">Whether the multiple-write-region meter applies.</param>
     /// <returns>True when autoscale is strictly cheaper.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">A rate is negative, the peak is zero, or the average exceeds the peak.</exception>
     public static bool AutoscaleIsCheaper(
-        double peakRequestUnitsPerSecond,
-        double averageRequestUnitsPerSecond) =>
-        RelativeAutoscaleCost(peakRequestUnitsPerSecond, averageRequestUnitsPerSecond) < 1.0;
+        double autoscaleMaximumRequestUnitsPerSecond,
+        IReadOnlyList<double> hourlyPeakRequestUnitsPerSecond,
+        bool multipleWriteRegions = false) =>
+        RelativeAutoscaleCost(
+            autoscaleMaximumRequestUnitsPerSecond,
+            hourlyPeakRequestUnitsPerSecond,
+            multipleWriteRegions) < 1.0;
 }

@@ -9,7 +9,7 @@ namespace LearningAzure.Exercises.QueueStorage;
 /// </remarks>
 public static class WorkOrderCodec
 {
-    /// <summary>The maximum size of a queue message, in bytes, after encoding.</summary>
+    /// <summary>The service's maximum message-body size, in bytes.</summary>
     public const int MaxMessageBytes = 64 * 1024;
 
     /// <summary>Serializer settings, fixed so encoded messages are stable across runs.</summary>
@@ -22,7 +22,9 @@ public static class WorkOrderCodec
     public static string Encode(WorkOrder order) =>
         // GAP 1 — Serialize to JSON, Base64-encode it, THEN check the limit.
         //
-        // The limit applies to the ENCODED bytes, and Base64 inflates by a third.
+        // This application deliberately uses Base64 while the v12 SDK default
+        // is no transformation. The service limit therefore applies to the
+        // Base64 text this codec sends, which inflates the JSON by a third.
         // Checking the JSON length instead lets a 60 KiB payload through and the
         // service rejects the 80 KiB message it becomes.
         //

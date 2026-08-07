@@ -39,7 +39,7 @@ By the end of this capstone you can:
 
 Two camps report temperature over a satellite link that drops. Ridge Camp's
 laptop retries whatever it is unsure about; Delta Camp's does the same. Base
-camp wants three things: every report preserved exactly once, a summary artifact
+camp wants three things: one durable report per identity, an idempotent summary artifact
 per report, and one page per station showing what was observed and in what
 order — cheap enough to refresh all day without an invoice anybody notices.
 
@@ -166,8 +166,8 @@ One evaluator judges both trees. Point it at the starter while you work:
 dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter
 ```
 
-Drop the property to run the same evaluator against [`solution/`](solution/),
-the reference implementation.
+The Learning Mentor unlocks the reference implementation after deterministic
+success or an explicit post-attempt unlock request.
 
 Grade one milestone at a time, in order:
 
@@ -176,10 +176,11 @@ Grade one milestone at a time, in order:
 | 1 | [the domain and the ports](#milestone-1-the-domain-and-the-ports) | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=domain-ports` |
 | 2 | [the storage workflow](#milestone-2-the-storage-workflow) | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=storage-workflow` |
 | 3 | [the telemetry pipeline](#milestone-3-the-telemetry-pipeline) | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=telemetry-pipeline` |
-| 4 | [the journal projection](#milestone-4-the-journal-projection) | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=cosmos-projection` |
-| 5 | [running it for real](#milestone-5-running-it-for-real) | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=live-operations` |
+| 4 | [the journal projection and operational boundary](#milestone-4-the-journal-projection) | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=cosmos-projection` |
 
-An untouched starter fails every one of them. That is the baseline: see
+An untouched starter fails every required milestone. The operational-boundary
+tests validate the optional Azure adapter offline without making a subscription
+part of course completion. See
 [Expected results](#expected-results).
 
 ### Milestone 1: the domain and the ports
@@ -308,12 +309,14 @@ why the projection is the last stage rather than the first.
   items than I asked for" means nothing. A reader that stops on a short page
   truncates its answer only under load, which is when it matters most.
 
-### Milestone 5: running it for real
+#### Operational boundary: offline graded, live run optional
 
 *Gaps 24-25 — `ExpeditionEnvironmentFactory`, `ExpeditionCleanup`.*
 
-Two properties separate a system that can be run in a subscription from one that
-merely works on a laptop.
+These final gaps remain part of milestone 4 and are graded offline. They make a
+live run possible without requiring a subscription or proving completion from
+an automated test. Two properties separate a system that can be run in a
+subscription from one that merely works on a laptop.
 
 **Identity, with no fallback.** "Use Entra ID if it works, otherwise the key" is
 a fallback that succeeds on the day the role assignment is missing, which is the
@@ -510,7 +513,6 @@ az group delete --name "$GROUP" --yes --no-wait
 | --- | --- | --- |
 | untouched starter | `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter` | **84 failures**, 28 passing, 112 total |
 | finished starter | same command | 112 passing |
-| reference solution | `dotnet test capstones/cloud-expedition-journal/tests` | 112 passing |
 
 The 28 tests that pass against an untouched starter judge code you were given —
 argument validation, the identifier rules, the adapters that carry no gap. They
@@ -523,8 +525,7 @@ Per milestone, from an untouched starter:
 | `domain-ports` | 17 | 30 |
 | `storage-workflow` | 17 | 17 |
 | `telemetry-pipeline` | 20 | 28 |
-| `cosmos-projection` | 20 | 21 |
-| `live-operations` | 10 | 16 |
+| `cosmos-projection` | 30 | 37 |
 
 ## How this is graded
 

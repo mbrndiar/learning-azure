@@ -105,7 +105,9 @@ an explicit repository `path`), and a `note` describing what satisfies the stage
 | status | meaning | verifier rule |
 | --- | --- | --- |
 | `planned` | the evidence does not exist yet | permitted only while the unit's `artifact_status` is `planned` |
-| `covered` | the evidence exists | the resolved artifact must exist; a declared `anchor` must match a real heading |
+| `covered` | the evidence exists and the note states the behavior it demonstrates | the resolved artifact must exist; a declared `anchor` must match a real heading |
+| `partial` | some evidence exists, but the stage is incomplete | always blocks completion |
+| `missing` | required evidence is absent | always blocks completion |
 | `deferred` | the stage is satisfied by a later unit that is not built yet | only for `applied`; requires `deferred_to` naming a later-sequence unit that is still `planned` |
 | `not-applicable` | the stage does not apply | requires a `rationale`; no artifact |
 
@@ -114,7 +116,7 @@ an explicit repository `path`), and a `note` describing what satisfies the stage
 - `planned` — every derived path for the unit **must not exist**, and every
   evidence stage must be `planned`. Content that lands silently is an error.
 - `present` — every derived path **must exist**, and no stage may remain
-  `planned`.
+  `planned`, `partial`, or `missing`.
 
 A unit may appear in `course.toml` only when its `artifact_status` is `present`.
 That is what prevents the course from advertising coverage, or the mentor from

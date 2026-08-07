@@ -126,9 +126,10 @@ was right there for the same reason it is wrong here. **A table partition bounds
 a scan; a stream partition bounds an order.** Bounding growth is a table problem
 that a stream does not have — retention drops old events for you.
 
-A key is a string of **at most 128 characters**, and unlike a table key there is
-no forbidden-character list. The trap is length, and it arrives on whichever
-station has the longest name.
+A key is a string whose UTF-8 representation is **at most 128 bytes**, and
+unlike a table key there is no forbidden-character list. Counting .NET
+characters is insufficient: non-ASCII station names can consume multiple bytes
+per character.
 
 ### The mapping is stable and it is not yours
 
@@ -470,7 +471,7 @@ the right thing.
 | half the processor instances are idle | fewer partitions than processors | a partition has exactly one owner per consumer group |
 | one partition is hot and the others are not | too few distinct partition keys | run `PartitionKeyPlanner.Spread` over the production key set before choosing |
 | "we will add partitions later" is in the design | it is not possible on Basic or Standard | see step 6 of the management labs |
-| a key is rejected at send time | it exceeds 128 characters | keys built by concatenation are the usual source |
+| a key is rejected at send time | its UTF-8 representation exceeds 128 bytes | measure with `Encoding.UTF8.GetByteCount`; concatenation and non-ASCII text are common causes |
 | the local replay test passes and production loses old events | the emulator does not enforce retention | check `retentionDescription.retentionTimeInHours` on the real hub |
 
 ## Practice
@@ -479,8 +480,6 @@ the right thing.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/08-event-hubs-model/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/08-event-hubs-model/tests -p:Implementation=solution
 ```
 
 The starter has thirteen numbered gaps, in dependency order: partition-key
@@ -490,7 +489,7 @@ cancellation, one batch per key, refusal handling, and the un-batchable event
 sizing and immutability (GAPs 10–13). Each throws a `NotImplementedException`
 naming the section of this page that derives it.
 
-**Untouched-starter baseline: fails.** 76 of 78 checks fail, the first with:
+**Untouched-starter baseline: fails.** 77 of 79 checks fail, the first with:
 
 ```text
 System.NotImplementedException : GAP 10-12: implement CapacityPlanner.Size.

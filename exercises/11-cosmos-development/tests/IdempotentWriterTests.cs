@@ -69,7 +69,8 @@ public sealed class IdempotentWriterTests
 
     [Theory]
     [InlineData(StoreOperation.Create)]
-    [InlineData(StoreOperation.Upsert)]
+    [InlineData(StoreOperation.ImmutableUpsert)]
+    [InlineData(StoreOperation.MutableUpsert)]
     [InlineData(StoreOperation.ConditionalReplace)]
     [InlineData(StoreOperation.UnconditionalReplace)]
     [InlineData(StoreOperation.PatchSet)]
@@ -85,7 +86,7 @@ public sealed class IdempotentWriterTests
     }
 
     [Theory]
-    [InlineData(StoreOperation.Upsert)]
+    [InlineData(StoreOperation.ImmutableUpsert)]
     [InlineData(StoreOperation.PatchSet)]
     [InlineData(StoreOperation.Delete)]
     [InlineData(StoreOperation.ConditionalReplace)]
@@ -98,6 +99,7 @@ public sealed class IdempotentWriterTests
 
     [Theory]
     [InlineData(StoreOperation.Create)]
+    [InlineData(StoreOperation.MutableUpsert)]
     [InlineData(StoreOperation.PatchIncrement)]
     [InlineData(StoreOperation.UnconditionalReplace)]
     public void Classify_RefusesToRetryOperationsThatWouldApplyTwice(StoreOperation operation)
@@ -123,7 +125,7 @@ public sealed class IdempotentWriterTests
     [Fact]
     public void MakeSafe_TurnsACreateIntoAnUpsert()
     {
-        Assert.Equal(StoreOperation.Upsert, IdempotentWriter.MakeSafe(StoreOperation.Create));
+        Assert.Equal(StoreOperation.ImmutableUpsert, IdempotentWriter.MakeSafe(StoreOperation.Create));
     }
 
     [Fact]
@@ -143,7 +145,7 @@ public sealed class IdempotentWriterTests
     }
 
     [Theory]
-    [InlineData(StoreOperation.Upsert)]
+    [InlineData(StoreOperation.ImmutableUpsert)]
     [InlineData(StoreOperation.PatchSet)]
     [InlineData(StoreOperation.Delete)]
     [InlineData(StoreOperation.ConditionalReplace)]
@@ -154,9 +156,10 @@ public sealed class IdempotentWriterTests
 
     [Theory]
     [InlineData(StoreOperation.Create)]
+    [InlineData(StoreOperation.MutableUpsert)]
     [InlineData(StoreOperation.PatchIncrement)]
     [InlineData(StoreOperation.UnconditionalReplace)]
-    [InlineData(StoreOperation.Upsert)]
+    [InlineData(StoreOperation.ImmutableUpsert)]
     [InlineData(StoreOperation.PatchSet)]
     [InlineData(StoreOperation.Delete)]
     [InlineData(StoreOperation.ConditionalReplace)]

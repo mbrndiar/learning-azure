@@ -6,9 +6,9 @@ namespace LearningAzure.Exercises.CosmosModeling;
 /// </summary>
 /// <remarks>
 /// The constants below are a deliberately crude model of a real account. They
-/// are calibrated to the one number Cosmos defines exactly — a 1 KB point read
-/// costs 1 RU — and everything else is expressed against it. The point of the
-/// model is the ratio between two designs, not the absolute figure.
+/// use a 1 KiB point read under Eventual or Session consistency as the 1-RU
+/// baseline. Strong and Bounded Staleness double read cost. Query charges are
+/// service measurements, not this formula; use it for ratios, not predictions.
 /// </remarks>
 public sealed class QueryCostModel
 {

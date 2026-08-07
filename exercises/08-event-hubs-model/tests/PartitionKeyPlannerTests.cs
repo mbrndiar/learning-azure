@@ -65,13 +65,20 @@ public sealed class PartitionKeyPlannerTests
     [Fact]
     public void AKeyOfExactlyTheMaximumLengthIsUsable()
     {
-        Assert.True(PartitionKeyPlanner.IsUsableKey(new string('s', PartitionKeyPlanner.MaximumKeyLength)));
+        Assert.True(PartitionKeyPlanner.IsUsableKey(new string('s', PartitionKeyPlanner.MaximumKeyBytes)));
     }
 
     [Fact]
-    public void AKeyOneCharacterOverTheMaximumIsNot()
+    public void AnAsciiKeyOneByteOverTheMaximumIsNot()
     {
-        Assert.False(PartitionKeyPlanner.IsUsableKey(new string('s', PartitionKeyPlanner.MaximumKeyLength + 1)));
+        Assert.False(PartitionKeyPlanner.IsUsableKey(new string('s', PartitionKeyPlanner.MaximumKeyBytes + 1)));
+    }
+
+    [Fact]
+    public void TheLimitCountsUtf8BytesNotUtf16Characters()
+    {
+        Assert.True(PartitionKeyPlanner.IsUsableKey(new string('é', 64)));
+        Assert.False(PartitionKeyPlanner.IsUsableKey(new string('é', 65)));
     }
 
     [Fact]

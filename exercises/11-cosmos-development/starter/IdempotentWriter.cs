@@ -6,8 +6,11 @@ public enum StoreOperation
     /// <summary>Insert, failing if the id already exists.</summary>
     Create,
 
-    /// <summary>Insert or overwrite, keyed on the id.</summary>
-    Upsert,
+    /// <summary>Insert or overwrite identical immutable content, keyed on the id.</summary>
+    ImmutableUpsert,
+
+    /// <summary>Insert or overwrite mutable content, keyed on the id.</summary>
+    MutableUpsert,
 
     /// <summary>Overwrite only if the ETag still matches.</summary>
     ConditionalReplace,

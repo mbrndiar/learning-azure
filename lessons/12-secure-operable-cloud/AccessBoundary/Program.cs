@@ -71,8 +71,10 @@ internal static class Program
             (nameof(AzureDeveloperCliCredential), "azd auth login", "developer"),
         };
 
-        Console.WriteLine("DefaultAzureCredential tries these in order and stops at the first one that");
-        Console.WriteLine("produces a token. InteractiveBrowserCredential is in the family but excluded");
+        Console.WriteLine("DefaultAzureCredential's base chain tries these in order and stops at the first");
+        Console.WriteLine("one that produces a token. BrokerCredential may follow when broker support is");
+        Console.WriteLine("installed and configured.");
+        Console.WriteLine("InteractiveBrowserCredential is in the family but excluded");
         Console.WriteLine("by default: a server that opens a browser is a server that hangs.");
         Console.WriteLine();
         Console.WriteLine("  #  credential                          kind        signal it looks for");
@@ -95,7 +97,7 @@ internal static class Program
         var hosts = new (string Name, string Winner, string Shadowed)[]
         {
             ("your laptop", nameof(AzureCliCredential), "AzureDeveloperCliCredential"),
-            ("GitHub Actions (OIDC)", nameof(EnvironmentCredential), "-"),
+            ("GitHub Actions after azure/login OIDC", nameof(AzureCliCredential), "-"),
             ("App Service + system-assigned identity", nameof(ManagedIdentityCredential), "-"),
             ("AKS pod with workload identity", nameof(WorkloadIdentityCredential), "ManagedIdentityCredential"),
         };
@@ -113,7 +115,10 @@ internal static class Program
         Console.WriteLine("The last row is the one worth staring at. The node has an identity and the pod");
         Console.WriteLine("has one; the chain picks the pod's, and the node's is one deployment change away");
         Console.WriteLine("from becoming the answer instead. That is why production code pins a single");
-        Console.WriteLine("credential: `new ManagedIdentityCredential(clientId)` cannot resolve to anything");
+        var productionCredential = new ManagedIdentityCredential(
+            ManagedIdentityId.FromUserAssignedClientId("00000000-0000-0000-0000-000000000001"));
+        Console.WriteLine(
+            $"credential: `{productionCredential.GetType().Name}(ManagedIdentityId)` cannot resolve to anything");
         Console.WriteLine("else, and it fails loudly on a laptop, which is the correct behaviour.");
     }
 
@@ -259,7 +264,7 @@ internal static class Program
 
         Console.WriteLine();
         Console.WriteLine("  Then verify, because \"deleted\" is a state and not an absence:");
-        Console.WriteLine("    - the group delete is asynchronous; it returns before it finishes");
+        Console.WriteLine("    - `az group delete` waits by default; `--no-wait` makes it asynchronous");
         Console.WriteLine("    - a deleted storage account is recoverable for 14 days, and creating a new");
         Console.WriteLine("      account with the same name silently forfeits that recovery");
         Console.WriteLine("    - a deleted Log Analytics workspace keeps its data, and its name, for 14 days");

@@ -367,8 +367,6 @@ inherited.
 # Your work. Expected to FAIL at GAP 1 until you implement it.
 dotnet test exercises/02-azure-sdk-foundations/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/02-azure-sdk-foundations/tests -p:Implementation=solution
 ```
 
 The starter has four numbered gaps, in dependency order: resolve the connection

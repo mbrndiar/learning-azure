@@ -99,15 +99,17 @@ One observation, from the laptop to the expedition lead's report:
 | 4 | the work order lands on `artifact-work` | the message is a *pointer*: the observation stays in the blob |
 | 5 | `StationWorker.ProcessAsync` receives it | the delivery budget is checked before any work is claimed or done |
 | 6 | `StationStatusProjector.TryClaimAsync` | a conditional **insert**; losing it is how a duplicate is detected |
-| 7 | the effect runs | exactly once per observation, however often the message is delivered |
+| 7 | the effect runs | at least once; the effect itself must be idempotent or deduplicated |
 | 8 | confirm, then delete | a crash between them costs one wasted receive, never a lost record |
 | 9 | the summary row is incremented | re-read **inside** the retry loop, under the ETag from that read |
 | 10 | `FieldStationCleanup.RemoveStationAsync` | lists by prefix, so it removes what earlier crashed runs left too |
 
 The ordering in steps 8 and 9 is the whole project in miniature. The status row
 records that the effect **completed**, not that it was attempted, so a row left
-`Pending` by a crashed worker means "this may or may not have run" — and the
-only safe reading of that is to run it again.
+`Pending` by a crashed worker means "this may or may not have run". Running it
+again is safe only because the effect is idempotent or independently
+deduplicated. A claim row and a non-atomic external effect cannot guarantee
+exactly-once execution across that crash window.
 
 ## Where the resources live
 
@@ -147,8 +149,8 @@ One evaluator judges both trees. Point it at the starter while you work:
 dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter
 ```
 
-Drop the property to run the same evaluator against
-[`solution/`](solution/), the reference implementation.
+The Learning Mentor unlocks the reference implementation after deterministic
+success or an explicit post-attempt unlock request.
 
 Grade one milestone at a time, in order:
 
@@ -393,9 +395,8 @@ az group delete --name "$GROUP" --yes --no-wait
 
 | state | command | result |
 | --- | --- | --- |
-| untouched starter | `dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter` | **63 failures**, 22 passing, 85 total |
-| finished starter | same command | 85 passing |
-| reference solution | `dotnet test projects/field-station/tests` | 85 passing |
+| untouched starter | `dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter` | **64 failures**, 22 passing, 86 total |
+| finished starter | same command | 86 passing |
 
 The 22 tests that pass against an untouched starter are the ones judging code
 you were given — argument validation, the identifier rules, the naming
@@ -441,3 +442,8 @@ Read [`solution/`](solution/) after your own version passes, not before. The
 places where the two differ are the interesting ones, and the questions worth
 asking are: what happens to this code if the process dies exactly here, and who
 arbitrates when two writers disagree?
+
+With the Storage pipeline now working as one system, module 8 changes the
+problem from dispatching discrete work to retaining an ordered stream. Carry
+forward the same duplicate-delivery discipline; leave queue visibility and pop
+receipts behind.

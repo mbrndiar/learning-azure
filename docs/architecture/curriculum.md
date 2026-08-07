@@ -16,7 +16,7 @@ record is [`evidence-matrix.md`](evidence-matrix.md).
 > across five milestones — so the `applied` evidence stage of modules 1 through
 > 7 is `covered` by its starter tree rather than deferred.
 > `capstone.cloud-expedition-journal` is **built** as well, across the same three
-> trees and five milestones, so the `applied` stage of modules 8 through 12 is
+> trees and four milestones, so the `applied` stage of modules 8 through 12 is
 > now `covered` by its starter tree too: nothing in the plan is deferred any
 > more, and every unit of the curriculum is present. The
 > verifier fails if content appears without the plan being updated, if the plan
@@ -336,7 +336,7 @@ Milestones:
 2. **Preserve artifacts in Blob Storage** (`milestone.field-station.artifact-storage`) — Stream artifacts into a container and update them under an ETag precondition.
 3. **Dispatch processing work** (`milestone.field-station.work-dispatch`) — Enqueue a work order per stored artifact and process it idempotently under redelivery.
 4. **Index station status** (`milestone.field-station.status-index`) — Record per-station processing status as point-readable entities with concurrency-safe updates.
-5. **Survive failure and cleanup** (`milestone.field-station.failure-recovery`) — Quarantine poison work, recover after restart without duplicate effects, and remove every resource the run created.
+5. **Survive failure and cleanup** (`milestone.field-station.failure-recovery`) — Quarantine poison work, recover after restart with an idempotent or deduplicated effect, and remove every resource the run created.
 
 
 ### `module.event-hubs-model` — Stream expedition telemetry
@@ -416,7 +416,7 @@ Outcomes — the learner can:
 
 ### `capstone.cloud-expedition-journal` — Cloud Expedition Field Journal
 
-Ingest sensor telemetry through Event Hubs with Blob checkpointing, queue artifact work, preserve reports in Blob Storage, track station state in Table Storage, and project a queryable journal into Cosmos DB, then deploy and tear it down live.
+Ingest sensor telemetry through Event Hubs with Blob checkpointing, queue artifact work, preserve reports in Blob Storage, track station state in Table Storage, and project a queryable journal into Cosmos DB, then run the complete system locally.
 
 - **Prerequisites:** `module.secure-operable-cloud`
 - **Environments:** emulator, live-checkpoint
@@ -426,13 +426,11 @@ Outcomes — the learner can:
 
 - Build the end-to-end journal across Event Hubs, Blob, Queue, Table, and Cosmos DB behind application-owned ports. *(`outcome.cloud-expedition-journal.build-end-to-end`, judged by `capstone_tests`)*
 - Verify normal, boundary, and failure behavior — duplicates, restarts, throttling, and poison work — with deterministic local tests. *(`outcome.cloud-expedition-journal.verify-failure-behavior`, judged by `capstone_tests`)*
-- Deploy the architecture to a live subscription, operate it under least privilege, and prove complete cleanup afterwards. *(`outcome.cloud-expedition-journal.operate-live`, judged by `capstone_tests`)*
+- Verify the journal's identity, retry, diagnostics, and cleanup boundary with deterministic tests. *(`outcome.cloud-expedition-journal.verify-operational-boundary`, judged by `capstone_tests`)*
 
 Milestones:
 
 1. **Model the journal domain and ports** (`milestone.cloud-expedition-journal.domain-ports`) — Define telemetry, artifact, station, and journal-entry contracts independent of any Azure SDK type.
 2. **Preserve reports and dispatch work** (`milestone.cloud-expedition-journal.storage-workflow`) — Store reports in Blob Storage under preconditions, queue artifact work, and track station state in Table Storage.
 3. **Ingest and process telemetry** (`milestone.cloud-expedition-journal.telemetry-pipeline`) — Produce keyed telemetry batches and consume them with Blob checkpointing that survives restart and duplicates.
-4. **Project the queryable journal** (`milestone.cloud-expedition-journal.cosmos-projection`) — Project processed telemetry and artifacts into a Cosmos container whose dominant queries stay single-partition under throttling.
-5. **Deploy, operate, and tear down** (`milestone.cloud-expedition-journal.live-operations`) — Run the journal against a live subscription under least-privilege roles, capture diagnostics and cost, and verify complete teardown.
-
+4. **Complete the journal and its operational boundary** (`milestone.cloud-expedition-journal.projection-and-operations`) — Project telemetry into a single-partition query model and implement the identity, retry, diagnostics, and cleanup boundary.

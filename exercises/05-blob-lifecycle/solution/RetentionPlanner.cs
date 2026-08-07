@@ -44,13 +44,6 @@ public static class RetentionPlanner
                 "is 0, so a deleted artifact is unrecoverable the instant the delete returns."));
         }
 
-        if (!plan.VersioningEnabled)
-        {
-            violations.Add(new RetentionViolation(
-                nameof(plan.VersioningEnabled),
-                "is off, so an overwrite silently destroys the previous bytes; soft delete does not cover overwrites."));
-        }
-
         if (plan.VersioningEnabled && plan.VersionRetentionDays == 0)
         {
             violations.Add(new RetentionViolation(
@@ -122,21 +115,25 @@ public static class RetentionPlanner
         ArgumentNullException.ThrowIfNull(plan);
         ArgumentOutOfRangeException.ThrowIfNegative(daysAgo);
 
-        // GAP 10 — Soft delete and versioning cover DIFFERENT losses.
+        // GAP 10 — Flat-namespace block blobs have two recovery paths.
         //
-        // Soft delete recovers a deleted blob. It does nothing for an overwrite,
-        // because nothing was deleted. That single sentence is the most commonly
-        // discovered-too-late fact about Blob Storage retention.
+        // Versioning preserves a first-class previous version. Without
+        // versioning, blob soft delete preserves the pre-overwrite state as a
+        // soft-deleted snapshot for its retention window. HNS accounts do not
+        // get overwrite protection from soft delete; this course's storage
+        // accounts use the flat namespace.
         if (wasOverwritten)
         {
-            if (!plan.VersioningEnabled)
+            if (plan.VersioningEnabled)
             {
-                return "Unrecoverable: the blob was overwritten and versioning was off. Soft delete does not cover overwrites.";
+                return plan.VersionRetentionDays == 0 || daysAgo <= plan.VersionRetentionDays
+                    ? "Recoverable: promote the previous version, which versioning kept."
+                    : $"Unrecoverable: the previous version expired after {plan.VersionRetentionDays} days.";
             }
 
-            return plan.VersionRetentionDays == 0 || daysAgo <= plan.VersionRetentionDays
-                ? "Recoverable: promote the previous version, which versioning kept."
-                : $"Unrecoverable: the previous version expired after {plan.VersionRetentionDays} days.";
+            return plan.SoftDeleteRetentionDays > 0 && daysAgo <= plan.SoftDeleteRetentionDays
+                ? "Recoverable: restore the soft-deleted snapshot created before the overwrite."
+                : "Unrecoverable: versioning was off and no soft-deleted snapshot remains.";
         }
 
         if (plan.SoftDeleteRetentionDays == 0)

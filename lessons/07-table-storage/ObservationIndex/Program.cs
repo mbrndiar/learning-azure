@@ -142,13 +142,11 @@ internal static class Program
         Console.WriteLine("-------------------------------------");
 
         var filter = $"PartitionKey eq '{target.PartitionKey}' and RowKey eq '{target.RowKey}'";
-        var (scanned, returned, elapsed) = await CountAsync(table, filter).ConfigureAwait(false);
+        var (returned, elapsed) = await CountAsync(table, filter).ConfigureAwait(false);
 
         Console.WriteLine($"   Filter              : PartitionKey eq '…' and RowKey eq '…'");
         Console.WriteLine($"   Entities returned   : {returned}");
         Console.WriteLine($"   Elapsed             : {elapsed:F1} ms");
-        _ = scanned;
-
         var wideFilter = $"PartitionKey eq '{target.PartitionKey}' and TemperatureC lt -18.0";
         var wide = await CountAsync(table, wideFilter).ConfigureAwait(false);
 
@@ -157,10 +155,9 @@ internal static class Program
         Console.WriteLine($"   Filter              : PartitionKey eq '…' and TemperatureC lt -18.0");
         Console.WriteLine($"   Entities returned   : {wide.Returned}");
         Console.WriteLine($"   Elapsed             : {wide.Elapsed:F1} ms");
+        Console.WriteLine($"   Candidate partition : {ReadingsPerStation} rows");
         Console.WriteLine(
-            $"   The partition holds {ReadingsPerStation} rows and every one of them was read to");
-        Console.WriteLine(
-            "   evaluate that predicate. The service returned few and scanned all.");
+            "   Table Storage does not expose an exact server-side scanned-row count.");
         Console.WriteLine();
     }
 
@@ -171,7 +168,7 @@ internal static class Program
         Console.WriteLine("-------------------------------");
 
         var filter = $"RowKey eq '{target.RowKey}'";
-        var (scanned, returned, elapsed) = await CountAsync(table, filter).ConfigureAwait(false);
+        var (returned, elapsed) = await CountAsync(table, filter).ConfigureAwait(false);
 
         Console.WriteLine($"   Filter              : RowKey eq '…'   (no PartitionKey!)");
         Console.WriteLine($"   Entities returned   : {returned}");
@@ -188,10 +185,9 @@ internal static class Program
         Console.WriteLine($"   Filter              : StationId eq 'station-03'");
         Console.WriteLine($"   Entities returned   : {property.Returned}");
         Console.WriteLine($"   Elapsed             : {property.Elapsed:F1} ms");
+        Console.WriteLine($"   Candidate table rows : {Stations * ReadingsPerStation}");
         Console.WriteLine(
-            "   Same rows as a partition scan, same syntax, and the service had to read");
-        Console.WriteLine(
-            "   the whole table to find them: StationId is a duplicated column, not a key.");
+            "   Same syntax, wider key range: StationId is a duplicated column, not a key.");
         Console.WriteLine();
     }
 
@@ -315,7 +311,7 @@ internal static class Program
             TableTransactionActionType.Add,
             new TableEntity(partitionKey, rowKey) { ["Status"] = "pending" });
 
-    private static async Task<(int Scanned, int Returned, double Elapsed)> CountAsync(
+    private static async Task<(int Returned, double Elapsed)> CountAsync(
         TableClient table,
         string filter)
     {
@@ -328,7 +324,7 @@ internal static class Program
         }
 
         stopwatch.Stop();
-        return (returned, returned, stopwatch.Elapsed.TotalMilliseconds);
+        return (returned, stopwatch.Elapsed.TotalMilliseconds);
     }
 
     private static string RowKey(DateTimeOffset observedAt) =>

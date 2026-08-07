@@ -17,11 +17,10 @@ namespace LearningAzure.Exercises.DataMap;
 public static class PrimitiveCharacteristics
 {
     /// <summary>
-    /// A Queue Storage message is limited to 64 KiB *after* encoding, and the
-    /// SDK's default Base64 encoding expands a payload by four thirds — so the
-    /// largest raw payload that still fits is 48 KiB.
+    /// A Queue Storage message body is limited to 64 KiB. The v12 SDK does not
+    /// transform the body unless the application explicitly selects Base64.
     /// </summary>
-    public const long MaxQueueMessagePayloadBytes = 49_152;
+    public const long MaxQueueMessagePayloadBytes = 65_536;
 
     /// <summary>Blob Storage accepts single blobs far larger than any expedition artifact.</summary>
     public const long MaxBlobBytes = 190_711_820_083_200;

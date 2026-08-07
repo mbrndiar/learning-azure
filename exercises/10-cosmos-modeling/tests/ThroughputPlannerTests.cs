@@ -111,14 +111,16 @@ public sealed class ThroughputPlannerTests
     public void AFlatWorkloadIsCheaperOnManualThroughput()
     {
         // Running at the peak all day: autoscale bills the same usage at 1.5x.
-        Assert.False(ThroughputPlanner.AutoscaleIsCheaper(1_000, 1_000));
+        Assert.False(ThroughputPlanner.AutoscaleIsCheaper(1_000, [1_000]));
     }
 
     [Fact]
     public void ASpikyWorkloadIsCheaperOnAutoscale()
     {
-        // Peaks at 10,000, averages 1,500. Autoscale bills 1,500 x 1.5 = 2,250.
-        Assert.True(ThroughputPlanner.AutoscaleIsCheaper(10_000, 1_500));
+        // One busy hour and 23 idle hours: every hour is billed separately.
+        Assert.True(ThroughputPlanner.AutoscaleIsCheaper(
+            10_000,
+            [10_000, .. Enumerable.Repeat(0.0, 23)]));
     }
 
     [Fact]
@@ -127,13 +129,13 @@ public sealed class ThroughputPlannerTests
         // A workload that is idle almost all the time still bills 10% of the
         // peak, times 1.5: 15% of the manual bill, not the 0.15% that raw usage
         // would suggest.
-        Assert.Equal(0.15, ThroughputPlanner.RelativeAutoscaleCost(10_000, 10), 6);
+        Assert.Equal(0.15, ThroughputPlanner.RelativeAutoscaleCost(10_000, [10]), 6);
     }
 
     [Fact]
     public void ACompletelyIdleWorkloadStillCostsFifteenPercent()
     {
-        Assert.Equal(0.15, ThroughputPlanner.RelativeAutoscaleCost(10_000, 0), 6);
+        Assert.Equal(0.15, ThroughputPlanner.RelativeAutoscaleCost(10_000, [0]), 6);
     }
 
     [Fact]
@@ -141,46 +143,62 @@ public sealed class ThroughputPlannerTests
     {
         // Everything at or under 10% of the peak bills the same.
         Assert.Equal(
-            ThroughputPlanner.RelativeAutoscaleCost(10_000, 0),
-            ThroughputPlanner.RelativeAutoscaleCost(10_000, 1_000),
+            ThroughputPlanner.RelativeAutoscaleCost(10_000, [0]),
+            ThroughputPlanner.RelativeAutoscaleCost(10_000, [1_000]),
             6);
 
         // Above the floor it starts moving again.
         Assert.True(
-            ThroughputPlanner.RelativeAutoscaleCost(10_000, 2_000)
-            > ThroughputPlanner.RelativeAutoscaleCost(10_000, 1_000));
+            ThroughputPlanner.RelativeAutoscaleCost(10_000, [2_000])
+            > ThroughputPlanner.RelativeAutoscaleCost(10_000, [1_000]));
     }
 
     [Fact]
     public void AFlatWorkloadCostsHalfAsMuchAgainOnAutoscale() =>
-        Assert.Equal(1.5, ThroughputPlanner.RelativeAutoscaleCost(1_000, 1_000), 6);
+        Assert.Equal(1.5, ThroughputPlanner.RelativeAutoscaleCost(1_000, [1_000]), 6);
 
     [Fact]
     public void APeakOfZeroIsNotAWorkload() =>
         Assert.Throws<ArgumentOutOfRangeException>(
-            () => ThroughputPlanner.RelativeAutoscaleCost(0, 0));
+            () => ThroughputPlanner.RelativeAutoscaleCost(0, [0]));
 
     [Fact]
-    public void TheBreakEvenIsAtTwoThirdsOfThePeak()
+    public void MovingTheSameUsageBetweenHoursChangesTheBill()
     {
-        // billed x 1.5 < peak  =>  average < peak x 2/3.
-        Assert.True(ThroughputPlanner.AutoscaleIsCheaper(3_000, 1_999));
-        Assert.False(ThroughputPlanner.AutoscaleIsCheaper(3_000, 2_000));
-        Assert.False(ThroughputPlanner.AutoscaleIsCheaper(3_000, 2_001));
+        var oneBusyHour = ThroughputPlanner.RelativeAutoscaleCost(10_000, [10_000, 0]);
+        var twoHalfBusyHours = ThroughputPlanner.RelativeAutoscaleCost(10_000, [5_000, 5_000]);
+
+        Assert.True(oneBusyHour > twoHalfBusyHours);
     }
 
     [Fact]
     public void AnAverageAboveThePeakIsNotAWorkload() =>
         Assert.Throws<ArgumentOutOfRangeException>(
-            () => ThroughputPlanner.AutoscaleIsCheaper(1_000, 1_001));
+            () => ThroughputPlanner.AutoscaleIsCheaper(1_000, [1_001]));
 
     [Fact]
     public void NegativeRatesAreNotWorkloads()
     {
         Assert.Throws<ArgumentOutOfRangeException>(
-            () => ThroughputPlanner.AutoscaleIsCheaper(-1, 0));
+            () => ThroughputPlanner.AutoscaleIsCheaper(-1, [0]));
 
         Assert.Throws<ArgumentOutOfRangeException>(
-            () => ThroughputPlanner.AutoscaleIsCheaper(1_000, -1));
+            () => ThroughputPlanner.AutoscaleIsCheaper(1_000, [-1]));
+    }
+
+    [Fact]
+    public void MultipleWriteRegionsDoNotApplyTheSingleRegionMultiplier()
+    {
+        Assert.Equal(
+            1.0,
+            ThroughputPlanner.RelativeAutoscaleCost(1_000, [1_000], multipleWriteRegions: true),
+            6);
+    }
+
+    [Fact]
+    public void NoBilledHoursIsNotAWorkload()
+    {
+        Assert.Throws<ArgumentException>(
+            () => ThroughputPlanner.RelativeAutoscaleCost(1_000, []));
     }
 }

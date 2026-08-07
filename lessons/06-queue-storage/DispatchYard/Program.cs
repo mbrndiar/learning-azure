@@ -216,11 +216,11 @@ internal static class Program
         Console.WriteLine();
     }
 
-    /// <summary>Section 5: the encoded ceiling, computed rather than recited.</summary>
+    /// <summary>Section 5: the course codec's encoded ceiling.</summary>
     private static void ShowSizeCeiling()
     {
-        Console.WriteLine("5. The 64 KiB ceiling is a Base64 ceiling");
-        Console.WriteLine("-----------------------------------------");
+        Console.WriteLine("5. The course Base64 policy reduces the raw-payload ceiling");
+        Console.WriteLine("-----------------------------------------------------------");
 
         const int limit = 64 * 1024;
 
@@ -233,8 +233,9 @@ internal static class Program
         }
 
         Console.WriteLine(
-            "   The usable payload is about 48 KiB, not 64. Anything bigger belongs in a");
-        Console.WriteLine("   blob, with the queue carrying only its name.");
+            "   Under this explicit codec policy, usable raw payload is about 48 KiB.");
+        Console.WriteLine(
+            "   The SDK default is None. Keep large work in a blob and queue only its name.");
         Console.WriteLine();
     }
 

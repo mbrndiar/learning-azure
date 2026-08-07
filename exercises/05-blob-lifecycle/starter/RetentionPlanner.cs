@@ -29,8 +29,6 @@ public static class RetentionPlanner
         // The rules, each with a RetentionViolation naming the setting:
         //   - SoftDeleteRetentionDays outside 0..MaximumSoftDeleteDays
         //   - SoftDeleteRetentionDays == 0 (a delete is instantly permanent)
-        //   - VersioningEnabled == false (an overwrite destroys the old bytes;
-        //     soft delete does NOT cover overwrites)
         //   - VersioningEnabled with VersionRetentionDays == 0 (kept forever)
         //   - VersionRetentionDays negative
         //   - a transition that does not fire strictly after the previous one
@@ -56,11 +54,13 @@ public static class RetentionPlanner
     /// <param name="daysAgo">Days since the loss.</param>
     /// <returns>A one-sentence answer an operator can act on.</returns>
     public static string RecoveryPath(RetentionPlan plan, bool wasOverwritten, int daysAgo) =>
-        // GAP 10 — Soft delete and versioning cover DIFFERENT losses.
+        // GAP 10 — Flat-namespace block blobs have two recovery paths.
         //
-        // Soft delete recovers a deleted blob. It does nothing for an overwrite,
-        // because nothing was deleted. That single sentence is the most commonly
-        // discovered-too-late fact about Blob Storage retention.
+        // Versioning preserves a first-class previous version. Without
+        // versioning, blob soft delete preserves the pre-overwrite state as a
+        // soft-deleted snapshot for its retention window. HNS accounts do not
+        // get overwrite protection from soft delete; this course uses flat
+        // namespace storage accounts.
         //
         // Return a sentence starting with "Recoverable:" or "Unrecoverable:".
         // The evaluator asserts on that prefix and on the reason, so say which

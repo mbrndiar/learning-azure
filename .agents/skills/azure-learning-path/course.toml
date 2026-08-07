@@ -25,7 +25,7 @@ curriculum_plan = "docs/architecture/curriculum.json"
 
 [course]
 id = "learning-azure"
-version = "0.5.0"
+version = "0.6.0"
 title = "Learning Azure Data and Messaging"
 description = "A narrative-driven, hands-on course teaching Azure Blob, Queue, and Table Storage, Event Hubs, and Azure Cosmos DB for NoSQL with C# and .NET 10 through one continuing story, the Cloud Expedition Field Journal. Twelve modules, an applied Storage project, and a capstone that integrates all five services end to end."
 language = "csharp"
@@ -49,7 +49,6 @@ required_outcomes = [
 lesson_readme = "lessons/01-azure-data-map/README.md"
 exercise_starter = "exercises/01-azure-data-map/starter"
 exercise_solution = "exercises/01-azure-data-map/solution"
-solution_supplements = ["exercises/01-azure-data-map/tests"]
 review_questions = { path = "lessons/01-azure-data-map/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/01-azure-data-map/tests"]
 solution_lock_group = "solutions.azure-data-map"
@@ -75,7 +74,6 @@ required_outcomes = [
 lesson_readme = "lessons/02-azure-sdk-foundations/README.md"
 exercise_starter = "exercises/02-azure-sdk-foundations/starter"
 exercise_solution = "exercises/02-azure-sdk-foundations/solution"
-solution_supplements = ["exercises/02-azure-sdk-foundations/tests"]
 review_questions = { path = "lessons/02-azure-sdk-foundations/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/02-azure-sdk-foundations/tests"]
 solution_lock_group = "solutions.azure-sdk-foundations"
@@ -101,7 +99,6 @@ required_outcomes = [
 lesson_readme = "lessons/03-storage-account/README.md"
 exercise_starter = "exercises/03-storage-account/starter"
 exercise_solution = "exercises/03-storage-account/solution"
-solution_supplements = ["exercises/03-storage-account/tests"]
 review_questions = { path = "lessons/03-storage-account/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/03-storage-account/tests"]
 solution_lock_group = "solutions.storage-account"
@@ -127,7 +124,6 @@ required_outcomes = [
 lesson_readme = "lessons/04-blob-storage/README.md"
 exercise_starter = "exercises/04-blob-storage/starter"
 exercise_solution = "exercises/04-blob-storage/solution"
-solution_supplements = ["exercises/04-blob-storage/tests"]
 review_questions = { path = "lessons/04-blob-storage/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/04-blob-storage/tests"]
 solution_lock_group = "solutions.blob-storage"
@@ -153,7 +149,6 @@ required_outcomes = [
 lesson_readme = "lessons/05-blob-lifecycle/README.md"
 exercise_starter = "exercises/05-blob-lifecycle/starter"
 exercise_solution = "exercises/05-blob-lifecycle/solution"
-solution_supplements = ["exercises/05-blob-lifecycle/tests"]
 review_questions = { path = "lessons/05-blob-lifecycle/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/05-blob-lifecycle/tests"]
 solution_lock_group = "solutions.blob-lifecycle"
@@ -179,7 +174,6 @@ required_outcomes = [
 lesson_readme = "lessons/06-queue-storage/README.md"
 exercise_starter = "exercises/06-queue-storage/starter"
 exercise_solution = "exercises/06-queue-storage/solution"
-solution_supplements = ["exercises/06-queue-storage/tests"]
 review_questions = { path = "lessons/06-queue-storage/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/06-queue-storage/tests"]
 solution_lock_group = "solutions.queue-storage"
@@ -205,7 +199,6 @@ required_outcomes = [
 lesson_readme = "lessons/07-table-storage/README.md"
 exercise_starter = "exercises/07-table-storage/starter"
 exercise_solution = "exercises/07-table-storage/solution"
-solution_supplements = ["exercises/07-table-storage/tests"]
 review_questions = { path = "lessons/07-table-storage/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/07-table-storage/tests"]
 solution_lock_group = "solutions.table-storage"
@@ -231,7 +224,6 @@ required_outcomes = [
 lesson_readme = "lessons/08-event-hubs-model/README.md"
 exercise_starter = "exercises/08-event-hubs-model/starter"
 exercise_solution = "exercises/08-event-hubs-model/solution"
-solution_supplements = ["exercises/08-event-hubs-model/tests"]
 review_questions = { path = "lessons/08-event-hubs-model/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/08-event-hubs-model/tests"]
 solution_lock_group = "solutions.event-hubs-model"
@@ -257,7 +249,6 @@ required_outcomes = [
 lesson_readme = "lessons/09-event-hubs-processing/README.md"
 exercise_starter = "exercises/09-event-hubs-processing/starter"
 exercise_solution = "exercises/09-event-hubs-processing/solution"
-solution_supplements = ["exercises/09-event-hubs-processing/tests"]
 review_questions = { path = "lessons/09-event-hubs-processing/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/09-event-hubs-processing/tests"]
 solution_lock_group = "solutions.event-hubs-processing"
@@ -283,7 +274,6 @@ required_outcomes = [
 lesson_readme = "lessons/10-cosmos-modeling/README.md"
 exercise_starter = "exercises/10-cosmos-modeling/starter"
 exercise_solution = "exercises/10-cosmos-modeling/solution"
-solution_supplements = ["exercises/10-cosmos-modeling/tests"]
 review_questions = { path = "lessons/10-cosmos-modeling/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/10-cosmos-modeling/tests"]
 solution_lock_group = "solutions.cosmos-modeling"
@@ -309,7 +299,6 @@ required_outcomes = [
 lesson_readme = "lessons/11-cosmos-development/README.md"
 exercise_starter = "exercises/11-cosmos-development/starter"
 exercise_solution = "exercises/11-cosmos-development/solution"
-solution_supplements = ["exercises/11-cosmos-development/tests"]
 review_questions = { path = "lessons/11-cosmos-development/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/11-cosmos-development/tests"]
 solution_lock_group = "solutions.cosmos-development"
@@ -335,7 +324,6 @@ required_outcomes = [
 lesson_readme = "lessons/12-secure-operable-cloud/README.md"
 exercise_starter = "exercises/12-secure-operable-cloud/starter"
 exercise_solution = "exercises/12-secure-operable-cloud/solution"
-solution_supplements = ["exercises/12-secure-operable-cloud/tests"]
 review_questions = { path = "lessons/12-secure-operable-cloud/README.md", heading = "Review questions" }
 validation_commands = ["dotnet test exercises/12-secure-operable-cloud/tests"]
 solution_lock_group = "solutions.secure-operable-cloud"
@@ -414,7 +402,7 @@ id = "milestone.field-station.failure-recovery"
 ordinal = 5
 title = "Survive failure and cleanup"
 prerequisites = ["milestone.field-station.status-index"]
-required_outcome = "Quarantine poison work, recover after restart without duplicate effects, and remove every resource the run created."
+required_outcome = "Quarantine poison work, recover after restart with an idempotent or deduplicated effect, and remove every resource the run created."
 test_command = "dotnet test projects/field-station/tests -p:ImplementationRoot=projects/field-station/starter --filter Milestone=failure-recovery"
 untouched_starter_result = "fails"
 
@@ -426,7 +414,7 @@ prerequisites = ["module.secure-operable-cloud"]
 required_outcomes = [
   "Build the end-to-end journal across Event Hubs, Blob, Queue, Table, and Cosmos DB behind application-owned ports.",
   "Verify normal, boundary, and failure behavior -- duplicates, restarts, throttling, and poison work -- with deterministic local tests.",
-  "Deploy the architecture to a live subscription, operate it under least privilege, and prove complete cleanup afterwards.",
+  "Verify the journal's identity, retry, diagnostics, and cleanup boundary with deterministic tests.",
 ]
 guide_path = "capstones/cloud-expedition-journal/README.md"
 starter_root = "capstones/cloud-expedition-journal/starter"
@@ -467,92 +455,83 @@ test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:Implemen
 untouched_starter_result = "fails"
 
 [[capstones.milestones]]
-id = "milestone.cloud-expedition-journal.cosmos-projection"
+id = "milestone.cloud-expedition-journal.projection-and-operations"
 ordinal = 4
-title = "Project the queryable journal"
+title = "Complete the journal and its operational boundary"
 prerequisites = ["milestone.cloud-expedition-journal.telemetry-pipeline"]
-required_outcome = "Project processed telemetry and artifacts into a Cosmos container whose dominant queries stay single-partition under throttling."
+required_outcome = "Project telemetry into a single-partition query model and implement the identity, retry, diagnostics, and cleanup boundary."
 test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=cosmos-projection"
-untouched_starter_result = "fails"
-
-[[capstones.milestones]]
-id = "milestone.cloud-expedition-journal.live-operations"
-ordinal = 5
-title = "Deploy, operate, and tear down"
-prerequisites = ["milestone.cloud-expedition-journal.cosmos-projection"]
-required_outcome = "Run the journal against a live subscription under least-privilege roles, capture diagnostics and cost, and verify complete teardown."
-test_command = "dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=live-operations"
 untouched_starter_result = "fails"
 
 [[solution_lock_groups]]
 id = "solutions.azure-data-map"
-paths = ["exercises/01-azure-data-map/solution", "exercises/01-azure-data-map/tests"]
+paths = ["exercises/01-azure-data-map/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.azure-sdk-foundations"
-paths = ["exercises/02-azure-sdk-foundations/solution", "exercises/02-azure-sdk-foundations/tests"]
+paths = ["exercises/02-azure-sdk-foundations/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.storage-account"
-paths = ["exercises/03-storage-account/solution", "exercises/03-storage-account/tests"]
+paths = ["exercises/03-storage-account/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.blob-storage"
-paths = ["exercises/04-blob-storage/solution", "exercises/04-blob-storage/tests"]
+paths = ["exercises/04-blob-storage/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.blob-lifecycle"
-paths = ["exercises/05-blob-lifecycle/solution", "exercises/05-blob-lifecycle/tests"]
+paths = ["exercises/05-blob-lifecycle/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.queue-storage"
-paths = ["exercises/06-queue-storage/solution", "exercises/06-queue-storage/tests"]
+paths = ["exercises/06-queue-storage/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.table-storage"
-paths = ["exercises/07-table-storage/solution", "exercises/07-table-storage/tests"]
+paths = ["exercises/07-table-storage/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.event-hubs-model"
-paths = ["exercises/08-event-hubs-model/solution", "exercises/08-event-hubs-model/tests"]
+paths = ["exercises/08-event-hubs-model/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.event-hubs-processing"
-paths = ["exercises/09-event-hubs-processing/solution", "exercises/09-event-hubs-processing/tests"]
+paths = ["exercises/09-event-hubs-processing/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.cosmos-modeling"
-paths = ["exercises/10-cosmos-modeling/solution", "exercises/10-cosmos-modeling/tests"]
+paths = ["exercises/10-cosmos-modeling/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.cosmos-development"
-paths = ["exercises/11-cosmos-development/solution", "exercises/11-cosmos-development/tests"]
+paths = ["exercises/11-cosmos-development/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 
 [[solution_lock_groups]]
 id = "solutions.secure-operable-cloud"
-paths = ["exercises/12-secure-operable-cloud/solution", "exercises/12-secure-operable-cloud/tests"]
+paths = ["exercises/12-secure-operable-cloud/solution"]
 unlock_policy = "after-unit-validation"
 solution_unlock_after = 2
 

@@ -75,9 +75,9 @@ fails if they materialize without review; it never asserts that they are present
   may be empty only during the bootstrap baseline.
 - `[[modules]]` is one ordered teaching module declaring its prerequisites,
   required outcomes, narrative README, review-question source, exercise starter
-  and reference, focused validation command(s), and solution-lock group. Optional
-  `solution_supplements` list further reference artifacts and must appear after
-  the primary exercise solution in the same lock group.
+  and reference, focused validation command(s), and solution-lock group. The
+  lock covers the reference implementation only; deterministic evaluators remain
+  visible so they can grade learner work.
 - `[[modules.concepts]]` maps one stable concept ID to a runnable .NET **project
   directory** and its documented command. A lesson companion is a directory
   containing a `.csproj`, so `lesson_project` names the directory and

@@ -384,7 +384,8 @@ second effect:
 
 | operation | safe to retry after a cancellation? | why |
 | --- | --- | --- |
-| upsert with a deterministic id | yes | the second write reaches the same state |
+| upsert immutable content with a deterministic id | yes | the second write reaches the same state |
+| upsert mutable content | **no** | a retry can overwrite a newer value |
 | patch `Set` | yes | setting a fixed value twice is setting it once |
 | delete | yes | tolerate the 404 and it is idempotent |
 | conditional replace | yes | the ETag makes the second attempt a clean 412 |
@@ -393,7 +394,8 @@ second effect:
 | unconditional replace | **no** | it overwrites whatever happened in between |
 
 Every unsafe operation has a safe sibling expressing the same intent. "Create
-this reading" becomes "upsert it under an id I can compute again". "Add one"
+this immutable reading" becomes "upsert it under an id I can compute again".
+Mutable documents need a condition or conflict policy. "Add one"
 becomes "read, add one, write it back if nobody else did".
 
 Which makes the id the load-bearing part:
@@ -661,8 +663,6 @@ any volume, because there is never a second page to get wrong.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/11-cosmos-development/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/11-cosmos-development/tests
 ```
 
 Fourteen gaps across six files, every one of them offline and deterministic —
@@ -686,7 +686,7 @@ schedule is computed rather than slept:
 | 13 | `BatchPlanner.cs` | finding the culprit past the 424s |
 | 14 | `CleanupPlanner.cs` | the cheapest deletion mechanism that is still correct |
 
-The untouched starter fails **110 of 140 checks**. The first failure names its
+The untouched starter fails **113 of 143 checks**. The first failure names its
 gap and this file:
 
 ```text
@@ -694,7 +694,7 @@ System.NotImplementedException : GAP 9: implement IdempotentWriter.Deterministic
 See lessons/11-cosmos-development/README.md#retrying-safely-means-retrying-idempotently.
 ```
 
-The reference implementation passes all 140.
+The reference implementation passes all 143 after it is unlocked.
 
 ### How this evaluator is known to be strong
 
@@ -800,9 +800,7 @@ commit several documents atomically inside the one boundary that permits it,
 back off when the service pushes back, and know which of your writes may safely
 be sent twice.
 
-Two things are still missing, and both are about *time*. You have no way to
-react to a change as it happens — every read in this module was a poll — and no
-way to move data out of Cosmos and into anything else. The change feed is the
-answer to the first, and it is the same idea as module 9's checkpointed
-processor wearing different clothes: a durable position in an ordered stream,
-per partition, that you commit when you are done.
+The data path is now complete. Module 12 moves outward to the boundary around
+it: which identity the process becomes, which data-plane role it needs, how
+diagnostics expose a refusal, and how teardown proves the learning environment
+stopped costing money.

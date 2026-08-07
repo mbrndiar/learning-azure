@@ -107,7 +107,8 @@ public sealed class StationWorker(IWorkBacklog queue, StationStatusProjector pro
         // AlreadyProcessed means the effect is done: delete the message so it
         // stops being delivered, but do NOT run the handler again. Resumed means
         // a previous attempt claimed the row and never confirmed, so the effect
-        // may not have happened and running it is the safe reading.
+        // may or may not have happened. Running it again requires the effect
+        // itself to be idempotent or independently deduplicated.
         var claim = await Projector.TryClaimAsync(order, cancellationToken).ConfigureAwait(false);
         switch (claim)
         {

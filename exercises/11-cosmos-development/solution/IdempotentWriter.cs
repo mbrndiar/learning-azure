@@ -6,8 +6,11 @@ public enum StoreOperation
     /// <summary>Insert, failing if the id already exists.</summary>
     Create,
 
-    /// <summary>Insert or overwrite, keyed on the id.</summary>
-    Upsert,
+    /// <summary>Insert or overwrite identical immutable content, keyed on the id.</summary>
+    ImmutableUpsert,
+
+    /// <summary>Insert or overwrite mutable content, keyed on the id.</summary>
+    MutableUpsert,
 
     /// <summary>Overwrite only if the ETag still matches.</summary>
     ConditionalReplace,
@@ -92,15 +95,15 @@ public sealed class IdempotentWriter
         return operation switch
         {
             // Applying these twice reaches the same state as applying them once.
-            StoreOperation.Upsert or StoreOperation.PatchSet or StoreOperation.Delete =>
+            StoreOperation.ImmutableUpsert or StoreOperation.PatchSet or StoreOperation.Delete =>
                 RetrySafety.Safe,
 
             // The ETag makes the second attempt fail rather than duplicate.
             StoreOperation.ConditionalReplace => RetrySafety.Safe,
 
+            // A mutable upsert or blind replace can overwrite a newer value.
             // A second create is a 409 at best and a duplicate at worst; a
-            // second increment is a wrong number; a second blind replace
-            // overwrites whatever happened in between.
+            // second increment is a wrong number.
             _ => RetrySafety.Unsafe,
         };
     }
@@ -122,8 +125,8 @@ public sealed class IdempotentWriter
         // See lessons/11-cosmos-development/README.md#retrying-safely-means-retrying-idempotently
         return operation switch
         {
-            StoreOperation.Create => StoreOperation.Upsert,
-            StoreOperation.UnconditionalReplace or StoreOperation.PatchIncrement =>
+            StoreOperation.Create => StoreOperation.ImmutableUpsert,
+            StoreOperation.MutableUpsert or StoreOperation.UnconditionalReplace or StoreOperation.PatchIncrement =>
                 StoreOperation.ConditionalReplace,
             _ => operation,
         };

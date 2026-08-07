@@ -180,7 +180,7 @@ public static class ExpeditionEnvironmentFactory
         // assignments the identity needs instead.
         throw new NotImplementedException(
             "GAP 24: refuse a live run that carries an ambient secret. See "
-            + "capstones/cloud-expedition-journal/README.md#milestone-5-running-it-for-real.");
+            + "capstones/cloud-expedition-journal/README.md#operational-boundary-offline-graded-live-run-optional.");
     }
 
     /// <summary>Builds blob client options with a bounded retry budget.</summary>

@@ -381,8 +381,6 @@ passes 40 MiB — comfortably past every test fixture anyone writes.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/04-blob-storage/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/04-blob-storage/tests -p:Implementation=solution
 ```
 
 The starter has ten numbered gaps, in dependency order: the naming scheme and

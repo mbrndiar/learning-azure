@@ -37,14 +37,12 @@ public sealed class RetentionPlannerTests
     }
 
     [Fact]
-    public void VersioningOffIsAViolation()
+    public void VersioningOffIsNotALossWhenSoftDeleteCoversTheOverwriteWindow()
     {
-        // Soft delete does not cover overwrites. A plan that relies on it for
-        // overwrite protection is wrong, and silently so.
         var violations = RetentionPlanner.Evaluate(
             Sound() with { VersioningEnabled = false, VersionRetentionDays = 0 });
 
-        Assert.Contains(violations, v => v.Setting == nameof(RetentionPlan.VersioningEnabled));
+        Assert.DoesNotContain(violations, v => v.Setting == nameof(RetentionPlan.VersioningEnabled));
     }
 
     [Fact]
@@ -109,7 +107,7 @@ public sealed class RetentionPlannerTests
                 new TierTransition(AccessTier.Cool, 3),
             ]);
 
-        Assert.True(RetentionPlanner.Evaluate(broken).Count >= 5, "Every fault should be reported at once.");
+        Assert.True(RetentionPlanner.Evaluate(broken).Count >= 4, "Every fault should be reported at once.");
     }
 
     [Fact]
@@ -145,15 +143,15 @@ public sealed class RetentionPlannerTests
     }
 
     [Fact]
-    public void AnOverwriteWithVersioningOffIsUnrecoverable()
+    public void AnOverwriteWithVersioningOffUsesTheSoftDeletedSnapshot()
     {
         // The most commonly discovered-too-late fact in this module.
         var plan = Sound() with { VersioningEnabled = false };
 
         var answer = RetentionPlanner.RecoveryPath(plan, wasOverwritten: true, daysAgo: 0);
 
-        Assert.StartsWith("Unrecoverable", answer, StringComparison.Ordinal);
-        Assert.Contains("overwrit", answer, StringComparison.OrdinalIgnoreCase);
+        Assert.StartsWith("Recoverable", answer, StringComparison.Ordinal);
+        Assert.Contains("snapshot", answer, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -201,16 +199,14 @@ public sealed class RetentionPlannerTests
     }
 
     [Fact]
-    public void SoftDeleteDoesNotRescueAnOverwrite()
+    public void SoftDeleteRescuesARecentOverwriteInAFlatNamespaceAccount()
     {
-        // Same plan, same day, two kinds of loss, two different answers. If
-        // these agree, the two mechanisms have been conflated.
         var plan = Sound() with { VersioningEnabled = false, VersionRetentionDays = 0, SoftDeleteRetentionDays = 30 };
 
         var overwrite = RetentionPlanner.RecoveryPath(plan, wasOverwritten: true, daysAgo: 1);
         var delete = RetentionPlanner.RecoveryPath(plan, wasOverwritten: false, daysAgo: 1);
 
-        Assert.StartsWith("Unrecoverable", overwrite, StringComparison.Ordinal);
+        Assert.StartsWith("Recoverable", overwrite, StringComparison.Ordinal);
         Assert.StartsWith("Recoverable", delete, StringComparison.Ordinal);
     }
 

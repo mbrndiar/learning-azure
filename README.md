@@ -10,7 +10,7 @@
 > milestones. The **Cloud Expedition Field Journal capstone** closes the course
 > after module 12 and integrates all five services — Event Hubs ingress, Blob
 > checkpoints and artifacts, Queue dispatch, Table state, Cosmos projection —
-> across five more milestones. Nothing here claims coverage the repository does
+> across four capstone milestones. Nothing here claims coverage the repository does
 > not have: the course verifier fails if a unit is advertised or made trackable
 > before its content exists.
 
@@ -35,7 +35,7 @@ plane, meeting each Azure service where a real design problem calls for it.
   the Azure SDK for .NET, emulators, partitioning, delivery semantics, and cloud
   operations are taught here, not assumed.
 
-## What you will be able to do
+## 📖 What you will be able to do
 
 By the end of the course you will be able to:
 
@@ -55,7 +55,7 @@ By the end of the course you will be able to:
 - operate the live architecture with Microsoft Entra ID, least-privilege RBAC,
   diagnostics, cost controls, and complete cleanup.
 
-## Course map
+## 🧭 Course map
 
 Fourteen units: twelve modules, one applied project, and the capstone. The
 prerequisite graph, measurable outcomes, split decisions, and per-unit evidence
@@ -95,8 +95,8 @@ navigation:
 4. **Fill the gaps** in `exercises/<NN>-<slug>/starter`. Every gap throws a
    `NotImplementedException` naming the lesson section that answers it. Grade with
    `dotnet test exercises/<NN>-<slug>/tests -p:Implementation=starter`, which fails
-   before you start and passes when you are done. Drop `-p:Implementation=starter`
-   to run the same evaluator against the reference solution.
+   before you start and passes when you are done. The Learning Mentor unlocks
+   reference comparison after deterministic success or an explicit post-attempt request.
 
 Which emulator a module needs is stated in its lesson:
 
@@ -118,7 +118,7 @@ service and adds nothing new.
 
 ### How the project and the capstone work
 
-Both are staged into five milestones and share one shape:
+Both are staged into bounded, dependency-ordered milestones and share one shape:
 
 1. **Read the guide** — [`projects/field-station/README.md`](projects/field-station/README.md)
    or [`capstones/cloud-expedition-journal/README.md`](capstones/cloud-expedition-journal/README.md).
@@ -126,8 +126,8 @@ Both are staged into five milestones and share one shape:
 2. **Fill the gaps** in the `starter` tree, milestone by milestone.
 3. **Grade one milestone** with, for example,
    `dotnet test capstones/cloud-expedition-journal/tests -p:ImplementationRoot=capstones/cloud-expedition-journal/starter --filter Milestone=domain-ports`.
-   Drop the `-p:` property to run the same evaluator against the reference
-   solution.
+   Keep the implementation selector on learner commands; reference comparison
+   follows the unlock policy.
 
 Both evaluators are fully offline. The capstone's end-to-end host needs all three
 emulators (`ACCEPT_EULA=Y docker compose up -d`), and its live checkpoint is
@@ -195,7 +195,7 @@ tools/CourseVerifier/         # curriculum plan verifier and its tests
 capstones/<slug>/             # the end-to-end capstone: guide, starter, solution, evaluator
 ```
 
-## Optional: Learning Mentor
+## 🧑‍🏫 Optional: Learning Mentor
 
 The repository ships an optional interactive mentor that tracks which objectives
 you have practiced, schedules reviews, and keeps reference solutions out of sight
@@ -203,7 +203,7 @@ until you have made a genuine attempt. It is entirely optional and works in
 GitHub Copilot CLI, OpenAI Codex, and Claude Code. See
 [section 8 of `docs/SETUP.md`](docs/SETUP.md#8-optional-learning-mentor).
 
-## Get started
+## 🚀 Get started
 
 1. Clone recursively (the course ships one submodule):
    `git clone --recurse-submodules <REPOSITORY_URL>`

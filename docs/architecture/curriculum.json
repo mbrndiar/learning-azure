@@ -702,7 +702,7 @@
           "prerequisites": [
             "milestone.field-station.status-index"
           ],
-          "required_outcome": "Quarantine poison work, recover after restart without duplicate effects, and remove every resource the run created."
+          "required_outcome": "Quarantine poison work, recover after restart with an idempotent or deduplicated effect, and remove every resource the run created."
         }
       ],
       "evidence": [
@@ -1135,7 +1135,7 @@
           "artifact": {
             "role": "capstone_starter"
           },
-          "note": "The capstone live checkpoint is operated and torn down by the learner. Resolved in capstone.cloud-expedition-journal#milestone-5-running-it-for-real."
+          "note": "The capstone applies identity, diagnostics, and cleanup through offline-graded adapters; an actual live run is an optional extension."
         }
       ]
     },
@@ -1146,7 +1146,7 @@
       "ordinal": 1,
       "sequence": 14,
       "title": "Cloud Expedition Field Journal",
-      "summary": "Ingest sensor telemetry through Event Hubs with Blob checkpointing, queue artifact work, preserve reports in Blob Storage, track station state in Table Storage, and project a queryable journal into Cosmos DB, then deploy and tear it down live.",
+      "summary": "Ingest sensor telemetry through Event Hubs with Blob checkpointing, queue artifact work, preserve reports in Blob Storage, track station state in Table Storage, and project a queryable journal into Cosmos DB, then run the complete system locally.",
       "prerequisites": [
         "module.secure-operable-cloud"
       ],
@@ -1169,8 +1169,8 @@
           "measured_by": "capstone_tests"
         },
         {
-          "id": "outcome.cloud-expedition-journal.operate-live",
-          "statement": "Deploy the architecture to a live subscription, operate it under least privilege, and prove complete cleanup afterwards.",
+          "id": "outcome.cloud-expedition-journal.verify-operational-boundary",
+          "statement": "Verify the journal's identity, retry, diagnostics, and cleanup boundary with deterministic tests.",
           "measured_by": "capstone_tests"
         }
       ],
@@ -1201,22 +1201,13 @@
           "required_outcome": "Produce keyed telemetry batches and consume them with Blob checkpointing that survives restart and duplicates."
         },
         {
-          "id": "milestone.cloud-expedition-journal.cosmos-projection",
+          "id": "milestone.cloud-expedition-journal.projection-and-operations",
           "ordinal": 4,
-          "title": "Project the queryable journal",
+          "title": "Complete the journal and its operational boundary",
           "prerequisites": [
             "milestone.cloud-expedition-journal.telemetry-pipeline"
           ],
-          "required_outcome": "Project processed telemetry and artifacts into a Cosmos container whose dominant queries stay single-partition under throttling."
-        },
-        {
-          "id": "milestone.cloud-expedition-journal.live-operations",
-          "ordinal": 5,
-          "title": "Deploy, operate, and tear down",
-          "prerequisites": [
-            "milestone.cloud-expedition-journal.cosmos-projection"
-          ],
-          "required_outcome": "Run the journal against a live subscription under least-privilege roles, capture diagnostics and cost, and verify complete teardown."
+          "required_outcome": "Project telemetry into a single-partition query model and implement the identity, retry, diagnostics, and cleanup boundary."
         }
       ],
       "evidence": [
@@ -1244,7 +1235,7 @@
           "artifact": {
             "role": "capstone_solution"
           },
-          "note": "The reference implementation runs end to end locally and at the live checkpoint."
+          "note": "The reference implementation runs end to end against the local service emulators; the live Azure extension is optional."
         },
         {
           "stage": "practiced",

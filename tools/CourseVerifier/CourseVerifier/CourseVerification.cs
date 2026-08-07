@@ -615,7 +615,15 @@ internal sealed partial class CourseVerification(string repositoryRoot, string p
                     continue;
 
                 case EvidenceStatuses.Planned when unit.ArtifactStatus == ArtifactStatuses.Present:
-                    Report(scope, "this unit's artifacts are present, so the stage must be covered, deferred, or explicitly not applicable");
+                    Report(scope, "this unit's artifacts are present, so the stage must be covered, partial, missing, deferred, or explicitly not applicable");
+                    continue;
+
+                case EvidenceStatuses.Partial:
+                    Report(scope, "partial evidence blocks curriculum completion; finish the stage or classify it explicitly");
+                    continue;
+
+                case EvidenceStatuses.Missing:
+                    Report(scope, "missing evidence blocks curriculum completion");
                     continue;
 
                 default:

@@ -155,14 +155,15 @@ your development table.
 The most common accident is filtering the *duplicated* column:
 
 ```text
-StationId    eq 'station-03'   → table scan,     1000 rows returned, 37.7 ms
-PartitionKey eq 'station-03|…' → partition scan, 1000 rows returned,  3-8 ms
+StationId    eq 'station-03'   -> table scan,     1000 rows returned, 37.7 ms
+PartitionKey eq 'station-03|…' -> partition scan, 1000 rows returned,  3-8 ms
 ```
 
 Same rows. Same result. One reads a partition and one reads everything. And a
-filter on a non-key property does not reduce what is *scanned* — only what is
-*returned*: the companion's `TemperatureC lt -18.0` query returns 58 rows and
-the service read all 1,000 in the partition to find them.
+filter on a non-key property does not narrow the key range the service must
+consider; it only reduces what is returned. The companion reports 58 returned
+rows, the 1,000-row candidate partition, requests/pages, and elapsed time.
+Table Storage does not expose an exact server-side scanned-row counter.
 
 ## The ETag is back, with a different API
 
@@ -239,8 +240,8 @@ machine, so this is one representative occurrence; the entity counts and the
    Filter              : PartitionKey eq '…' and TemperatureC lt -18.0
    Entities returned   : 58
    Elapsed             : 3.4 ms
-   The partition holds 1000 rows and every one of them was read to
-   evaluate that predicate. The service returned few and scanned all.
+   The partition holds 1000 candidate rows. The service returned 58.
+   Table Storage does not expose an exact server-side scanned-row count.
 
 3. Table scan: no key predicate
 -------------------------------
@@ -361,10 +362,12 @@ property the entire key design exists to buy, measured rather than asserted.
 **The scan got 40× slower** as partitions were merged — and nothing about the
 data, the filter, or the code changed. Only the key did.
 
-**The scan cost tracks what is *returned*, not what is stored.** All three runs
-scanned 5,000 rows. The one that took 152 ms is the one that had to hand 5,000
-of them back. Partitioning is the only lever, it moves scan cost only, and no
-partition layout makes a table scan cheap.
+**The observable cost tracks candidate range, returned entities, pages, and
+latency.** The client cannot report how many rows the server examined
+internally. The 152 ms run returned 5,000 entities; the narrower runs returned
+fewer. Treat those as observations, not a fabricated scan count. Key design is
+the lever that narrows the candidate range, and no partition layout makes a
+table scan cheap.
 
 ## Common mistakes and how to diagnose them
 
@@ -386,8 +389,6 @@ partition layout makes a table scan cheap.
 # Your work. Expected to FAIL until you implement the gaps.
 dotnet test exercises/07-table-storage/tests -p:Implementation=starter
 
-# The reference implementation, judged by exactly the same evaluator.
-dotnet test exercises/07-table-storage/tests -p:Implementation=solution
 ```
 
 The starter has ten numbered gaps, in dependency order: key construction and key
@@ -472,3 +473,7 @@ answered by point reads rather than by scans. That is the whole Storage account
 — the four services, their consistency models, their cost models, and their
 failure modes — with each claim in these seven modules measured rather than
 asserted.
+
+Next, the **Field Station** project removes the chapter-by-chapter scaffolding:
+you will combine Blob, Queue, and Table behind application-owned ports before
+the course introduces a new service.

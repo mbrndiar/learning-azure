@@ -145,7 +145,7 @@ public enum StationPhase
     /// <summary>Claimed by a processor; the reading has not been confirmed.</summary>
     Pending,
 
-    /// <summary>The reading has been handled and projected exactly once.</summary>
+    /// <summary>The reading's idempotent projection has been handled and confirmed.</summary>
     Journaled,
 
     /// <summary>The work was moved aside and needs a human.</summary>
