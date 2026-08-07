@@ -17,10 +17,9 @@
     grant access to nothing outside this machine, which is why they may appear
     in source. A real account key must never be written down like this.
 
-    TO RUN THE SAME STEPS AGAINST AZURE instead of the emulator, replace the
-    storage context with an Entra ID one:
+    TO RUN THE SAME STEPS AGAINST AZURE instead of the emulator, pass the account:
 
-        $ctx = New-AzStorageContext -StorageAccountName <account> -UseConnectedAccount
+        pwsh -File infra/powershell/table-storage.ps1 -StorageAccountName <account>
 
     That needs the Storage Table Data Contributor role on the account. See
     infra/powershell/storage-account.ps1, which creates an account configured
@@ -29,9 +28,8 @@
     NOTE: two rules exercised here -- the single-partition transaction limit and
     the 100-operation batch limit -- are NOT enforced by Azurite. See step 8.
 
-    PREREQUISITES: PowerShell 7 with the Az.Storage module and a running Azurite
-    container (docker compose up -d azurite). No sign-in is required for the
-    emulator path.
+    PREREQUISITES: PowerShell 7 with Az.Storage. The emulator path needs Azurite;
+    the Azure path needs a signed-in account and the data-plane role above.
 
 .EXAMPLE
     pwsh -File infra/powershell/table-storage.ps1
@@ -40,7 +38,8 @@
 [CmdletBinding()]
 param(
     [string] $TableName = 'expeditionobservations',
-    [string] $ConnectionString = $env:AZURITE_CONNECTION_STRING
+    [string] $ConnectionString = $env:AZURITE_CONNECTION_STRING,
+    [string] $StorageAccountName = $env:AZURE_STORAGE_ACCOUNT
 )
 
 Set-StrictMode -Version Latest
@@ -84,7 +83,12 @@ try {
     # -------------------------------------------------------------------------
     # Printing the endpoint, not the key. If this does not say 127.0.0.1 you are
     # about to write to a real account.
-    $ctx = New-AzStorageContext -ConnectionString $ConnectionString
+    $ctx = if ([string]::IsNullOrWhiteSpace($StorageAccountName)) {
+        New-AzStorageContext -ConnectionString $ConnectionString
+    }
+    else {
+        New-AzStorageContext -StorageAccountName $StorageAccountName -UseConnectedAccount
+    }
     Write-Information "table endpoint : $($ctx.TableEndPoint)"
 
     # -------------------------------------------------------------------------

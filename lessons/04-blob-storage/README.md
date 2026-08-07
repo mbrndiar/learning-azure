@@ -424,12 +424,15 @@ evaluator localises the defect rather than collapsing.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d azurite` for the companion and for both
+- **🧪 Emulator.** `docker compose up -d azurite` for the companion and for both
   shell labs. The exercise evaluator is pure and needs nothing running.
-- **Live: not required.** Everything in this module behaves identically on
-  Azurite. Blob index tags, versioning, and lifecycle rules do not — which is
-  why [module 5](../05-blob-lifecycle/README.md) carries a required live
-  checkpoint and this one does not.
+- **☁️ Azure alternative — optional.** Create the
+  [live Storage sandbox](../../infra/README.md#create-a-live-storage-sandbox),
+  then run `bash infra/azure-cli/blob-storage.sh` or
+  `pwsh -File infra/powershell/blob-storage.ps1 -StorageAccountName
+  $env:AZURE_STORAGE_ACCOUNT`. Everything here behaves identically on Azurite;
+  Blob index tags, versioning, and lifecycle rules do not, which is why
+  [module 5](../05-blob-lifecycle/README.md) requires Azure and this one does not.
 
 ## Review questions
 

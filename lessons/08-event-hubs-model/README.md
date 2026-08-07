@@ -534,11 +534,13 @@ that both share: five keys over four partitions cannot balance.
 
 ## 🌍 Environments
 
-- **Emulator.** `ACCEPT_EULA=Y docker compose up -d eventhubs` for the
+- **🧪 Emulator.** `ACCEPT_EULA=Y docker compose up -d eventhubs` for the
   companion. The Event Hubs emulator depends on Azurite for its metadata and
   blob storage, so Compose starts both. The exercise evaluator needs nothing
   running.
-- **Live checkpoint: required.** Run one of the two management labs end to end.
+- **☁️ Azure alternative — required.** Run
+  `bash infra/azure-cli/event-hubs-model.sh` or
+  `pwsh -File infra/powershell/event-hubs-model.ps1` end to end.
   The emulator has no control plane at all — no namespace, hub, partition,
   retention, or throughput operation exists locally — so every capacity claim in
   this module is unverifiable without it. The specific thing you are there to

@@ -24,8 +24,8 @@
 # role on the account. See infra/azure-cli/storage-account.sh, which creates an
 # account configured exactly that way.
 #
-# PREREQUISITES: Azure CLI 2.60+ and a running Azurite container. No 'az login'
-# is required for the emulator path.
+# PREREQUISITES: Azure CLI 2.60+. The emulator path needs Azurite; the Azure path
+# needs `az login`, AZURE_STORAGE_ACCOUNT, and the data-plane role above.
 # =============================================================================
 
 set -euo pipefail
@@ -33,7 +33,12 @@ set -euo pipefail
 AZURITE_ACCOUNT="devstoreaccount1"
 AZURITE_KEY="Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
 
-export AZURE_STORAGE_CONNECTION_STRING="${AZURITE_CONNECTION_STRING:-DefaultEndpointsProtocol=http;AccountName=$AZURITE_ACCOUNT;AccountKey=$AZURITE_KEY;QueueEndpoint=http://127.0.0.1:10001/$AZURITE_ACCOUNT;}"
+if [[ -n "${AZURE_STORAGE_ACCOUNT:-}" ]]; then
+  export AZURE_STORAGE_AUTH_MODE="${AZURE_STORAGE_AUTH_MODE:-login}"
+  unset AZURE_STORAGE_CONNECTION_STRING
+else
+  export AZURE_STORAGE_CONNECTION_STRING="${AZURITE_CONNECTION_STRING:-DefaultEndpointsProtocol=http;AccountName=$AZURITE_ACCOUNT;AccountKey=$AZURITE_KEY;QueueEndpoint=http://127.0.0.1:10001/$AZURITE_ACCOUNT;}"
+fi
 
 QUEUE_NAME="expedition-dispatch"
 

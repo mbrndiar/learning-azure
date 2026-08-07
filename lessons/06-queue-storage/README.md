@@ -427,13 +427,16 @@ loses money in production.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d azurite` for the companion and for both
+- **🧪 Emulator.** `docker compose up -d azurite` for the companion and for both
   management labs. The exercise evaluator needs nothing running.
-- **Live checkpoint: not required.** Azurite implements the queue behaviour this
-  module teaches — visibility timeouts, dequeue counts, pop receipts, and
-  redelivery — faithfully enough that a live account would show you nothing
-  new. Contrast [module 5](../05-blob-lifecycle/README.md#environments), where
-  the emulator genuinely cannot answer the question.
+- **☁️ Azure alternative — optional.** Create the
+  [live Storage sandbox](../../infra/README.md#create-a-live-storage-sandbox),
+  then run `bash infra/azure-cli/queue-storage.sh` or
+  `pwsh -File infra/powershell/queue-storage.ps1 -StorageAccountName
+  $env:AZURE_STORAGE_ACCOUNT`. Azurite implements visibility timeouts, dequeue
+  counts, pop receipts, and redelivery faithfully enough that Azure adds no
+  required evidence here. Contrast
+  [module 5](../05-blob-lifecycle/README.md#environments), where it does.
 
 ## Review questions
 

@@ -522,11 +522,13 @@ is what a deployment does.
 
 ## 🌍 Environments
 
-- **Emulator.** `ACCEPT_EULA=Y docker compose up -d azurite eventhubs` for the
+- **🧪 Emulator.** `ACCEPT_EULA=Y docker compose up -d azurite eventhubs` for the
   companion — both, because the checkpoint store is Azurite and the processor
   cannot claim a partition without it. The exercise evaluator needs nothing
   running.
-- **Live checkpoint: required.** Run one of the two management labs end to end.
+- **☁️ Azure alternative — required.** Run
+  `bash infra/azure-cli/event-hubs-processing.sh` or
+  `pwsh -File infra/powershell/event-hubs-processing.ps1` end to end.
   Two things this module teaches are absent locally and cannot be simulated:
   the split role model — a processor needs a role on Event Hubs *and* a role on
   the blob container, and the failure mode when it has only one is silent — and
