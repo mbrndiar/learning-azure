@@ -1,4 +1,4 @@
-# 7. Index station observations
+# 🗂️ 7. Index station observations
 
 > **Read** this page, **run** the companion in
 > [`ObservationIndex/`](ObservationIndex/) against Azurite, **practise** in

@@ -1,4 +1,4 @@
-# Capstone: the Cloud Expedition Field Journal
+# 📓 Capstone: the Cloud Expedition Field Journal
 
 > **Final destination.** No new Azure service and no new API: everything here
 > was taught in modules 4 to 12, and nothing here is scaffolded for you.

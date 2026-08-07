@@ -1,4 +1,4 @@
-# 5. Control artifact versions and deletion
+# ♻️ 5. Control artifact versions and deletion
 
 > **Read** this page, **run** the companion in
 > [`PreconditionArena/`](PreconditionArena/) against Azurite, **practise** in

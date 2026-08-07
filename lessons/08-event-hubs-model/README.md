@@ -1,4 +1,4 @@
-# 8. Stream expedition telemetry
+# 🌊 8. Stream expedition telemetry
 
 > **Read** this page, **run** the companion in
 > [`TelemetryStream/`](TelemetryStream/) against the Event Hubs emulator,

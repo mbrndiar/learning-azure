@@ -1,4 +1,4 @@
-# 9. Consume, checkpoint, and recover
+# 🔁 9. Consume, checkpoint, and recover
 
 Module 8 put events into a log and read them back. Nothing in it survived a
 restart, a second instance, or a failure halfway through a batch. This module is

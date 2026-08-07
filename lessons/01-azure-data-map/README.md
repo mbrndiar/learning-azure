@@ -1,4 +1,4 @@
-# 1. Choose the right Azure data primitive
+# 🧭 1. Choose the right Azure data primitive
 
 > **Read** this page, **run** the tour in
 > [`PrimitiveTour/`](PrimitiveTour/), then **practise** in

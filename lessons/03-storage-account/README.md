@@ -1,4 +1,4 @@
-# 3. Operate the shared storage boundary
+# 🏗️ 3. Operate the shared storage boundary
 
 > **Read** this page, **run** the companion in
 > [`AccountBoundary/`](AccountBoundary/) against Azurite, **practise** in

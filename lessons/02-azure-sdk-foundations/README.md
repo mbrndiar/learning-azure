@@ -1,4 +1,4 @@
-# 2. Build a testable C# Azure client
+# 🧰 2. Build a testable C# Azure client
 
 > **Read** this page, **run** the tour in
 > [`ClientSeams/`](ClientSeams/), then **practise** in

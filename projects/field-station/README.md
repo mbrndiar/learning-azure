@@ -1,4 +1,4 @@
-# Project: the Field Station
+# 🛰️ Project: the Field Station
 
 > **Applied project.** No new Azure service, no new API. Everything here was
 > taught in modules 4 to 7; nothing here is scaffolded for you.

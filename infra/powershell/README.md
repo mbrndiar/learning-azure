@@ -1,4 +1,4 @@
-# `infra/powershell` — management labs
+# 💠 `infra/powershell` — management labs
 
 The Azure PowerShell twin of [`infra/azure-cli`](../azure-cli/). Each script does
 behaviorally equivalent work to the `.sh` file of the same name, step for step,

@@ -1,4 +1,4 @@
-# `infra/local` — emulator configuration
+# 🧪 `infra/local` — emulator configuration
 
 Configuration consumed by the local emulator stack in [`compose.yaml`](../../compose.yaml).
 These files describe **local, free, non-parity** approximations of Azure

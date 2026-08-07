@@ -1,4 +1,4 @@
-# Course verifier
+# ✅ Course verifier
 
 Repository automation, not course content. It validates the curriculum design in
 [`docs/architecture/curriculum.json`](../../docs/architecture/curriculum.json)

@@ -1,4 +1,4 @@
-# `infra/azure-cli` — management labs
+# ⌨️ `infra/azure-cli` — management labs
 
 One script per module that has management work to do, plus one for the capstone. Each is a **step-by-step
 lab**, not a provisioning tool: it prints what it is about to do, does it, and

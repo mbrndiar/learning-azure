@@ -1,4 +1,4 @@
-# 4. Preserve expedition artifacts
+# 🗄️ 4. Preserve expedition artifacts
 
 > **Read** this page, **run** the companion in
 > [`ArtifactVault/`](ArtifactVault/) against Azurite, **practise** in

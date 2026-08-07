@@ -1,4 +1,4 @@
-# 11. Query and update with C#
+# 💻 11. Query and update with C#
 
 Module 10 chose a partition key and priced a workload. Nothing was written by an
 application; the container existed and the bill was arithmetic. This module is

@@ -1,4 +1,4 @@
-# Learning Azure — Data and Messaging
+# ☁️ Learning Azure — Data and Messaging
 
 > **Status: the course is complete — all fourteen units are built.** From choosing a data primitive,
 > through Storage, Event Hubs, and Cosmos DB for NoSQL, to securing and operating

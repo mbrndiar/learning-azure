@@ -1,4 +1,4 @@
-# 6. Dispatch processing work
+# 📨 6. Dispatch processing work
 
 > **Read** this page, **run** the companion in
 > [`DispatchYard/`](DispatchYard/) against Azurite, **practise** in

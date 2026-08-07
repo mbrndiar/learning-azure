@@ -1,4 +1,4 @@
-# 12. Prove the live architecture
+# 🔐 12. Prove the live architecture
 
 Eleven modules built an architecture. Blobs hold artifacts, queues hand work
 between processes, tables index observations, Event Hubs carries telemetry, and

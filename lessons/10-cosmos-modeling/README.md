@@ -1,4 +1,4 @@
-# 10. Design the global journal
+# 🌌 10. Design the global journal
 
 Module 9 left a projection in memory. This module gives it somewhere to live —
 and introduces the one decision in Azure that you cannot change afterwards
