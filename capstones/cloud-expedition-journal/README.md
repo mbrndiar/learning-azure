@@ -153,7 +153,7 @@ emulator defaults and nothing else — see
 The emulators are needed for the end-to-end run only. **Every graded test is
 offline**: you can work every milestone with Docker stopped.
 
-## Work the milestones
+## 🧩 Work the milestones
 
 Fill the gaps in [`starter/`](starter/). Each of the 25 gaps throws a
 `NotImplementedException` naming the section here that answers it, and the
@@ -335,7 +335,7 @@ paging through it is a well-known way to skip rows and then report a clean
 teardown that is not clean. Then report what is left, so the caller can *fail*
 rather than log it.
 
-## Run it locally
+## ▶️ Run it locally
 
 The reference solution is an executable that runs the whole pipeline against the
 emulators, deliberately including a duplicate reading, a replayed partition, a
@@ -421,7 +421,7 @@ Stop the emulators when you are done:
 docker compose down -v
 ```
 
-## Run it against live Azure
+## ☁️ Run it against live Azure
 
 **Optional, opt-in, and billable.** Nothing in this capstone requires it and no
 milestone is graded on it. A single run of this size costs a few cents; an event
@@ -507,7 +507,7 @@ table, and Cosmos database, but the account, namespace, and group are yours:
 az group delete --name "$GROUP" --yes --no-wait
 ```
 
-## Expected results
+## ✅ Expected results
 
 | state | command | result |
 | --- | --- | --- |
@@ -527,7 +527,7 @@ Per milestone, from an untouched starter:
 | `telemetry-pipeline` | 20 | 28 |
 | `cosmos-projection` | 30 | 37 |
 
-## How this is graded
+## 🧪 How this is graded
 
 The evaluator never touches Azure and never opens a socket. It uses three
 deterministic seams, and the boundary between them is deliberate:
@@ -599,7 +599,7 @@ rejects it. They are the reason the milestone commands mean something:
 | deleting only what this process remembers | `TeardownRemovesWorkAPreviousRunLeftBehind` |
 | a teardown that claims success with work still queued | `TeardownReportsAnIncompleteQueueRatherThanClaimingSuccess` |
 
-## What to look at when you are done
+## 🧭 What to look at when you are done
 
 Read [`solution/`](solution/) after your own version passes, not before. The
 places where the two differ are the interesting ones, and the questions worth

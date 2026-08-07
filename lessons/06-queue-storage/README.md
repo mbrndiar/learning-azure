@@ -226,7 +226,7 @@ The rules the exercise encodes, in order: **replay required → stream**;
 item → stream**; **otherwise → queue**. Throughput is not on that list.
 "High volume" justifies neither, and it is the reason most often given.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 docker compose up -d azurite
@@ -293,7 +293,7 @@ occurrence; every count, code, and `DequeueCount` in it is reproducible.
 
 The companion deletes its queue on the way out, so it can be run repeatedly.
 
-## The management labs
+## 🛠️ The management labs
 
 Same ten steps, twice, so the shape survives whichever tool your team uses:
 
@@ -315,7 +315,7 @@ protection that makes a stale consumer harmless.
 Both scripts print the endpoint they are about to write to before writing
 anything, and both delete their queue at the end.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Fifteen minutes, two observable answers.
 
@@ -365,7 +365,7 @@ error condition.** You can make it rarer, and the service will not even let you
 tune below one second. You cannot make it impossible, which is why the consumer
 must be correct when it happens anyway.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
@@ -378,7 +378,7 @@ must be correct when it happens anyway.
 | messages vanish overnight | the 7-day time to live expired | check `ExpirationTime` on send; it is not unbounded |
 | ordering assumptions fail under load | competing consumers reorder by construction | you need a stream, not a queue — see [A queue is not a stream](#a-queue-is-not-a-stream) |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -425,7 +425,7 @@ obvious "a redelivered message is not processed twice" check, and it fails only
 for work that was re-enqueued rather than redelivered — the case that actually
 loses money in production.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d azurite` for the companion and for both
   management labs. The exercise evaluator needs nothing running.
@@ -456,7 +456,7 @@ loses money in production.
    the same observations replayed next month by an audit job. Which dispatch
    model, and what do you do about the other requirement?
 
-## What you can now assume
+## 🧭 What you can now assume
 
 The rest of the course takes for granted that you can move work out of a request
 without losing it, keep a consumer correct when the same work arrives three

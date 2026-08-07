@@ -233,7 +233,7 @@ The fix is the two-method split used in the solution: a plain method that
 validates and *returns* the iterator, plus a private `async IAsyncEnumerable`
 that does the work.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 docker compose up -d azurite
@@ -341,7 +341,7 @@ account through Entra ID instead of the emulator's well-known key. That key is
 in the source deliberately: it is an emulator credential that grants access to
 nothing outside this machine. A real account key never gets that treatment.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, two edits, one prediction.
 
@@ -361,7 +361,7 @@ error message blames the *content*. A block-id defect is invisible until the
 tenth block, which on a 4 MiB block size means invisible until the payload
 passes 40 MiB — comfortably past every test fixture anyone writes.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | what actually happened | how to tell |
 | --- | --- | --- |
@@ -375,7 +375,7 @@ passes 40 MiB — comfortably past every test fixture anyone writes.
 | a metadata-based search scans the container | metadata is not indexed; only tags are | one `GetProperties` request per blob in the logs |
 | deleting "the folder" deletes nothing | there is no folder; there are only names sharing a prefix | delete is per-blob, or per-container |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -422,7 +422,7 @@ correct results** and differ only in cost. An evaluator that checked outputs
 would pass them both. Each fault also left the other checks passing, so the
 evaluator localises the defect rather than collapsing.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d azurite` for the companion and for both
   shell labs. The exercise evaluator is pure and needs nothing running.
@@ -450,7 +450,7 @@ evaluator localises the defect rather than collapsing.
 6. You need to find every artifact in the account marked `retention=cold`.
    Metadata or tags? What does the wrong choice cost, in requests?
 
-## What you can now assume
+## 🧭 What you can now assume
 
 The rest of the course takes for granted that you can design a blob name that
 makes your dominant query a prefix scan, upload an artifact of any size in

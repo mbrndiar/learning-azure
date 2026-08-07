@@ -437,7 +437,7 @@ the mechanism without expiring anything, and individual documents can then carry
 their own `/ttl`. Turning it on later is easy; realising you needed it after
 storing a year of logs is not.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 docker compose up -d cosmos
@@ -548,7 +548,7 @@ loop and the retry policy are therefore taught **offline**, in the exercise,
 where a page size and a `RetryAfter` can be dictated exactly — and confirmed
 **live**, at the checkpoint.
 
-## The management labs
+## 🛠️ The management labs
 
 Equivalent scripts, same nine steps, same names:
 
@@ -577,7 +577,7 @@ account turns `Pages returned: 1` into `Pages returned: 5`, with a continuation
 token several hundred characters long. The code does not change; its behaviour
 does. Budget roughly USD 0.01 and thirty minutes.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, one run, two constants changed. Both are in
 `DataPlane/Program.cs`: `Readings` on **line 35** and `PageSize` on **line 38**.
@@ -637,7 +637,7 @@ request at all and returns nothing, so it fails locally. The other two paging
 bugs — stopping on a short page, and dropping the token — are invisible here at
 any volume, because there is never a second page to get wrong.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
@@ -657,7 +657,7 @@ any volume, because there is never a second page to get wrong.
 | a delete-everything job costs more than the ingest | per-document deletes where TTL or a container drop would do | multiply the document count by ~5 RU |
 | ids sort wrongly in a range query | the numeric part of the id is not zero-padded | sort a sample as strings and look for `-10` before `-9` |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -738,7 +738,7 @@ which throws `OverflowException` at attempt 60. The evaluator's
 `Backoff_StopsAtTheCeiling` case found it immediately. A cap applied after the
 arithmetic is not a cap.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d cosmos`, then wait for
   `http://127.0.0.1:8080/ready`. The companion creates and deletes its own
@@ -791,7 +791,7 @@ arithmetic is not a cap.
     predicate. Price the naive approach in RU, then describe two designs that
     would have made this free, and say when each of them had to be chosen.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 You can now talk to a Cosmos container the way an application does: fetch by
 address rather than by question, read a result set that the service is allowed

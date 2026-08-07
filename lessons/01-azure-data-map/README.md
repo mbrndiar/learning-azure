@@ -183,7 +183,7 @@ Finally, every resource carries four tags — `expedition`, `environment`,
 `expires-on`, `managed-by` — so a resource that escapes its group is still
 attributable and still has a date on it.
 
-## Run the companion
+## ▶️ Run the companion
 
 The tour projects the record above onto all five primitives. It is offline and
 deterministic: no Azure account, no emulator, no network.
@@ -251,7 +251,7 @@ Storage primitives, so they cannot drift from the packages the course actually
 references. Event Hubs and Cosmos DB are labelled as taught later, because this
 module deliberately does not reference their packages.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, one file, one prediction.
 
@@ -272,7 +272,7 @@ The point is not the text. It is that "reading consumes" is the single property
 that makes a queue safe for work and a blob useless for it, and it is invisible
 in any type signature.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | what actually happened | how to tell |
 | --- | --- | --- |
@@ -283,7 +283,7 @@ in any type signature.
 | `StorageAccountAlreadyTaken` on a fresh deployment | the uniqueness discriminator was truncated away, so two deployments generated the same globally unique name | the generated name is exactly 24 characters and does not contain the discriminator |
 | resources still billing after cleanup | something was created outside the deployment's resource group | `az resource list --tag managed-by=learning-azure` finds strays the group delete missed |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL at GAP 1 until you implement it.
@@ -320,7 +320,7 @@ reverted:
 Each fault produced exactly one intended failure category and left the other 45
 checks passing, so the evaluator localises the defect rather than collapsing.
 
-## Environments
+## 🌍 Environments
 
 - **Local only.** This module creates nothing and connects to nothing.
 - **No emulator needed.** Azurite is introduced in
@@ -348,7 +348,7 @@ checks passing, so the evaluator localises the defect rather than collapsing.
 6. Why does the routing rule read the item ceiling from the characteristics table
    instead of comparing against its own constant?
 
-## What you can now assume
+## 🧭 What you can now assume
 
 The rest of the course takes for granted that you can name the primitive a
 requirement calls for, defend it against the adjacent one, and scope a deployment

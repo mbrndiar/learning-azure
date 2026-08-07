@@ -136,7 +136,7 @@ export AZURITE_CONNECTION_STRING="UseDevelopmentStorage=true"
 Azurite is the only dependency. Nothing in this project needs an Azure
 subscription, and nothing writes to Azure unless you deliberately opt in below.
 
-## Work the milestones
+## 🧩 Work the milestones
 
 Fill the gaps in [`starter/`](starter/). Every gap throws a
 `NotImplementedException` naming the section here that answers it, and the
@@ -281,7 +281,7 @@ same partition is a well-known way to skip rows and then report a clean teardown
 that is not clean. And report what is left, so the caller can *fail* rather than
 log it.
 
-## Run it
+## ▶️ Run it
 
 The reference solution is an executable that runs the whole pipeline against
 Azurite, deliberately including a duplicate upload, a malformed message, and an
@@ -391,7 +391,7 @@ table, but the account and group are yours:
 az group delete --name "$GROUP" --yes --no-wait
 ```
 
-## Expected results
+## ✅ Expected results
 
 | state | command | result |
 | --- | --- | --- |
@@ -413,7 +413,7 @@ Per milestone, from an untouched starter:
 | `status-index` | 16 | 17 |
 | `failure-recovery` | 17 | 17 |
 
-## How this is graded
+## 🧪 How this is graded
 
 The evaluator never touches Azure. It uses three deterministic seams, and the
 boundary between them is deliberate:
@@ -436,7 +436,7 @@ boundary between them is deliberate:
 Time is injected (`TimeProvider`), so no test sleeps and no row is stamped with
 a value that changes between runs.
 
-## What to look at when you are done
+## 🧭 What to look at when you are done
 
 Read [`solution/`](solution/) after your own version passes, not before. The
 places where the two differ are the interesting ones, and the questions worth

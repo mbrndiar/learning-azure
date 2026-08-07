@@ -203,7 +203,7 @@ projection, so the position past it is safe to record. A pump that advances only
 on newly applied events pins its checkpoint behind a run of duplicates and
 replays them again on the next restart, forever.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 ACCEPT_EULA=Y docker compose up -d azurite eventhubs
@@ -354,7 +354,7 @@ nothing, and reports errors from a service nobody was watching.
 
 The last two are why this module has a **required live checkpoint**.
 
-## The management labs
+## 🛠️ The management labs
 
 ```bash
 bash infra/azure-cli/event-hubs-processing.sh
@@ -382,7 +382,7 @@ Step 6 reads `lastEnqueuedSequenceNumber` per partition and then asks the
 platform for `IncomingMessages` and `OutgoingMessages`. Neither number exists
 locally.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Fifteen minutes, two runs, one constant changed each time. `CheckpointEvery` is
 on line 39 of `CheckpointYard/Program.cs`. Section 4 is the only part of the
@@ -446,7 +446,7 @@ health check. The only evidence that 90 events were counted twice is a
 comparison the *application* performed. That is the case for idempotency: the
 platform will never tell you.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
@@ -462,7 +462,7 @@ platform will never tell you.
 | a consumer will not start after an outage | the checkpoint points inside an expired retention window | compare the checkpoint with `beginSequenceNumber` |
 | a second replica reads nothing for 30 seconds after the first dies | ownership leases have not expired yet | that is the design; shorten the interval only if you accept more rebalancing |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -520,7 +520,7 @@ loop is honoured perfectly by any caller who cancels *before* starting, which is
 what a naive test would do. The evaluator cancels after 40 of 500 events, which
 is what a deployment does.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `ACCEPT_EULA=Y docker compose up -d azurite eventhubs` for the
   companion — both, because the checkpoint store is Azurite and the processor
@@ -565,7 +565,7 @@ is what a deployment does.
     retention. Its checkpoint is still stored. Describe what happens on restart
     and how you would detect it before it happens.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 You can now consume a partitioned stream reliably: resume in the right place,
 bound the duplicate count deliberately, apply effects idempotently, measure lag

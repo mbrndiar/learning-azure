@@ -172,6 +172,12 @@ default.
 
 ## Repository layout
 
+Start with the section guides for
+[`lessons/`](lessons/README.md), [`exercises/`](exercises/README.md),
+[`projects/`](projects/README.md), [`capstones/`](capstones/README.md),
+[`infra/`](infra/README.md), [`docs/`](docs/README.md),
+[`support/`](support/README.md), and [`tools/`](tools/README.md).
+
 ```text
 README.md                     # this entry point
 global.json                   # pinned .NET 10 SDK band

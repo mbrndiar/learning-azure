@@ -211,7 +211,7 @@ therefore costs *more* than leaving them Hot, and looks like a saving in the
 plan. That check is exactly what `RetentionPlanner.Evaluate` performs, and why
 it reports **every** violation rather than the first.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 docker compose up -d azurite
@@ -280,7 +280,7 @@ run, and what matters is that both readers hold the *same* ETag and only one
 Sections 1 and 2 are the same code with one header added. That is the entire
 difference between silent data loss and a detected conflict.
 
-## Required live checkpoint
+## ☁️ Required live checkpoint
 
 Sections 1–3 above behave identically on Azurite and in Azure. Section 4 does
 not, and everything in it is load-bearing for a retention promise. **This
@@ -315,7 +315,7 @@ If the script is interrupted, the teardown is one command:
 az group delete --name rg-expedition-lifecycle --yes --no-wait
 ```
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, one line, one prediction.
 
@@ -336,7 +336,7 @@ a fresher ETag than the one your data came from is a lost update with extra
 steps, and no header can detect it. That is the entire reason the re-read must
 be inside the retry loop.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | what actually happened | how to tell |
 | --- | --- | --- |
@@ -350,7 +350,7 @@ be inside the retry loop.
 | the bill rose after adding a lifecycle rule | blobs move to Cool or Archive and are deleted before the minimum retention | compare transition days with the 30/180-day minimums |
 | an archived artifact cannot be read | Archive requires rehydration, which takes hours | `x-ms-access-tier: Archive` and 409 `BlobArchived` on read |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -396,7 +396,7 @@ The second fault is the one to notice: it produces a **successful write with the
 correct bytes** and differs only in what happens when somebody else is writing
 too. An evaluator that checked return values would pass it.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d azurite` for the companion. The exercise
   evaluator is pure and offline: it drives real SDK clients over a scripted
@@ -425,7 +425,7 @@ too. An evaluator that checked return values would pass it.
    not, and say which one you would be most embarrassed to discover in
    production.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 The rest of the course takes for granted that you can make a shared artifact
 safe under concurrent writers, tell a stale write apart from a throttled one and

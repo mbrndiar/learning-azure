@@ -202,7 +202,7 @@ Splitting a cross-partition batch by partition is the honest fallback, and it is
 worth saying plainly what it costs: **the atomicity is gone.** Each resulting
 batch succeeds or fails alone, and the caller must tolerate a partial outcome.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 docker compose up -d azurite
@@ -299,7 +299,7 @@ named, and compensated for in code*. Contrast
 [module 5](../05-blob-lifecycle/README.md#environments), where the emulator
 cannot answer the question at all.
 
-## The management labs
+## 🛠️ The management labs
 
 Same ten steps, twice, so the shape survives whichever tool your team uses:
 
@@ -320,7 +320,7 @@ one ETag twice and is rejected the second time with HTTP 412.
 Both scripts print the endpoint they are about to write to before writing
 anything, and both delete their table at the end.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Fifteen minutes, one uncomfortable answer. The table holds 5,000 rows in every
 run below; only the partition layout changes.
@@ -369,7 +369,7 @@ fewer. Treat those as observations, not a fabricated scan count. Key design is
 the lever that narrows the candidate range, and no partition layout makes a
 table scan cheap.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
@@ -383,7 +383,7 @@ table scan cheap.
 | `UpdateConditionNotSatisfied` never stops | the retry does not re-read, so it resends the same stale ETag | assert that no two attempts bet on the same ETag |
 | a key is rejected at write time | it contains `/`, `\`, `#`, `?`, or a control character | blob names are the usual source |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -435,7 +435,7 @@ machine-local, so on a UTC+2 machine 9 a.m. and 10 a.m. both became single-digit
 UTC hours and the trap never sprang. It now uses explicit `TimeSpan.Zero`
 offsets. A test that cannot fail is not a test.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d azurite` for the companion and for both
   management labs. The exercise evaluator needs nothing running.
@@ -465,7 +465,7 @@ offsets. A test that cannot fail is not a test.
 8. A retry loop keeps failing with `UpdateConditionNotSatisfied` forever. Give
    the bug, then give the *different* bug that a naive fix introduces.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 You can now store bytes, control their versions and lifetime, dispatch work
 about them without losing it, and index them so the expedition's questions are

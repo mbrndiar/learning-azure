@@ -453,7 +453,7 @@ The last row is the one that accumulates. Deleting a scope removes the
 assignments inside it; deleting a *principal* removes nothing, and every
 short-lived identity anybody ever granted access to leaves an entry behind.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 dotnet run --project lessons/12-secure-operable-cloud/AccessBoundary
@@ -636,7 +636,7 @@ you can check; none of it is evidence. In particular:
   one produced by your own subscription, with your own principal id in it, is a
   different kind of knowing.
 
-## The management labs
+## 🛠️ The management labs
 
 ```bash
 bash infra/azure-cli/secure-operable-cloud.sh
@@ -674,7 +674,7 @@ steps 5 and 6. Step 9 deletes everything; if you interrupt the script, the
 resource-group name is printed at every step so the manual teardown is one
 command.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Fifteen minutes, inside the lab, between steps 4 and 5. It answers a question
 the offline evaluator cannot: **how long does propagation actually take, and is
@@ -715,7 +715,7 @@ budget rather than a single attempt.
 
 Then delete the group: `az group delete --name "$RESOURCE_GROUP" --yes`.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | actual cause | how to tell |
 | --- | --- | --- |
@@ -730,7 +730,7 @@ Then delete the group: `az group delete --name "$RESOURCE_GROUP" --yes`.
 | the subscription is right in the portal and wrong in the script | a display name matched more than one subscription | `az account list --query "[?name=='<name>'].id"` returns two rows |
 | Cost Management shows nothing for a new subscription | it can take up to 48 hours to become available | the tags are the fallback: `az resource list --tag managed-by=learning-azure` |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -818,7 +818,7 @@ implementation-coupling until you remember that Azure rejects an assignment
 aimed there. Counting path segments is enough to produce something that parses,
 looks like a scope in a log line, and cannot be assigned.
 
-## Environments
+## 🌍 Environments
 
 - **Local: everything.** The companion and the evaluator both run with nothing
   installed and nothing signed in. There is no emulator for this module, and
@@ -883,7 +883,7 @@ looks like a scope in a log line, and cannot be assigned.
     the reasoning, then state what a teardown that deleted the group would have
     cost.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 You can now put this architecture somewhere real. You can say which identity a
 process will be, which role that identity needs, at which scope, in which of the
@@ -897,7 +897,7 @@ work, observations, telemetry, journal, and a live checkpoint you operate and
 tear down yourself, with the identity and cost story you have just learned
 attached to it rather than added afterwards.
 
-## References
+## 📚 References
 
 - [Credential chains in the Azure Identity library for .NET](https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication/credential-chains)
 - [Authentication best practices with the Azure Identity library](https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication/best-practices)

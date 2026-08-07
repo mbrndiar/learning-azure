@@ -217,7 +217,7 @@ Premium **remaps keys to partitions**, so events for one key move and relative
 order across the change is not preserved. There is no tier on which the
 partition count is a free variable.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 ACCEPT_EULA=Y docker compose up -d eventhubs
@@ -365,7 +365,7 @@ The first is cosmetic. The second and third are why this module has a **required
 live checkpoint**: a capacity model you have never watched Azure refuse is a
 capacity model you do not have.
 
-## The management labs
+## 🛠️ The management labs
 
 ```bash
 bash infra/azure-cli/event-hubs-model.sh
@@ -389,7 +389,7 @@ state rather than the status code.
 Step 7 assigns *Azure Event Hubs Data Sender* and *Data Receiver* separately.
 Being Owner of the namespace does not let you publish one event to it.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Fifteen minutes, three runs, one number changed each time. Section 4 is the only
 part of the output you need.
@@ -459,7 +459,7 @@ one-partition-carrying-more-than-half, to three-partitions-empty. When you pick 
 how many distinct values it will have in production — not whether it identifies
 the right thing.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
@@ -474,7 +474,7 @@ the right thing.
 | a key is rejected at send time | its UTF-8 representation exceeds 128 bytes | measure with `Encoding.UTF8.GetByteCount`; concatenation and non-ASCII text are common causes |
 | the local replay test passes and production loses old events | the emulator does not enforce retention | check `retentionDescription.retentionTimeInHours` on the real hub |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -532,7 +532,7 @@ service's placements against a model that is explicitly not the service's hash
 would have been a test that pins the wrong thing. It now asserts the property
 that both share: five keys over four partitions cannot balance.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `ACCEPT_EULA=Y docker compose up -d eventhubs` for the
   companion. The Event Hubs emulator depends on Azurite for its metadata and
@@ -574,7 +574,7 @@ that both share: five keys over four partitions cannot balance.
 9. `TryAdd` returns `false` for an event that is 2 MB. Describe the two wrong
    responses and what each one costs.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 You can now put events into a partitioned, replayable log with an ordering
 guarantee you chose deliberately, size the hub from a measured workload, and say

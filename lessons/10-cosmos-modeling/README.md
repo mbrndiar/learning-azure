@@ -269,7 +269,7 @@ makes `RequiresMissingCompositeIndex` a check worth having in a test suite:
 `(day, celsius)` does not serve `ORDER BY celsius, day`, and a prefix does not
 serve a longer query.
 
-## Run the companion
+## ▶️ Run the companion
 
 ```bash
 docker compose up -d cosmos
@@ -439,7 +439,7 @@ partition, `GROUP BY` distribution, throughput and autoscale settings on the
 control plane. That is what this module measures locally, and it is why the live
 checkpoint is **required** rather than optional.
 
-## The management labs
+## 🛠️ The management labs
 
 ```bash
 bash infra/azure-cli/cosmos-modeling.sh
@@ -476,7 +476,7 @@ Step 8 narrows the indexing policy to two paths. It applies asynchronously via a
 background reindex that leaves the container queryable throughout, which is why
 the saving does not appear the instant the command returns.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, one run, one constant changed. `Stations` is on line 36 of
 `RequestUnits/Program.cs`. Sections 4 and 5 are the only parts of the output you
@@ -539,7 +539,7 @@ scoring candidates by share-of-total, the *good* key's score improved for a
 reason that has nothing to do with the key — which is precisely why
 `PartitionKeyAdvisor.Measure` scores against the average instead.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | likely cause | how to confirm |
 | --- | --- | --- |
@@ -556,7 +556,7 @@ reason that has nothing to do with the key — which is precisely why
 | autoscale cost 15% of manual on an idle container | the 10% floor, times the 1.5x rate | compare billed RU/s with the autoscale maximum, not with usage |
 | writes got more expensive after a "small" index change | every write pays for every index | count indexed paths before and after and multiply by write rate |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL until you implement the gaps.
@@ -622,7 +622,7 @@ generalisation, it passes every test that does not specifically probe it, and it
 produces a query that Cosmos refuses at runtime in an environment where the
 emulator did not.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d cosmos`, then wait for
   `http://127.0.0.1:8080/ready`. The companion creates and deletes its own
@@ -668,7 +668,7 @@ emulator did not.
     Cosmos DB's partition key does that Table Storage's does not, and the one
     thing Table Storage's row key gives you that Cosmos DB's id does not.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 You can now choose a partition key on evidence rather than intuition, project it
 against the ceiling that ends its life, manufacture one when the document does

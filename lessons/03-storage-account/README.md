@@ -148,7 +148,7 @@ The exercise's `AccountSecurityBaseline.Evaluate` reports **every** violation, n
 the first. An audit that stops at the first finding turns a six-problem account
 into six fix-and-re-audit cycles.
 
-## Run the companion
+## ▶️ Run the companion
 
 Start the emulator, then run the tour. It creates a container, a queue, and a
 table in Azurite, shows they share one account, and deletes them again.
@@ -236,7 +236,7 @@ throws on an unknown capability name rather than returning `false` — a silent
 `false` would let a typo quietly reclassify something as "needs the live
 checkpoint" and nobody would ever notice.
 
-## Required live checkpoint
+## ☁️ Required live checkpoint
 
 This is the first unit that provisions real Azure resources, and it is
 **required**: the auth boundary, redundancy, and tiers have no local equivalent
@@ -287,7 +287,7 @@ Neither script calls `az login` or `Connect-AzAccount` for you. Signing in is
 your decision, made while looking at which tenant and subscription you are about
 to spend money in.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, one flag, one prediction.
 
@@ -305,7 +305,7 @@ The point: "I have Owner" and "I can read the data" became two different
 statements the moment shared-key access was disabled. That separation is the
 whole reason the baseline disables it.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | what actually happened | how to tell |
 | --- | --- | --- |
@@ -317,7 +317,7 @@ whole reason the baseline disables it.
 | a "zone-redundant" account is actually LRS | the region has no availability zones and the deployment silently fell back | `az storage account show --query sku.name` returns `Standard_LRS` |
 | resources still billing after the lab | something was created outside the resource group | `az resource list --tag managed-by=learning-azure` finds strays |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL at GAP 1 until you implement it.
@@ -357,7 +357,7 @@ reverted:
 Each fault produced exactly one intended failure and left the other 84 checks
 passing, so the evaluator localises the defect rather than collapsing.
 
-## Environments
+## 🌍 Environments
 
 - **Emulator.** `docker compose up -d azurite` for the companion. The exercise
   evaluator is pure and needs nothing running.
@@ -381,7 +381,7 @@ passing, so the evaluator localises the defect rather than collapsing.
 6. Name three things a green Azurite test run does **not** prove about a live
    account, and say which module each one is finally proved in.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 The rest of the course takes for granted that you can create an account on the
 security baseline, resolve its endpoints in both environments, choose its

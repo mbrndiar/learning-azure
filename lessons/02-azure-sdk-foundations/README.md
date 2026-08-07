@@ -256,7 +256,7 @@ Filter on `Status`, not on `ErrorCode`, for the same reason `TryParse` beats
 parsing an exception message: the status is a small closed set that Storage
 guarantees, while error codes are added over time.
 
-## Run the companion
+## ▶️ Run the companion
 
 The tour drives a real `BlobContainerClient` — its real pipeline, its real retry
 policy, its real response parsing — over a scripted transport. It is offline and
@@ -322,7 +322,7 @@ never sees. The cancellation seam printed `TaskCanceledException`, a subclass of
 `OperationCanceledException`, which is why exercise code catches the base type.
 And both error rows show `attempts 1`: neither 404 nor 403 was retried.
 
-## A bounded experiment
+## 🔬 A bounded experiment
 
 Ten minutes, one file, one prediction.
 
@@ -350,7 +350,7 @@ The point: the retry budget is the difference between an operation that survives
 a throttle and one that does not, and it is a number you chose, not a default you
 inherited.
 
-## Common mistakes and how to diagnose them
+## ⚠️ Common mistakes and how to diagnose them
 
 | symptom | what actually happened | how to tell |
 | --- | --- | --- |
@@ -361,7 +361,7 @@ inherited.
 | a live deployment works "for now" with a connection string | shared-key auth bypassed RBAC entirely | no role assignment exists for the workload identity, yet it has full account access |
 | retries never happen for a genuinely transient error | the failure surfaced as `TaskCanceledException` from `NetworkTimeout`, which is not classified as retryable in the same way | compare `Retry.NetworkTimeout` against the operation's real duration |
 
-## Practice
+## 🧩 Practice
 
 ```bash
 # Your work. Expected to FAIL at GAP 1 until you implement it.
@@ -401,7 +401,7 @@ reverted:
 Each fault produced exactly one intended failure category and left the remaining
 checks passing, so the evaluator localises the defect rather than collapsing.
 
-## Environments
+## 🌍 Environments
 
 - **Local only.** This module creates nothing and connects to nothing; the
   scripted transport in
@@ -431,7 +431,7 @@ checks passing, so the evaluator localises the defect rather than collapsing.
    retried automatically and the other is not, and what would break if the SDK
    retried both.
 
-## What you can now assume
+## 🧭 What you can now assume
 
 The rest of the course takes for granted that you can construct an Azure client
 with an explicit credential, a bounded retry budget, and a replaceable transport;
