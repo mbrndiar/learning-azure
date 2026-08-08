@@ -624,11 +624,13 @@ emulator did not.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d cosmos`, then wait for
+- **🧪 Emulator.** `docker compose up -d cosmos`, then wait for
   `http://127.0.0.1:8080/ready`. The companion creates and deletes its own
   database, so a failed run leaves nothing behind. The exercise evaluator needs
   nothing running at all.
-- **Live checkpoint: required.** Run one of the two management labs end to end.
+- **☁️ Azure alternative — required.** Run
+  `bash infra/azure-cli/cosmos-modeling.sh` or
+  `pwsh -File infra/powershell/cosmos-modeling.ps1` end to end.
   This module is about cost and the emulator does not model cost: request
   charges are a flat 1 RU, query metrics are zeros, there is one physical
   partition forever, and there is no rate limiter. Everything the module teaches

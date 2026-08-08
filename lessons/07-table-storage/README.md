@@ -437,9 +437,13 @@ offsets. A test that cannot fail is not a test.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d azurite` for the companion and for both
+- **🧪 Emulator.** `docker compose up -d azurite` for the companion and for both
   management labs. The exercise evaluator needs nothing running.
-- **Live checkpoint: not required.** The two known emulator divergences are
+- **☁️ Azure alternative — optional.** Create the
+  [live Storage sandbox](../../infra/README.md#create-a-live-storage-sandbox),
+  then run `bash infra/azure-cli/table-storage.sh` or
+  `pwsh -File infra/powershell/table-storage.ps1 -StorageAccountName
+  $env:AZURE_STORAGE_ACCOUNT`. The two known emulator divergences are
   named in [What the emulator will not tell you](#what-the-emulator-will-not-tell-you)
   and compensated for by `BatchValidator`, which is why they are taught rather
   than merely encountered.

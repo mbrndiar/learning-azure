@@ -398,10 +398,12 @@ too. An evaluator that checked return values would pass it.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d azurite` for the companion. The exercise
+- **🧪 Emulator.** `docker compose up -d azurite` for the companion. The exercise
   evaluator is pure and offline: it drives real SDK clients over a scripted
   transport and needs nothing running.
-- **Live checkpoint: required.** See
+- **☁️ Azure alternative — required.** Run
+  `bash infra/azure-cli/blob-lifecycle.sh` or
+  `pwsh -File infra/powershell/blob-lifecycle.ps1`; see
   [Required live checkpoint](#required-live-checkpoint). Cost is under USD 0.01
   and the teardown is one command.
 

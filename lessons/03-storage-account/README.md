@@ -359,9 +359,11 @@ passing, so the evaluator localises the defect rather than collapsing.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d azurite` for the companion. The exercise
+- **🧪 Emulator.** `docker compose up -d azurite` for the companion. The exercise
   evaluator is pure and needs nothing running.
-- **Live checkpoint: required.** See
+- **☁️ Azure alternative — required.** Run
+  `bash infra/azure-cli/storage-account.sh` or
+  `pwsh -File infra/powershell/storage-account.ps1`; see
   [Required live checkpoint](#required-live-checkpoint). Cost is under USD 0.01
   and the teardown is one command.
 

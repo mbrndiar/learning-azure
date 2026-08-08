@@ -98,14 +98,15 @@ navigation:
    before you start and passes when you are done. The Learning Mentor unlocks
    reference comparison after deterministic success or an explicit post-attempt request.
 
-Which emulator a module needs is stated in its lesson:
+Each emulator-backed lesson also offers a ☁️ live Azure route and names the
+infrastructure lab that creates or exercises it:
 
-| modules | command |
-| --- | --- |
-| 3-7 | `docker compose up -d azurite` |
-| 8-9 | `ACCEPT_EULA=Y docker compose up -d eventhubs` (starts Azurite too; module 9 checkpoints into it) |
-| 10-11 | `docker compose up -d cosmos` |
-| 12 | none — the companion, exercise, and evaluator are offline; the labs are live-only |
+| modules | 🧪 local command | ☁️ Azure alternative |
+| --- | --- | --- |
+| 3-7 | `docker compose up -d azurite` | Module 3's live account lab; for 4, 6, and 7 use the [live Storage sandbox](infra/README.md#create-a-live-storage-sandbox) with the module lab |
+| 8-9 | `ACCEPT_EULA=Y docker compose up -d eventhubs` (starts Azurite too; module 9 checkpoints into it) | `infra/azure-cli/event-hubs-*.sh` or its PowerShell twin |
+| 10-11 | `docker compose up -d cosmos` | `infra/azure-cli/cosmos-*.sh` or its PowerShell twin |
+| 12 | none — the companion, exercise, and evaluator are offline | live-only labs create the required resources |
 
 Modules 3, 5, and 8 through 12 additionally have a **required live checkpoint**
 against a real Azure subscription; all are clearly marked, state their cost

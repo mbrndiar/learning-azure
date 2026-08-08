@@ -740,13 +740,15 @@ arithmetic is not a cap.
 
 ## 🌍 Environments
 
-- **Emulator.** `docker compose up -d cosmos`, then wait for
+- **🧪 Emulator.** `docker compose up -d cosmos`, then wait for
   `http://127.0.0.1:8080/ready`. The companion creates and deletes its own
   database, so a failed run leaves nothing behind. The exercise evaluator needs
   nothing running at all — no emulator, no container, no clock.
-- **Live checkpoint: required.** Run one of the two management labs end to end,
-  then run the companion with `COSMOS_ENDPOINT` and `COSMOS_KEY` pointing at the
-  account it created. Pagination and throttling — two of this module's four core
+- **☁️ Azure alternative — required.** Run
+  `bash infra/azure-cli/cosmos-development.sh` or
+  `pwsh -File infra/powershell/cosmos-development.ps1` end to end, then run the
+  companion with `COSMOS_ENDPOINT` and `COSMOS_KEY` pointing at the account it
+  created. Pagination and throttling — two of this module's four core
   mechanics — do not exist locally in any form, and TTL and consistency are
   account-level behaviours with no local switch. Budget roughly USD 0.01 and
   thirty minutes; step 9 deletes the resource group.
