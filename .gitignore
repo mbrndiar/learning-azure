@@ -52,7 +52,7 @@ msbuild.log
 # The shared state helper and the course-owned adapter both run on Python 3, so
 # bytecode caches can appear beside them. Learner progress itself is never stored
 # in the repository: the state helper keeps it outside, under
-# $XDG_DATA_HOME/copilot-learning-tutor/state.sqlite3.
+# $XDG_DATA_HOME/learning-mentor/state.sqlite3.
 __pycache__/
 *.py[cod]
 

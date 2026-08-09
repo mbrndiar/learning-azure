@@ -217,9 +217,10 @@ on standard error and records nothing.
 ### Where your progress is stored
 
 Progress lives outside this repository, in
-`$XDG_DATA_HOME/copilot-learning-tutor/state.sqlite3` (falling back to
-`~/.local/share/...`). It is never committed, so cloning fresh or resetting the
-working tree does not erase it, and pushing never publishes it.
+`$XDG_DATA_HOME/learning-mentor/state.sqlite3` (falling back to
+`~/.local/share/learning-mentor/state.sqlite3`). It is never committed, so
+cloning fresh or resetting the working tree does not erase it, and pushing never
+publishes it.
 
 ## Troubleshooting
 
