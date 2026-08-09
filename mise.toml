@@ -1,0 +1,5 @@
+[tools]
+dotnet = "10"
+azure-cli = "2"
+powershell = "7.6"
+python = "3.11"

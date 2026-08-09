@@ -159,6 +159,12 @@ Az modules; an Azure subscription for the live checkpoints. Python 3.11+ is
 required only for the optional Learning Mentor. Full setup and troubleshooting is
 in [`docs/SETUP.md`](docs/SETUP.md).
 
+For a native environment, the recommended path is `mise install` from the
+cloned repository; `mise.toml` and `mise.lock` select the validated .NET, Azure
+CLI, PowerShell, and Mentor Python versions. The setup guide also retains the
+complete manual installation path. Docker, Az modules, emulators, and any Azure
+subscription remain separate prerequisites in both cases.
+
 ## Scope and non-goals
 
 **In scope:** Blob, Queue, and Table Storage; Event Hubs; Cosmos DB for NoSQL;

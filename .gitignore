@@ -63,3 +63,7 @@ __pycache__/
 # --- OS cruft ------------------------------------------------------------------
 .DS_Store
 Thumbs.db
+
+# Local mise overrides
+mise.local.toml
+mise.local.lock

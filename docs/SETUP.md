@@ -4,10 +4,38 @@ This guide installs the toolchain, gets the code, and starts the local
 emulators. The course is verified on Linux; macOS and Windows via WSL run the
 same workflow.
 
+## Recommended native setup with mise
+
+The shortest reproducible native setup uses
+[`mise`](https://mise.jdx.dev/installing-mise.html). After cloning the course in
+section 2, run this from the repository root:
+
+```bash
+mise install
+mise exec -- dotnet --version
+mise exec -- az version
+mise exec -- pwsh -NoProfile -Command '$PSVersionTable.PSVersion'
+```
+
+`mise.toml` declares the supported .NET, Azure CLI, PowerShell, and optional
+Learning Mentor Python lines. `mise.lock` selects the exact versions validated
+for this course. Shell activation makes them available directly; without it,
+prefix commands with `mise exec --`.
+
+The lock is intentionally not auto-updated whenever a patch appears. Maintainers
+refresh it with `mise lock --bump`, inspect the resolution, and run the complete
+course validation before committing it. Put personal overrides in the ignored
+`mise.local.toml`, not in the shared config.
+
+Mise does not install Git, Docker, the PowerShell Az modules, local emulators,
+or an Azure subscription. Follow sections 3 and 4 for those prerequisites. If
+you prefer operating-system or vendor installers, use the complete manual path
+below instead.
+
 ## 1. Install the .NET 10 SDK
 
-Install the **.NET 10 SDK** from <https://dotnet.microsoft.com/download/dotnet/10.0>
-and verify it:
+For the manual path, install the **.NET 10 SDK** from
+<https://dotnet.microsoft.com/download/dotnet/10.0> and verify it:
 
 ```bash
 dotnet --version
