@@ -67,3 +67,6 @@ Thumbs.db
 # Local mise overrides
 mise.local.toml
 mise.local.lock
+
+# Temporary Learning Mentor transfer snapshots
+.learning-mentor-transfer/

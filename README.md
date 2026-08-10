@@ -1,23 +1,17 @@
 # ☁️ Learning Azure — Data and Messaging
 
-> **Status: the course is complete — all fourteen units are built.** From choosing a data primitive,
-> through Storage, Event Hubs, and Cosmos DB for NoSQL, to securing and operating
-> the live architecture, each module ships complete: a narrative lesson, a
-> runnable companion whose captured output is in the lesson, a starter, a
-> reference solution, a shared xUnit evaluator, and (from module 3) paired Azure
-> CLI and Azure PowerShell labs. The **Field Station project** sits between
-> modules 7 and 8 and applies all three Storage services in one worker across five
-> milestones. The **Cloud Expedition Field Journal capstone** closes the course
-> after module 12 and integrates all five services — Event Hubs ingress, Blob
-> checkpoints and artifacts, Queue dispatch, Table state, Cosmos projection —
-> across four capstone milestones. Nothing here claims coverage the repository does
-> not have: the course verifier fails if a unit is advertised or made trackable
-> before its content exists.
-
 A narrative-driven, hands-on course that teaches the Azure data and messaging
 plane in **C# on .NET 10** through one continuing story: the **Cloud Expedition
 Field Journal**. You join a field expedition and incrementally build its data
 plane, meeting each Azure service where a real design problem calls for it.
+
+## Quick start
+
+1. Clone with `git clone --recurse-submodules REPOSITORY_URL`.
+2. Follow the [setup guide](docs/SETUP.md) to choose mise or manual installation
+   and start the local emulators.
+3. Open [module 1](lessons/01-azure-data-map/README.md); it needs no Azure
+   subscription and no emulator.
 
 - **Azure Blob Storage** — field reports, photos, and immutable artifacts.
 - **Azure Queue Storage** — background artifact-processing work orders.
@@ -165,6 +159,16 @@ CLI, PowerShell, and Mentor Python versions. The setup guide also retains the
 complete manual installation path. Docker, Az modules, emulators, and any Azure
 subscription remain separate prerequisites in both cases.
 
+## How this course's code runs and ships
+
+The C# applications compile to .NET assemblies and run on the .NET runtime.
+Azure CLI and PowerShell are management tools used to create and inspect cloud
+resources; they are not application runtime dependencies. Deploy an application
+as a framework-dependent or self-contained .NET publish, and optionally package
+that output in a container with its OS-level dependencies. The local emulator
+containers in this course model services for development; they are not the
+application's production deployment image.
+
 ## Scope and non-goals
 
 **In scope:** Blob, Queue, and Table Storage; Event Hubs; Cosmos DB for NoSQL;
@@ -213,15 +217,6 @@ capstones/<slug>/             # the end-to-end capstone: guide, starter, solutio
 The repository ships an optional interactive mentor that tracks which objectives
 you have practiced, schedules reviews, and keeps reference solutions out of sight
 until you have made a genuine attempt. It is entirely optional and works in
-GitHub Copilot CLI, OpenAI Codex, and Claude Code. See
-[section 8 of `docs/SETUP.md`](docs/SETUP.md#8-optional-learning-mentor).
-
-## 🚀 Get started
-
-1. Clone recursively (the course ships one submodule):
-   `git clone --recurse-submodules <REPOSITORY_URL>`
-2. Follow [`docs/SETUP.md`](docs/SETUP.md) to install the toolchain and start the
-   local emulators.
-3. Read [`docs/QUALITY.md`](docs/QUALITY.md) for the validation commands.
-4. Start module 1: [`lessons/01-azure-data-map/README.md`](lessons/01-azure-data-map/README.md).
-   It needs no cloud account and no emulator.
+GitHub Copilot CLI, OpenAI Codex, and Claude Code. See the
+[Learning Mentor guide](docs/LEARNING_MENTOR.md) for setup, privacy, and
+transfer between machines.

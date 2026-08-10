@@ -7,20 +7,23 @@ same workflow.
 ## Recommended native setup with mise
 
 The shortest reproducible native setup uses
-[`mise`](https://mise.jdx.dev/installing-mise.html). After cloning the course in
+[`mise`](https://mise.jdx.dev/installing-mise.html) and
+[activate it in your shell](https://mise.jdx.dev/getting-started.html#activate-mise).
+After cloning the course in
 section 2, run this from the repository root:
 
 ```bash
 mise install
-mise exec -- dotnet --version
-mise exec -- az version
-mise exec -- pwsh -NoProfile -Command '$PSVersionTable.PSVersion'
+dotnet --version
+az version
+pwsh -NoProfile -Command '$PSVersionTable.PSVersion'
 ```
 
 `mise.toml` declares the supported .NET, Azure CLI, PowerShell, and optional
 Learning Mentor Python lines. `mise.lock` selects the exact versions validated
 for this course. Shell activation makes them available directly; without it,
-prefix commands with `mise exec --`.
+use `mise exec -- COMMAND` only as a fallback in an unactivated shell or in
+automation.
 
 The lock is intentionally not auto-updated whenever a patch appears. Maintainers
 refresh it with `mise lock --bump`, inspect the resolution, and run the complete
